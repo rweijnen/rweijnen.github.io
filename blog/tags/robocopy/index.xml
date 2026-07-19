@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>RoboCopy on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/robocopy/</link><description>Recent content in RoboCopy on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 31 Jan 2011 11:39:03 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/robocopy/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Synctoy in Data Migrations</title><link>https://remkoweijnen.nl/blog/2011/01/31/using-synctoy-in-data-migrations/</link><pubDate>Mon, 31 Jan 2011 11:39:03 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/31/using-synctoy-in-data-migrations/</guid><description>&lt;p&gt;In every project I do I will have to migrate data at some point. This usually involves three types of data:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;&lt;span style="color: #35383d;"&gt;Home Directory Data&lt;/span&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;span style="color: #35383d;"&gt;Workgroup Data (eg office documents)&lt;/span&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;span style="color: #35383d;"&gt;Application Data (not database but flat file data belonging to applications such as templates and documents).&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+Home Directory Data is usually a flat copy although I tend to filter out the garbage (temp files and such).
+&lt;p&gt;Workgroup data usually needs to be cleaned up so it involves some kind of data mapping (folder x goes to place y).&lt;/p&gt;
+&lt;p&gt;Application Data is usually a flat copy from old to new location but often there are things like ini files that are adjusted and we don&amp;rsquo;t want to overwrite that.&lt;/p&gt;</description></item></channel></rss>

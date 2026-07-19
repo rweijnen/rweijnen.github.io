@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>String Manipulation on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/string-manipulation/</link><description>Recent content in String Manipulation on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 01 Feb 2011 10:02:20 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/string-manipulation/index.xml" rel="self" type="application/rss+xml"/><item><title>Get last char of the computername in PowerShell</title><link>https://remkoweijnen.nl/blog/2011/02/01/get-last-char-of-the-computername-in-powershell/</link><pubDate>Tue, 01 Feb 2011 10:02:20 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/02/01/get-last-char-of-the-computername-in-powershell/</guid><description>&lt;p&gt;For my &lt;a href="https://remkoweijnen.nl/blog/2011/01/31/powershell-script-to-add-reboot-scheduled-task-for-citrix/" target="_blank"&gt;Reboot Script&lt;/a&gt; I needed to get the last character of the computername and convert it to an integer.&lt;/p&gt; &lt;p&gt;We can do it like this in PowerShell:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,JGkgPSBbaW50XSIkKChnYyBlbnY6Y29tcHV0ZXJuYW1lKVstMV0pIg=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;$i = [int]&amp;#34;$((gc env:computername)[-1])&amp;#34;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

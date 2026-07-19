@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Windows XP Embedded on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/windows-xp-embedded/</link><description>Recent content in Windows XP Embedded on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 18 Jul 2012 13:43:06 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/windows-xp-embedded/index.xml" rel="self" type="application/rss+xml"/><item><title>Could not load file or assembly 'System.Configuration'</title><link>https://remkoweijnen.nl/blog/2012/07/18/could-not-load-file-or-assembly-system-configuration/</link><pubDate>Wed, 18 Jul 2012 13:43:06 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/07/18/could-not-load-file-or-assembly-system-configuration/</guid><description>&lt;p&gt;Today I was asked to troubleshoot an executable that didn't work correctly on Windows XP Embedded.&lt;/p&gt; &lt;p&gt;On startup it displayed the following message:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,VW5oYW5kbGVkIEV4Y2VwdGlvbjogU3lzdGVtLklPLkZpbGVOb3RGb3VuZEV4Y2VwdGlvbjogQ291bGQgbm90IGxvYWQgZmlsZSBvciBhc3MKZW1ibHkgJ1N5c3RlbS5Db25maWd1cmF0aW9uLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49YjAKM2Y1ZjdmMTFkNTBhM2EnIG9yIG9uZSBvZiBpdHMgZGVwZW5kZW5jaWVzLiBUaGUgc3lzdGVtIGNhbm5vdCBmaW5kIHRoZSBwYXRoIHNwZWMKaWZpZWQuCkZpbGUgbmFtZTogJ1N5c3RlbS5Db25maWd1cmF0aW9uLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rCmVuPWIwM2Y1ZjdmMTFkNTBhM2EnIC0tLT4gU3lzdGVtLklPLkRpcmVjdG9yeU5vdEZvdW5kRXhjZXB0aW9uOiBUaGUgc3lzdGVtIGNhbm5vCnQgZmluZCB0aGUgcGF0aCBzcGVjaWZpZWQuIChFeGNlcHRpb24gZnJvbSBIUkVTVUxUOiAweDgwMDcwMDAzKQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;Unhandled Exception: System.IO.FileNotFoundException: Could not load file or ass
+embly &amp;#39;System.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b0
+3f5f7f11d50a3a&amp;#39; or one of its dependencies. The system cannot find the path spec
+ified.
+File name: &amp;#39;System.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyTok
+en=b03f5f7f11d50a3a&amp;#39; ---&amp;gt; System.IO.DirectoryNotFoundException: The system canno
+t find the path specified. (Exception from HRESULT: 0x80070003)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;I verified that System.Configuration.dll was present (in C:\Windows\Microsoft.NET\Framework\v2.0.50727).&lt;/p&gt;</description></item></channel></rss>

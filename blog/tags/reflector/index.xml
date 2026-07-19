@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Reflector on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/reflector/</link><description>Recent content in Reflector on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 30 May 2013 16:18:23 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/reflector/index.xml" rel="self" type="application/rss+xml"/><item><title>Redirect Registry by Modifying .NET Executable</title><link>https://remkoweijnen.nl/blog/2013/05/30/redirect-registry-by-modifying-net-executable/</link><pubDate>Thu, 30 May 2013 16:18:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2013/05/30/redirect-registry-by-modifying-net-executable/</guid><description>&lt;p&gt;Yesterday I was troubleshooting an application that was migrated to Citrix XenApp. &lt;/p&gt; &lt;p&gt;The application is able to use a high precision scale which is attached to the client pc's com port. This com port is redirected to XenApp.&lt;/p&gt; &lt;p&gt;While testing users reported several issues, let's have a look at them.&lt;/p&gt; &lt;p&gt;&lt;strong&gt;&lt;u&gt;Error configuring COM Port&lt;/u&gt;&lt;/strong&gt; &lt;br /&gt;Within the application the comport to which the scale is connected must be configured:&lt;/p&gt; &lt;p&gt;&lt;a class="glightbox thickbox" href="https://remkoweijnen.nl/blog/wp-content/uploads/2013/05/image3.webp" data-type="image" data-gallery="post-3284"&gt;&lt;img loading="lazy" decoding="async" style="display: inline" title="Compoort instellen" alt="De compoort lezer staat uit" src="https://remkoweijnen.nl/blog/wp-content/uploads/2013/05/image_thumb3.webp" width="240" height="95" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;After pressing &amp;quot;Registreer&amp;quot; to register the new com port the following error message was shown&lt;/p&gt; &lt;p&gt;&lt;a class="glightbox thickbox" href="https://remkoweijnen.nl/blog/wp-content/uploads/2013/05/image4.webp" data-type="image" data-gallery="post-3284"&gt;&lt;img loading="lazy" decoding="async" style="display: inline" title="Fout" alt="Er staat geen compoort in het register. Registreer eerste de juiste compoort" src="https://remkoweijnen.nl/blog/wp-content/uploads/2013/05/image_thumb4.webp" width="240" height="58" /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Calling a function inside another assembly in .NET</title><link>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</link><pubDate>Wed, 22 Aug 2012 09:42:06 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</guid><description>&lt;p&gt;&lt;img style="display: inline; float: right" alt="Red Gate .NET Reflector" align="right" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/920a4b121ffc2422.jpg" width="32" height="32" /&gt;I wanted to call a hash function from a .net executable from my code. My first step was to inspect the executable with &lt;a href="http://www.reflector.net/"&gt;Reflector&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;The Hash function was in a namespace called Core:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;namespace Core &lt;span class="codelang"&gt;&amp;middot; c#&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="namespace-core.cs" href="data:text/plain;charset=utf-8;base64,bmFtZXNwYWNlIFRoZUV4ZS5Db3JlCnsKICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBBc3NlbWJseUluZm8KICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCn0KCmludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCnsKICAgIC8vIE1ldGhvZHMKICAgIHB1YmxpYyBzdGF0aWMgc3RyaW5nIEhhc2godGhpcyBzdHJpbmcgb3JpZ2luYWwsIHN0cmluZyBwYXNzd29yZCk7CiAgICAvLyBNb3JlIG1ldGhvZHMuLi4KfQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-csharp"&gt;&lt;code class="language-csharp"&gt;namespace TheExe.Core
+{
+ internal static class AssemblyInfo
+ internal static class StringExtensionMethods
+}
+
+internal static class StringExtensionMethods
+{
+ // Methods
+ public static string Hash(this string original, string password);
+ // More methods...
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that the Core namespace is marked as internal so it was not meant to be callable outside of the executable. It's still possible to call it using Reflection:&lt;/p&gt;</description></item></channel></rss>

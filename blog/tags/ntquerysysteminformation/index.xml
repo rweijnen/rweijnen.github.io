@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NtQuerySystemInformation on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/ntquerysysteminformation/</link><description>Recent content in NtQuerySystemInformation on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 20 Jan 2011 15:34:23 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/ntquerysysteminformation/index.xml" rel="self" type="application/rss+xml"/><item><title>Enumerating Session Processes with NtQuerySystemInformation</title><link>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</link><pubDate>Thu, 20 Jan 2011 15:34:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</guid><description>&lt;p&gt;As you may know, you can enumerate processes of a specific Terminal Server or Citrix session using the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724509(VS.85).aspx"&gt;NtQuerySystemInformation&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On x86 system the code below works fine:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgU3RhdHVzIDogTlRTVEFUVVM7CiAgUmV0TGVuZ3RoIDogRFdPUkQ7CiAgU2Vzc2lvbkluZm8gOiAgU1lTVEVNX1NFU1NJT05fUFJPQ0VTU19JTkZPUk1BVElPTjsKICBDdXJyZW50UHJvY2VzcyA6IFBTeXN0ZW1Qcm9jZXNzZXM7CmJlZ2luCgogIFNlc3Npb25JbmZvLlNlc3Npb25JZCA6PSBTZXNzaW9uSWQ7CiAgU2Vzc2lvbkluZm8uQnVmZmVyIDo9IG5pbDsKICBTZXNzaW9uSW5mby5TaXplT2ZCdWYgOj0gMDsKCiAgU3RhdHVzIDo9IE50UXVlcnlTeXN0ZW1JbmZvcm1hdGlvbihTeXN0ZW1TZXNzaW9uUHJvY2Vzc2VzSW5mb3JtYXRpb24sIEBTZXNzaW9uSW5mbywgU2l6ZU9mKFNlc3Npb25JbmZvKSwgQFJldExlbmd0aCk7CiAgd2hpbGUgKFN0YXR1cyA9IFNUQVRVU19JTkZPX0xFTkdUSF9NSVNNQVRDSCkgZG8KICBiZWdpbgogICAgU2Vzc2lvbkluZm8uU2l6ZU9mQnVmIDo9IFJldExlbmd0aDsKICAgIFNlc3Npb25JbmZvLkJ1ZmZlciA6PSBHZXRNZW1vcnkoUmV0TGVuZ3RoKTsKICAgIHRyeQogICAgICBTdGF0dXMgOj0gTnRRdWVyeVN5c3RlbUluZm9ybWF0aW9uKFN5c3RlbVNlc3Npb25Qcm9jZXNzZXNJbmZvcm1hdGlvbiwgQFNlc3Npb25JbmZvLCBTaXplT2YoU2Vzc2lvbkluZm8pLCBAUmV0TGVuZ3RoKTsKICAgICAgaWYgTlRfU1VDQ0VTUyhTdGF0dXMpIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBDdXJyZW50UHJvY2VzcyA6PSBTZXNzaW9uSW5mby5CdWZmZXI7CiAgICAgICAgd2hpbGUgVHJ1ZSBkbwogICAgICAgIGJlZ2luCiAgICAgICAgICAvLyBZb3VyIGNvZGUgaGVyZQoKICAgICAgICAgIGlmIChDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGEgPSAwKSB0aGVuCiAgICAgICAgICAgIEJyZWFrOwoKICAgICAgICAgIENhcmRpbmFsKEN1cnJlbnRQcm9jZXNzKSA6PSBDYXJkaW5hbChDdXJyZW50UHJvY2VzcykgKyBDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGE7CiAgICAgICAgZW5kOwoKICAgICAgICBFeGl0OwogICAgICBlbmQ7CiAgICBmaW5hbGx5CiAgICAgIEZyZWVNZW1vcnkoU2Vzc2lvbkluZm8uQnVmZmVyKTsKICAgIGVuZDsKICBlbmQ7CgogIFNldExhc3RFcnJvcihSdGxOdFN0YXR1c1RvRG9zRXJyb3IoU3RhdHVzKSk7CiAgUmFpc2VMYXN0T1NFcnJvcjsKZW5kOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ Status : NTSTATUS;
+ RetLength : DWORD;
+ SessionInfo : SYSTEM_SESSION_PROCESS_INFORMATION;
+ CurrentProcess : PSystemProcesses;
+begin
+
+ SessionInfo.SessionId := SessionId;
+ SessionInfo.Buffer := nil;
+ SessionInfo.SizeOfBuf := 0;
+
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ while (Status = STATUS_INFO_LENGTH_MISMATCH) do
+ begin
+ SessionInfo.SizeOfBuf := RetLength;
+ SessionInfo.Buffer := GetMemory(RetLength);
+ try
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ if NT_SUCCESS(Status) then
+ begin
+ CurrentProcess := SessionInfo.Buffer;
+ while True do
+ begin
+ // Your code here
+
+ if (CurrentProcess^.NextEntryDelta = 0) then
+ Break;
+
+ Cardinal(CurrentProcess) := Cardinal(CurrentProcess) &amp;#43; CurrentProcess^.NextEntryDelta;
+ end;
+
+ Exit;
+ end;
+ finally
+ FreeMemory(SessionInfo.Buffer);
+ end;
+ end;
+
+ SetLastError(RtlNtStatusToDosError(Status));
+ RaiseLastOSError;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;While this works fine on Windows XP and 2003 x86, it fails to work correctly on the x64 versions of Windows XP and 2003 (or maybe even higher).&lt;/p&gt;
+&lt;p&gt;The problem is that RetLength is always SizeOf(SYSTEM_SESSION_PROCESS_INFORMATION) and thus we are in an endless loop!&lt;/p&gt;</description></item></channel></rss>

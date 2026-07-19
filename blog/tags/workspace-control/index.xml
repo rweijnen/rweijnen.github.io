@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Workspace Control on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/workspace-control/</link><description>Recent content in Workspace Control on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 03 Dec 2009 09:33:58 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/workspace-control/index.xml" rel="self" type="application/rss+xml"/><item><title>Citrix Workspace Control not working on HP t5540</title><link>https://remkoweijnen.nl/blog/2009/12/03/citrix-workspace-control-not-working-on-hp-t5540/</link><pubDate>Thu, 03 Dec 2009 09:33:58 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/12/03/citrix-workspace-control-not-working-on-hp-t5540/</guid><description>&lt;p&gt;Yesterday I was troubleshooting why Workspace Control was not available on an HP t5540 (Windows CE) Thin Client. This was a Citrix Xenapp 5 environment on Server 2008. When logging in through the Web Interface from the Thin Client's browser we noticed two things: Client Detection failed and the Reconnect and Disconnect buttons were not available: &lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2009/12/nobuttons.webp" class="glightbox" data-type="image" data-gallery="post-497"&gt;&lt;img loading="lazy" decoding="async" alt="NoButtons" src="https://remkoweijnen.nl/blog/wp-content/uploads/2009/12/nobuttons-small.webp" width="430" height="70" /&gt;&lt;/a&gt; I looked into the files in the webinterface folder (&lt;em&gt;wwwroot/Citrix/XenApp&lt;/em&gt;)and searched for workplace and reconnect. I determined that the Client Detection is done in the &lt;strong&gt;nativeClientDetect.js&lt;/strong&gt; (&lt;em&gt;app_data/clientDetection/clientscripts&lt;/em&gt;). But what I saw was very strange:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;javascript&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".js" href="data:text/plain;charset=utf-8;base64,Ly8gRGV0ZWN0IHdoZXRoZXIgSUNBIENsaWVudCBpcyBhdmFpbGFibGUuCjwlCmlmICgoc0NsaWVudEluZm8ub3NXaW5DRSgpICYmIHNDbGllbnRJbmZvLmlzSUUoKSkgIHx8IHNDbGllbnRJbmZvLm9zU3ltYmlhbigpICkgewolPgogICAgICAgIC8vIEl0IGlzIGRpZmZpY3VsdCB0byByZWxpYWJseSBkZXRlY3QgcHJvY2Vzc29yIHR5cGUgZm9yIFdpbkNFIGFuZCBTeW1iaWFuIERldmljZXMKICAgIC8vIGFuZCB0aGVyZWZvcmUgdG8gY2hvb3NlIHRoZSByaWdodCBmbGF2b3VyIG9mIHRoZSBJQ0EgY2xpZW50LgogICAgLy8gQWxzbywgaXQgaXMgbm90IHBvc3NpYmxlIHRvIHNpbXBseSBkb3dubG9hZCBhbmQgaW5zdGFsbCBJQ0EgY2xpZW50IGZvciBzb21lIG9mIHRoZXNlIGRldmljZXMsCiAgICAvLyBlLmcuIFdCVHMuIFRoZXJlZm9yZSwgd2UgYXNzdW1lIHRoYXQgSUNBIGNsaWVudCBpcyBhbHdheXMgYXZhaWxhYmxlLgoKICAgIGZ1bmN0aW9uIGRldGVjdE5hdGl2ZUNsaWVudCgpIHsKICAgICAgICByZXR1cm4gdHJ1ZTsKICAgIH0="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-javascript"&gt;&lt;code class="language-javascript"&gt;// Detect whether ICA Client is available.
+&amp;lt;%
+if ((sClientInfo.osWinCE() &amp;amp;&amp;amp; sClientInfo.isIE()) || sClientInfo.osSymbian() ) {
+%&amp;gt;
+ // It is difficult to reliably detect processor type for WinCE and Symbian Devices
+ // and therefore to choose the right flavour of the ICA client.
+ // Also, it is not possible to simply download and install ICA client for some of these devices,
+ // e.g. WBTs. Therefore, we assume that ICA client is always available.
+
+ function detectNativeClient() {
+ return true;
+ }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

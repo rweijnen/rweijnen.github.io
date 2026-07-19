@@ -1,0 +1,173 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Sign APPX packages with PowerShell &#183; Remko's Blog</title><meta name=description content="Locate signtool.exe across concurrent Windows 10 SDK versions with Resolve-Path and wildcards to sign APPX packages yourself for reliable UWP sideloading."><link rel=canonical href=https://remkoweijnen.nl/blog/2017/12/20/sign-appx-packages-powershell/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Sign APPX packages with PowerShell"><meta property="og:description" content="Locate signtool.exe across concurrent Windows 10 SDK versions with Resolve-Path and wildcards to sign APPX packages yourself for reliable UWP sideloading."><meta property="og:url" content="https://remkoweijnen.nl/blog/2017/12/20/sign-appx-packages-powershell/"><meta property="og:image" content="https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image-5.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Sign APPX packages with PowerShell"><meta name=twitter:description content="Locate signtool.exe across concurrent Windows 10 SDK versions with Resolve-Path and wildcards to sign APPX packages yourself for reliable UWP sideloading."><meta name=twitter:image content="https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image-5.webp"><meta property="article:published_time" content="2017-12-20T15:00:33Z"><meta property="article:modified_time" content="2017-12-20T15:00:33Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Remko Weijnen"},"dateModified":"2017-12-20T15:00:33Z","datePublished":"2017-12-20T15:00:33Z","description":"Locate signtool.exe across concurrent Windows 10 SDK versions with Resolve-Path and wildcards to sign APPX packages yourself for reliable UWP sideloading.","headline":"Sign APPX packages with PowerShell","image":["https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image-5.webp"],"mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2017/12/20/sign-appx-packages-powershell/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2017/12/20/sign-appx-packages-powershell/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"><link rel=stylesheet href=/blog/css/glightbox.min.css></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>PowerShell</span>
+<span data-pagefind-meta=category>PowerShell</span>
+<span data-pagefind-filter=tag>APPX</span><span data-pagefind-filter=tag>SignTool</span><span data-pagefind-filter=tag>UWP</span><span data-pagefind-filter=tag>PowerShell</span>
+<span data-pagefind-filter=year>2017</span>
+<span data-pagefind-meta=date>2017-12-20</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/powershell/>powershell</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Sign APPX packages with PowerShell</h1><div class=byline><time datetime=2017-12-20>Dec 20, 2017</time>
+<span class=dot>&#183;</span><span>3 min read</span></div><div class=post-content data-pagefind-body><p>I have been working with Microsoft&rsquo;s Desktop App Converter a lot recently. Even though there&rsquo;s an option to autosign the resulting package with the <code>-Sign</code> switch I prefer to sign APPX packages myself using signtool.</p><p>The reason is that I can send UWP packages to testers for sideloading without requiring them to import the auto generated certificate (which is different on each (re)build).</p><p>However I always forget the exact path to signtool.exe (this comes with the <a href=https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk target=_blank rel=noopener>Windows SDK</a>).</p><p>The Windows 10 SDK is installed by default in <code>C:\Program Files (x86)\Windows Kits\10</code>.</p><p>Signtool.exe will be in the folder <code>&lt;sdkpath>\bin\\&lt;version>\\&lt;platform>\signtool.exe</code>.</p><p>As there are multiple version of Windows 10 there are multiple version of the SDK and you can install those concurrently.</p><p>But then I found the PowerShell cmdlet <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/resolve-path?view=powershell-3.0" target=_blank rel=noopener>Resolve-Path</a> which &ldquo;Resolves the wildcard characters in a path, and displays the path contents&rdquo;.</p><p>This does exactly what I need:</p><p><a href=/blog/wp-content/uploads/2017/12/image-5.webp class=glightbox data-type=image data-gallery=post-4204><img loading=lazy decoding=async style=display:inline title=image src=/blog/wp-content/uploads/2017/12/image_thumb-5.webp alt=image width=433 height=83></a></p><p>Wow, Resolve-Path is a perfect example of the many hidden gems in PowerShell!</p><p>So I decided to wrap signtool.exe in a PowerShell cmdlet as PowerShell also makes it easy to locate the correct code signing certificate from the certificate store.</p><p>The certificate can either be provided with a parameter but if this is omitted the script will search for code signing certificates in the Personal certificates store.</p><p>If multiple code signing certificates are found, the script will ask which one you&rsquo;d like to use:</p><p><a href=/blog/wp-content/uploads/2017/12/image-6.webp class=glightbox data-type=image data-gallery=post-4204><img loading=lazy decoding=async style=display:inline title=image src=/blog/wp-content/uploads/2017/12/image_thumb-6.webp alt=image width=428 height=141></a></p><div class=codecard><div class=codehead><span class=codefile>Sign-File <span class=codelang>&#183; powershell</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=sign-file.ps1 href="data:;charset=utf-8;base64,ZnVuY3Rpb24gU2lnbi1GaWxlIHsKCTwjCgkuU1lOT1BTSVMKCQlTaWduIGEgZmlsZSAoZS5nLiAuZGxsIC5leGUgLmFwcHgpIHVzaW5nIHNpZ250b29sIChwcmVyZXF1aXN1aXRlKQoJLkRFU0NSSVBUSU9OCgkJTGV2ZXJhZ2VzIHNpZ250b29sLmV4ZSBmcm9tIHRoZSBNaWNyb3NvZnQgV2luZG93cyBTREsgdG8gc2lnbgoJCWZpbGVzIHdpdGggYSBkaWdpdGFsIHNpZ25hdHVyZS4gU3VwcG9ydHMgVmVyYm9zZSBhbmQgRGVidWcgc3dpdGNoZXMuCgkuRVhBTVBMRQoJCVNpZ24tRmlsZSAiTXlGaWxlLkV4ZSIKCS5FWEFNUExFCgkJZ2NpICJNeUZvbGRlciIgLVJlY3Vyc2UgLUZpbHRlciAqLmV4ZSB8IFNpZ24tRmlsZQoJLk5PVEVTCgkJTmFtZTogU2lnbi1GaWxlCgkJQXV0aG9yOiBSZW1rbyBXZWlqbmVuCgkjPgoJW0NtZGxldEJpbmRpbmcoU3VwcG9ydHNTaG91bGRQcm9jZXNzPSRUcnVlKV0KCXBhcmFtCgkoCgkJW1BhcmFtZXRlcihNYW5kYXRvcnk9JFRydWUsCgkJVmFsdWVGcm9tUGlwZWxpbmU9JFRydWUsCgkJVmFsdWVGcm9tUGlwZWxpbmVCeVByb3BlcnR5TmFtZT0kVHJ1ZSwKCQkgIEhlbHBNZXNzYWdlPSdXaGljaCBmaWxlKHMpIGRvIHlvdSB3YW50IHRvIHNpZ24/JyldCgkJW0FsaWFzKCdQU1BhdGgnKV0KCQlbU3lzdGVtLklPLkZpbGVJbmZvW11dJEZpbGVQYXRoLAoKCQlbUGFyYW1ldGVyKE1hbmRhdG9yeT0kRmFsc2UsCgkJVmFsdWVGcm9tUGlwZWxpbmU9JFRydWUsCgkJVmFsdWVGcm9tUGlwZWxpbmVCeVByb3BlcnR5TmFtZT0kVHJ1ZSwKCQkgIEhlbHBNZXNzYWdlPSdXaGljaCBjb2RlIHNpZ25pbmcgY2VydGlmaWNhdGUgdG8gdXNlJyldCgkJW0FsaWFzKCdDZXJ0JyldCgkJW1N5c3RlbS5TZWN1cml0eS5DcnlwdG9ncmFwaHkuWDUwOUNlcnRpZmljYXRlcy5YNTA5Q2VydGlmaWNhdGUyXSRDZXJ0aWZpY2F0ZQoJKQoKCUJFR0lOCgl7CgkJV3JpdGUtVmVyYm9zZSAiU2lnbmluZyBmaWxlKHMpOiAkRmlsZVBhdGgiCgoJCSMgZmluZCBzaWdudG9vbAoJCSRzaWduVG9vbCA9IFJlc29sdmUtUGF0aCAgIiQoW0Vudmlyb25tZW50XTo6R2V0Rm9sZGVyUGF0aCgiUHJvZ3JhbUZpbGVzWDg2IikpXFdpbmRvd3MgS2l0c1wqXGJpblwqXHg2NFxzaWdudG9vbC5leGUiIHwgU2VsZWN0IC1GaXJzdCAxCgoJCVdyaXRlLVZlcmJvc2UgInVzaW5nIFNpZ25Ub29sIGxvY2F0aW9uOiAkc2lnblRvb2wiCgoJCWlmICghJENlcnRpZmljYXRlKQoJCXsKCQkJV3JpdGUtVmVyYm9zZSAiTm8gY2VydGlmaWNhdGUgc3BlY2lmaWVkLCBzZWFyY2hpbmcgZm9yIGNvZGUgc2lnbmluZyBjZXJ0aWZpY2F0ZXMuLi4iCgkJCSRjZXJ0cyA9IEdldC1DaGlsZEl0ZW0gLVBhdGggY2VydDogLVJlY3Vyc2UgLUNvZGVTaWduaW5nQ2VydAoJCQlpZiAoJGNlcnRzIC1pcyBbYXJyYXldKQoJCQl7CgkJCQkjIGZvdW5kIG11bHRpcGxlIGNvZGUgc2lnbmluZyBjZXJ0aWZpY2F0ZXMsIGFzayB0aGUgdXNlciB3aGljaCBvbmUgdG8gdXNlCgkJCQlXcml0ZS1WZXJib3NlICJGb3VuZCBtdWx0aXBsZSBjb2RlIHNpZ25pbmcgY2VydGlmaWNhdGVzLCBwbGVhc2Ugc2VsZWN0IG9uZS4uLiIKCQkJCSRDZXJ0aWZpY2F0ZSA9IEdldC1DaGlsZEl0ZW0gLVBhdGggY2VydDogLVJlY3Vyc2UgLUNvZGVTaWduaW5nQ2VydCB8IE91dC1HcmlkVmlldyAtUGFzc1RocnUKCQkJfQoJCX0KCgkJV3JpdGUtVmVyYm9zZSAiVXNpbmcgY2VydGlmaWNhdGUgJCgkQ2VydGlmaWNhdGUuU3ViamVjdCkiCgkJJHBzaSA9IE5ldy1PYmplY3QgU3lzdGVtLkRpYWdub3N0aWNzLlByb2Nlc3NTdGFydEluZm8KCQkkcHNpLkZpbGVOYW1lID0gJHNpZ250b29sLlBhdGgKCgkJJHBzaS5SZWRpcmVjdFN0YW5kYXJkT3V0cHV0ID0gJHRydWUKCQkkcHNpLlJlZGlyZWN0U3RhbmRhcmRJbnB1dCA9ICR0cnVlCgkJJHBzaS5SZWRpcmVjdFN0YW5kYXJkRXJyb3IgPSAkdHJ1ZQoJCSRwc2kuVXNlU2hlbGxFeGVjdXRlID0gJGZhbHNlCgkJJHBzaS5DcmVhdGVOb1dpbmRvdyA9ICR0cnVlCgoJCSRyZXN1bHRzID0gQCgpCgoJfQoKCVBST0NFU1MKCXsKCgkJRm9yRWFjaCAoJGl0ZW0gaW4gJEZpbGVQYXRoKQoJCXsKCQkJV3JpdGUtVmVyYm9zZSAiUHJvY2Vzc2luZyAkKCRpdGVtLkZ1bGxuYW1lKSIKCQkJJG9wZXJhdGlvbiA9ICJzaWduIgoKCQkJaWYgKCRwc0JvdW5kUGFyYW1ldGVyc1snRGVidWcnXSkKCQkJewoJCQkJV3JpdGUtVmVyYm9zZSAiQWRkaW5nIGRlYnVnIHN3aXRjaCB0byBTaWduVG9vbCIKCQkJCSRvcGVyYXRpb24gKz0gIiAvZGVidWciCgkJCX0KCgkJCSRwc2kuQXJndW1lbnRzID0gQCgiJG9wZXJhdGlvbiAvZmQgU0hBMjU2IC9zaGExICQoJENlcnRpZmljYXRlLlRodW1iUHJpbnQpIC90IGAiaHR0cDovL3RpbWVzdGFtcC5kaWdpY2VydC5jb21gIiBgIiQoJGl0ZW0uRnVsbG5hbWUpYCIiKQoJCQlXcml0ZS1EZWJ1ZyAiU2lnbnRvb2wgY29tbWFuZGxpbmU6IGAiJCgkcHNpLkZpbGVuYW1lKWAiICQoJHBzaS5Bcmd1bWVudHMpIgoKCQkJaWYgKCRQc0NtZGxldC5TaG91bGRQcm9jZXNzKCRpdGVtKSkKCQkJewoKCQkJCSRzdGRPdXQgPSBOZXctT2JqZWN0IFN5c3RlbS5UZXh0LlN0cmluZ0J1aWxkZXIKCgkJCQkkcHJvY2VzcyA9IE5ldy1PYmplY3QgU3lzdGVtLkRpYWdub3N0aWNzLlByb2Nlc3MKCgoJCQkJJHByb2Nlc3MuU3RhcnRJbmZvID0gJHBzaQoJCQkgICAgdHJ5CgkJCQl7CgkJCQkJJHByb2Nlc3MuU3RhcnQoKSB8IE91dC1OdWxsCgoJCQkJCSRyZXN1bHQgPSBbUFNDdXN0b21PYmplY3RdQHsKCQkJCSAgICAgICAgZmlsZSA9ICQoJGl0ZW0uRnVsbG5hbWUpCgkJCQkJCXN0ZG91dCA9ICRwcm9jZXNzLlN0YW5kYXJkT3V0cHV0LlJlYWRUb0VuZCgpCgkJCQkgICAgICAgIEV4aXRDb2RlID0gJHByb2Nlc3MuRXhpdENvZGUKCQkJCQkJc3RkZXJyID0gJHByb2Nlc3MuU3RhbmRhcmRFcnJvci5SZWFkVG9FbmQoKQoJCQkJICAgIH0KCgkJCQkJJHByb2Nlc3MuV2FpdEZvckV4aXQoKQoKCQkJCQlXcml0ZS1WZXJib3NlICJTaWdudG9vbCBvdXRwdXQ6ICQoJHJlc3VsdC5zdGRvdXQpIgoJCQkJCWlmICgkcHJvY2Vzcy5FeGl0Q29kZSAtbmUgMCkKCQkJCQl7CgkJCQkJCVdyaXRlLUVycm9yICRyZXN1bHQuc3RkZXJyCgkJCQkJfQoKCQkJCQkkcmVzdWx0cyArPSAkcmVzdWx0CgkJCQl9CgkJCQljYXRjaCBbU3lzdGVtLkNvbXBvbmVudE1vZGVsLldpbjMyRXhjZXB0aW9uXQoJCQkJewoJCQkJCVdyaXRlLUVycm9yICJFeGNlcHRpb24gbGF1bmNoaW5nIHNpZ250b29sOiAkKCRfLkV4Y2VwdGlvbi5NZXNzYWdlKSIKCQkJCX0KCQkJCWNhdGNoCgkJCQl7CgkJCQkJV3JpdGUtRXJyb3IgIkV4Y2VwdGlvbjogJCgkXy5FeGNlcHRpb24uTWVzc2FnZSkiCgkJCQl9CgkJCQlmaW5hbGx5CgkJCQl7CgkJCQkJJHByb2Nlc3MuRGlzcG9zZSgpCgkJCQl9CgkJCX0KCQl9Cgl9CglFTkQKCXsKCQlXcml0ZS1WZXJib3NlICJGaW5pc2hlZCIKCQkkcmVzdWx0cwoJfQp9">Download</a></span></div><div class=codebody><pre class=language-powershell><code class=language-powershell>function Sign-File {
+	&lt;#
+	.SYNOPSIS
+		Sign a file (e.g. .dll .exe .appx) using signtool (prerequisuite)
+	.DESCRIPTION
+		Leverages signtool.exe from the Microsoft Windows SDK to sign
+		files with a digital signature. Supports Verbose and Debug switches.
+	.EXAMPLE
+		Sign-File &#34;MyFile.Exe&#34;
+	.EXAMPLE
+		gci &#34;MyFolder&#34; -Recurse -Filter *.exe | Sign-File
+	.NOTES
+		Name: Sign-File
+		Author: Remko Weijnen
+	#&gt;
+	[CmdletBinding(SupportsShouldProcess=$True)]
+	param
+	(
+		[Parameter(Mandatory=$True,
+		ValueFromPipeline=$True,
+		ValueFromPipelineByPropertyName=$True,
+		  HelpMessage=&#39;Which file(s) do you want to sign?&#39;)]
+		[Alias(&#39;PSPath&#39;)]
+		[System.IO.FileInfo[]]$FilePath,
+
+		[Parameter(Mandatory=$False,
+		ValueFromPipeline=$True,
+		ValueFromPipelineByPropertyName=$True,
+		  HelpMessage=&#39;Which code signing certificate to use&#39;)]
+		[Alias(&#39;Cert&#39;)]
+		[System.Security.Cryptography.X509Certificates.X509Certificate2]$Certificate
+	)
+
+	BEGIN
+	{
+		Write-Verbose &#34;Signing file(s): $FilePath&#34;
+
+		# find signtool
+		$signTool = Resolve-Path  &#34;$([Environment]::GetFolderPath(&#34;ProgramFilesX86&#34;))\Windows Kits\*\bin\*\x64\signtool.exe&#34; | Select -First 1
+
+		Write-Verbose &#34;using SignTool location: $signTool&#34;
+
+		if (!$Certificate)
+		{
+			Write-Verbose &#34;No certificate specified, searching for code signing certificates...&#34;
+			$certs = Get-ChildItem -Path cert: -Recurse -CodeSigningCert
+			if ($certs -is [array])
+			{
+				# found multiple code signing certificates, ask the user which one to use
+				Write-Verbose &#34;Found multiple code signing certificates, please select one...&#34;
+				$Certificate = Get-ChildItem -Path cert: -Recurse -CodeSigningCert | Out-GridView -PassThru
+			}
+		}
+
+		Write-Verbose &#34;Using certificate $($Certificate.Subject)&#34;
+		$psi = New-Object System.Diagnostics.ProcessStartInfo
+		$psi.FileName = $signtool.Path
+
+		$psi.RedirectStandardOutput = $true
+		$psi.RedirectStandardInput = $true
+		$psi.RedirectStandardError = $true
+		$psi.UseShellExecute = $false
+		$psi.CreateNoWindow = $true
+
+		$results = @()
+
+	}
+
+	PROCESS
+	{
+
+		ForEach ($item in $FilePath)
+		{
+			Write-Verbose &#34;Processing $($item.Fullname)&#34;
+			$operation = &#34;sign&#34;
+
+			if ($psBoundParameters[&#39;Debug&#39;])
+			{
+				Write-Verbose &#34;Adding debug switch to SignTool&#34;
+				$operation &#43;= &#34; /debug&#34;
+			}
+
+			$psi.Arguments = @(&#34;$operation /fd SHA256 /sha1 $($Certificate.ThumbPrint) /t `&#34;http://timestamp.digicert.com`&#34; `&#34;$($item.Fullname)`&#34;&#34;)
+			Write-Debug &#34;Signtool commandline: `&#34;$($psi.Filename)`&#34; $($psi.Arguments)&#34;
+
+			if ($PsCmdlet.ShouldProcess($item))
+			{
+
+				$stdOut = New-Object System.Text.StringBuilder
+
+				$process = New-Object System.Diagnostics.Process
+
+
+				$process.StartInfo = $psi
+			    try
+				{
+					$process.Start() | Out-Null
+
+					$result = [PSCustomObject]@{
+				        file = $($item.Fullname)
+						stdout = $process.StandardOutput.ReadToEnd()
+				        ExitCode = $process.ExitCode
+						stderr = $process.StandardError.ReadToEnd()
+				    }
+
+					$process.WaitForExit()
+
+					Write-Verbose &#34;Signtool output: $($result.stdout)&#34;
+					if ($process.ExitCode -ne 0)
+					{
+						Write-Error $result.stderr
+					}
+
+					$results &#43;= $result
+				}
+				catch [System.ComponentModel.Win32Exception]
+				{
+					Write-Error &#34;Exception launching signtool: $($_.Exception.Message)&#34;
+				}
+				catch
+				{
+					Write-Error &#34;Exception: $($_.Exception.Message)&#34;
+				}
+				finally
+				{
+					$process.Dispose()
+				}
+			}
+		}
+	}
+	END
+	{
+		Write-Verbose &#34;Finished&#34;
+		$results
+	}
+}</code></pre></div></div><p>The script can be downloaded directly from my <a href=https://github.com/rweijnen/Sign-File target=_blank rel=noopener>Github repo.</a></p></div><div class=author-foot><img class=avatar-img src=/blog/img/remko-avatar.png alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>RW</span><div class=who><div class=side-h>> written by</div><div class=name>Remko Weijnen</div><p>I work on Windows internals, application delivery, security, reverse engineering, automation and AI — building tools, debugging strange behaviour and taking systems apart to understand how they work.</p><div class=links><a href=https://github.com/rweijnen rel=me>GitHub</a>
+<a href=https://www.linkedin.com/in/remkoweijnen/ rel=me>LinkedIn</a></div></div></div></article><aside class=rail><div class=side-modules><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on PowerShell</div><div class=related-list><a class=related-item href=/blog/2022/06/17/the-aws-access-key-id-you-provided-does-not-exist-in-our-records-using-aws-powershell-cmdlets/><span class=rt>The AWS Access Key Id you provided does not exist in our records using AWS PowerShell Cmdlets</span>
+<span class=rm>2022 &#183; 2 min</span>
+</a><a class=related-item href=/blog/2017/04/04/get-windows-10-version-number-powershell/><span class=rt>Get Windows 10 Version Number with PowerShell</span>
+<span class=rm>2017 &#183; 4 min</span>
+</a><a class=related-item href=/blog/2017/03/13/convert-executable-powershell/><span class=rt>Convert Executable to PowerShell</span>
+<span class=rm>2017 &#183; 4 min</span>
+</a><a class=related-all href=/blog/categories/powershell/>All PowerShell posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/>Cannot complete customization when cloning from Template</a><div class=random-meta id=randomMeta>2010 &#183; VMware</div><script type=application/json id=randomPool>[{"c":"VMware","t":"Cannot complete customization when cloning from Template","u":"/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/","y":"2010"},{"c":"Delphi","t":"Accessing kernel objects in other sessions part 1","u":"/blog/2009/01/27/accessing-kernel-objects-in-other-sessions/","y":"2009"},{"c":"Delphi","t":"How to get Client IP Address?","u":"/blog/2007/10/31/how-to-get-client-ip-address/","y":"2007"},{"c":"Active Directory","t":"Reading accountExpires attribute from Active Directory (in Delphi)","u":"/blog/2010/02/10/reading-accountexpires-attribute-from-active-directory-in-delphi/","y":"2010"},{"c":"Delphi","t":"Setting ChildCount in a Virtual Tree","u":"/blog/2010/06/08/setting-childcount-in-a-virtual-tree/","y":"2010"},{"c":"General","t":"Office 2010 cannot remove registry key","u":"/blog/2011/03/10/office-2010-cannot-remove-registry-key/","y":"2011"},{"c":"Citrix","t":"Unable to get System PTE individual lock consumer information error when using !sysptes 4 in WinDbg","u":"/blog/2009/04/16/unable-to-get-system-pte-individual-lock-consumer-information-error-when-using-sysptes-4-in-windbg/","y":"2009"},{"c":"Delphi","t":"New home for Jedi Apilib and Jedi Security Library","u":"/blog/2008/03/03/new-home-for-jedi-apilib-and-jedi-security-library/","y":"2008"},{"c":"Windows 2008","t":"How to deactivate Internet Explorer Enhanced Security Configuration in Windows Server 2008?","u":"/blog/2008/04/04/how-to-deactivate-internet-explorer-enhanced-security-configuration-in-windows-server-2008/","y":"2008"},{"c":"Delphi","t":"Sending WM_KEYDOWN or WM_KEYUP","u":"/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/","y":"2009"},{"c":"Citrix","t":"The case of the Slow Xerox Universal Print Driver","u":"/blog/2012/01/04/the-case-of-the-slow-xerox-universal-print-driver/","y":"2012"},{"c":"Active Directory","t":"Registry editing has been disabled by your administrator (not anymore!)","u":"/blog/2008/08/12/registry-editing-has-been-disabled-by-your-administrator/","y":"2008"},{"c":"Active Directory","t":"The case of the failing Exchange 2007 Install","u":"/blog/2010/11/08/the-case-of-the-failing-exchange-2007-install/","y":"2010"},{"c":"Delphi","t":"Rad Studio XE has been released","u":"/blog/2010/08/30/rad-studio-xe-has-been-released/","y":"2010"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script src=/blog/js/glightbox.min.js></script><script>window.GLightbox&&GLightbox({selector:".glightbox",loop:!0})</script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

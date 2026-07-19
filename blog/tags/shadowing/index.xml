@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Shadowing on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/shadowing/</link><description>Recent content in Shadowing on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 27 Dec 2010 16:38:55 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/shadowing/index.xml" rel="self" type="application/rss+xml"/><item><title>Terminal Server Remote Keyboard Layout</title><link>https://remkoweijnen.nl/blog/2010/12/27/terminal-server-remote-keyboard-layout/</link><pubDate>Mon, 27 Dec 2010 16:38:55 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/27/terminal-server-remote-keyboard-layout/</guid><description>&lt;p&gt;Today I shadowed a user&amp;rsquo;s session in Citrix and when I wanted to type something I noticed that the keyboard layout was incorrect.&lt;/p&gt;
+&lt;p&gt;This is and old &amp;ldquo;friend&amp;rdquo; that I always tend to forget about. So hopefully this post will help me to remember it :D.&lt;/p&gt;
+&lt;p&gt;You can prevent this by adding a value &amp;ldquo;IgnoreRemoteKeyboardLayout&amp;rdquo; to the registry key HKLM\System\CurrentControlSet\Keyboard Layout:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,cmVnIGFkZCAiSEtMTVxTWVNURU1cQ3VycmVudENvbnRyb2xTZXRcQ29udHJvbFxLZXlib2FyZCBMYXlvdXQiIC92IElnbm9yZVJlbW90ZUtleWJvYXJkTGF5b3V0IC90IFJFR19EV09SRCAvZCAweDAwMDAwMDAxIC9m"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;reg add &amp;#34;HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layout&amp;#34; /v IgnoreRemoteKeyboardLayout /t REG_DWORD /d 0x00000001 /f&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;This option has been present since Windows 2000 but was broken in Windows 2003. For Windows 2003 there are two related hotfixes, see &lt;a title="The IgnoreRemoteKeyboardLayout registry entry has no effect in Windows Server 2003" href="http://support.microsoft.com/kb/842136" target="_blank"&gt;kb 842136&lt;/a&gt; and &lt;a title="The terminal server IME keyboard layout differs from the client computer when you remotely log on to a Windows Server 2003 SP1-based terminal server" href="http://support.microsoft.com/kb/917910" target="_blank"&gt;kb 917910&lt;/a&gt;.&lt;/p&gt;</description></item></channel></rss>

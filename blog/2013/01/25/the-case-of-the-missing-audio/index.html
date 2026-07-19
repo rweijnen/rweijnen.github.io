@@ -1,0 +1,183 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>The case of the missing audio &#183; Remko's Blog</title><meta name=description content="No audio on a Citrix XenApp presentation PC turns out to be a separate Philips Audio Control from the G2 Speech driver muting output alongside the standard mixer."><link rel=canonical href=https://remkoweijnen.nl/blog/2013/01/25/the-case-of-the-missing-audio/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="The case of the missing audio"><meta property="og:description" content="No audio on a Citrix XenApp presentation PC turns out to be a separate Philips Audio Control from the G2 Speech driver muting output alongside the standard mixer."><meta property="og:url" content="https://remkoweijnen.nl/blog/2013/01/25/the-case-of-the-missing-audio/"><meta property="og:image" content="https://remkoweijnen.nl/blog/wp-content/uploads/2013/01/image16.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="The case of the missing audio"><meta name=twitter:description content="No audio on a Citrix XenApp presentation PC turns out to be a separate Philips Audio Control from the G2 Speech driver muting output alongside the standard mixer."><meta name=twitter:image content="https://remkoweijnen.nl/blog/wp-content/uploads/2013/01/image16.webp"><meta property="article:published_time" content="2013-01-25T16:07:06Z"><meta property="article:modified_time" content="2013-01-25T16:07:06Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Remko Weijnen"},"dateModified":"2013-01-25T16:07:06Z","datePublished":"2013-01-25T16:07:06Z","description":"No audio on a Citrix XenApp presentation PC turns out to be a separate Philips Audio Control from the G2 Speech driver muting output alongside the standard mixer.","headline":"The case of the missing audio","image":["https://remkoweijnen.nl/blog/wp-content/uploads/2013/01/image16.webp"],"mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2013/01/25/the-case-of-the-missing-audio/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2013/01/25/the-case-of-the-missing-audio/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"><link rel=stylesheet href=/blog/css/glightbox.min.css></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Citrix</span><span data-pagefind-filter=category>RES</span><span data-pagefind-filter=category>Windows XP</span>
+<span data-pagefind-meta=category>Citrix</span>
+<span data-pagefind-filter=tag>Citrix</span><span data-pagefind-filter=tag>XenApp</span><span data-pagefind-filter=tag>Audio</span><span data-pagefind-filter=tag>RES Workspace Extender</span><span data-pagefind-filter=tag>Philips G2 Speech</span><span data-pagefind-filter=tag>Windows XP</span>
+<span data-pagefind-filter=year>2013</span>
+<span data-pagefind-meta=date>2013-01-25</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/citrix/>citrix</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>The case of the missing audio</h1><div class=byline><time datetime=2013-01-25>Jan 25, 2013</time>
+<span class=dot>&#183;</span><span>5 min read</span></div><div class=post-content data-pagefind-body><p>Yesterday I was asked to investigate a problem with a presentation pc. Even though the volume was set maximal there was not audio output.</p><p>The machine was used to connect to a Citrix XenApp desktop and RES Workspace Extender was used to integrate local applications in the XenApp desktop.</p><p>The local sound volume control was published as a subscribed application so I launched that and verified that the volume was set to Maximum:</p><p><a class="glightbox thickbox" href=/blog/wp-content/uploads/2013/01/image16.webp data-type=image data-gallery=post-3007><img loading=lazy decoding=async style=display:inline title=Volumeregeling alt=Volumeregeling src=/blog/wp-content/uploads/2013/01/image_thumb16.webp width=415 height=211></a></p><p>I decided to launch the local explorer shell and noticed that there were two volume control icons in the Traybar:</p><p><a class="glightbox thickbox" href=/blog/wp-content/uploads/2013/01/image17.webp data-type=image data-gallery=post-3007><img loading=lazy decoding=async style=display:inline title=Traybar alt="Volume Controls" src=/blog/wp-content/uploads/2013/01/image_thumb17.webp width=96 height=25></a></p><p>I clicked the second icon and a control named "Philips Audio Control" popped up:</p><p><a class="glightbox thickbox" href=/blog/wp-content/uploads/2013/01/image18.webp data-type=image data-gallery=post-3007><img loading=lazy decoding=async style=display:inline title="Philips Audio Control" alt="Volume Muted" src=/blog/wp-content/uploads/2013/01/image_thumb18.webp width=240 height=218></a></p><p>I raised the volume in the Philips Audio Control and immediately the audio worked as expected.</p><p>I was curious where this "Philips Audio Control" came from and found out that it belongs to the Philips <a href=http://www.g2speech.com>G2 Speech</a> software.</p><p>Apparently the G2 Speech driver was put in the pc image to accommodate medical staff that use dictation and speech recognition software (so they can use it on any pc).</p><p>When the G2 Speech hardware is plugged in the volume controls are synched so if you adjust one of the two volumes the other follows.</p><p>However when the G2 Speech hardware is not present, the Philips Audio Control volume is set to mute by default and setting the master volume to maximum still gives no audio.</p><p>This was a potential issue on all pc's so I needed to find a way to set the volume programmatically.</p><p>I investigated the Philips Audio Control binary (PspContr.exe) with my favourite tool, Ida Pro. PspContr.exe loads an audio driver:</p><div class=codecard><div class=codehead><span class=codefile>PspContr.exe <span class=codelang>&#183; c</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=pspcontr.exe.c href="data:;charset=utf-8,OpenDriver(%22pspaudrv.dll%22,%200,%200)">Download</a></span></div><div class=codebody><pre class=language-c><code class=language-c>OpenDriver(&#34;pspaudrv.dll&#34;, 0, 0)</code></pre></div></div><p>I loaded pspaudrv.dll in Ida Pro calls and it calls into a function named PSPSBEXTwodMessage from pspsbext.dll with different integers (messages?). I thought that this might be of interest because wodMessage could mean <a href=http://msdn.microsoft.com/en-us/library/ms923287.aspx>Waveform Output Driver</a> Message.</p><div class=codecard><div class=codehead><span class=codefile>PSPSBEXTwodMessage <span class=codelang>&#183; c</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=pspsbextwodmessage.c href="data:;charset=utf-8;base64,c2lnbmVkIGludCBfX3N0ZGNhbGwgUFNQU0JFWFR3b2RNZXNzYWdlKGludCBhMSwgRFdPUkQgbHBNZW0sIERXT1JEIERhdGEsIGludCBjYndoKQp7CiAgc2lnbmVkIGludCByZXN1bHQ7IC8vIGVheEAzCiAgaW50IHY1OyAvLyBlYnhANQogIEhXQVZFT1VUIHY2OyAvLyBlY3hAMjEKCiAgaWYgKCBieXRlXzIwNTk4NTQ0ICkKICB7CiAgICBpZiAoIHN1Yl8yMDUwMzBFMChhMSwgbHBNZW0sIERhdGEsIGNid2gsIDIsIChpbnQpJmNid2gpICkKICAgIHsKICAgICAgcmVzdWx0ID0gY2J3aDsKICAgIH0KICAgIGVsc2UKICAgIHsKICAgICAgZm5MT0dOdW1FcnIoIlBTUFNCRVhULkRMTCIsICIuXFxXYXZlcHJvYy5jIiwgMzYzLCAwLCAiRXJyb3IgaW4gcmVkaXJlY3RpbmcgY29tbWFuZCBmb3IgY2l0cml4Iik7CiAgICAgIHJlc3VsdCA9IDg7CiAgICB9CiAgfQogIGVsc2UKICB7CiAgICB2NSA9IGNid2g7CiAgICBpZiAoIGJ5dGVfMjA1OTg1NDUgJiYgc3ViXzIwNTAzMjYwKGExLCBscE1lbSwgRGF0YSwgY2J3aCwgMiwgKGludCkmY2J3aCkgKQogICAgewogICAgICByZXN1bHQgPSBjYndoOwogICAgfQogICAgZWxzZSBpZiAoICh1bnNpZ25lZCBpbnQpYTEgPiAweDQwMDAgKQogICAgewogICAgICBzd2l0Y2ggKCBhMSApCiAgICAgIHsKICAgICAgICBjYXNlIDE2Mzg1OgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCA0MzYsICJ3b2RNZXNzYWdlKCkgLSBXT0RNX1NFVFNQRUVEIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDY2RDAoRGF0YSk7CiAgICAgICAgICBicmVhazsKICAgICAgICBjYXNlIDE2Mzg2OgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCA0NDAsICJ3b2RNZXNzYWdlKCkgLSBXT0RNX0dFVFNQRUVEIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDY4NTAoRGF0YSk7CiAgICAgICAgICBicmVhazsKICAgICAgICBjYXNlIDE2Mzg3OgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCA0NDQsICJ3b2RNZXNzYWdlKCkgLSBXT0RNX1NFVFRPTkUiKTsKICAgICAgICAgIHJlc3VsdCA9IHN1Yl8yMDUwNjg4MChEYXRhKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgMTYzODg6CiAgICAgICAgICBmbkxPR0Z1bmN0aW9uKCJQU1BTQkVYVC5ETEwiLCAiLlxcV2F2ZXByb2MuYyIsIDQ0OCwgIndvZE1lc3NhZ2UoKSAtIFdPRE1fR0VUVE9ORSIpOwogICAgICAgICAgcmVzdWx0ID0gc3ViXzIwNTA2QTAwKERhdGEpOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSAxNjM4OToKICAgICAgICAgIGZuTE9HRnVuY3Rpb24oIlBTUFNCRVhULkRMTCIsICIuXFxXYXZlcHJvYy5jIiwgNDUyLCAid29kTWVzc2FnZSgpIC0gV09ETV9HRVRTSUdOQUwiKTsKICAgICAgICAgIGlmICggISooX0RXT1JEICopbHBNZW0gKQogICAgICAgICAgICBnb3RvIExBQkVMXzMzOwogICAgICAgICAgcmVzdWx0ID0gc3ViXzIwNTA2RjMwKDIsIGxwTWVtLCBEYXRhKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgMTYzOTI6CiAgICAgICAgICBmbkxPR0Z1bmN0aW9uKCJQU1BTQkVYVC5ETEwiLCAiLlxcV2F2ZXByb2MuYyIsIDQ2NCwgIndvZE1lc3NhZ2UoKSAtIFdPRE1fR0VUUEVBSyIpOwogICAgICAgICAgaWYgKCAhKihfRFdPUkQgKilscE1lbSApCiAgICAgICAgICAgIGdvdG8gTEFCRUxfMzM7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDZGOTAoMiwgbHBNZW0sIERhdGEpOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSAxNjM5MzoKICAgICAgICAgIGZuTE9HRnVuY3Rpb24oIlBTUFNCRVhULkRMTCIsICIuXFxXYXZlcHJvYy5jIiwgNDc2LCAid29kTWVzc2FnZSgpIC0gV09ETV9TRVRDSEFOTkVMU0VMRUNUSU9OIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDcwRDAoRGF0YSk7CiAgICAgICAgICBicmVhazsKICAgICAgICBkZWZhdWx0OgpMQUJFTF8zMzoKICAgICAgICAgIHJlc3VsdCA9IDg7CiAgICAgICAgICBicmVhazsKICAgICAgfQogICAgfQogICAgZWxzZSBpZiAoIGExID09IDE2Mzg0ICkKICAgIHsKICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCA0MzIsICJ3b2RNZXNzYWdlKCkgLSBXT0RNX0dFVFBTUENBUFMiKTsKICAgICAgcmVzdWx0ID0gc3ViXzIwNTA2NjcwKDIsICh2b2lkICopRGF0YSwgdjUpOwogICAgfQogICAgZWxzZQogICAgewogICAgICBzd2l0Y2ggKCBhMSApCiAgICAgIHsKICAgICAgICBjYXNlIDM6CiAgICAgICAgICBmbkxPR0Z1bmN0aW9uKCJQU1BTQkVYVC5ETEwiLCAiLlxcV2F2ZXByb2MuYyIsIDM4MCwgIndvZE1lc3NhZ2UoKSAtIFdPRE1fR0VUTlVNREVWUyIpOwogICAgICAgICAgcmVzdWx0ID0gd2F2ZU91dEdldE51bURldnMoKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgNDoKICAgICAgICAgIGZuTE9HRnVuY3Rpb24oIlBTUFNCRVhULkRMTCIsICIuXFxXYXZlcHJvYy5jIiwgMzg0LCAid29kTWVzc2FnZSgpIC0gV09ETV9HRVRERVZDQVBTIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDFGMDAoKHZvaWQgKilEYXRhLCB2NSkgIT0gMCA/IDAgOiA3OwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSA1OgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCAzOTUsICJ3b2RNZXNzYWdlKCkgLSBXT0RNX09QRU4iKTsKICAgICAgICAgIHJlc3VsdCA9IHN1Yl8yMDUwNzcxMCgoSEtFWSkyLCBscE1lbSwgRGF0YSwgdjUpOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSA2OgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCAzOTksICJ3b2RNZXNzYWdlKCkgLSBXT0RNX0NMT1NFIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDk1NTAoMiwgbHBNZW0pOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSA5OgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCA0MDMsICJ3b2RNZXNzYWdlKCkgLSBXT0RNX1dSSVRFIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDkxOTAoMiwgbHBNZW0sIChMUFdBVkVIRFIpRGF0YSwgdjUpOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSAxMDoKICAgICAgICAgIGZuTE9HRnVuY3Rpb24oIlBTUFNCRVhULkRMTCIsICIuXFxXYXZlcHJvYy5jIiwgNDA3LCAid29kTWVzc2FnZSgpIC0gV09ETV9QQVVTRSIpOwogICAgICAgICAgcmVzdWx0ID0gc3ViXzIwNTA5QjgwKDIsIGxwTWVtKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgMTE6CiAgICAgICAgICBmbkxPR0Z1bmN0aW9uKCJQU1BTQkVYVC5ETEwiLCAiLlxcV2F2ZXByb2MuYyIsIDQxMSwgIndvZE1lc3NhZ2UoKSAtIFdPRE1fUkVTVEFSVCIpOwogICAgICAgICAgcmVzdWx0ID0gc3ViXzIwNTA5RDAwKDIsIGxwTWVtKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgMTI6CiAgICAgICAgICBmbkxPR0Z1bmN0aW9uKCJQU1BTQkVYVC5ETEwiLCAiLlxcV2F2ZXByb2MuYyIsIDQxNSwgIndvZE1lc3NhZ2UoKSAtIFdPRE1fUkVTRVQiKTsKICAgICAgICAgIHJlc3VsdCA9IHN1Yl8yMDUwOURFMCgyLCBscE1lbSk7CiAgICAgICAgICBicmVhazsKICAgICAgICBjYXNlIDEzOgogICAgICAgICAgZm5MT0dGdW5jdGlvbigiUFNQU0JFWFQuRExMIiwgIi5cXFdhdmVwcm9jLmMiLCA0MTksICJ3b2RNZXNzYWdlKCkgLSBXT0RNX0dFVFBPUyIpOwogICAgICAgICAgcmVzdWx0ID0gc3ViXzIwNTA5RkUwKDIsIGxwTWVtLCAoTFBNTVRJTUUpRGF0YSwgdjUpOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgY2FzZSAxNzoKICAgICAgICAgIGZuTE9HRnVuY3Rpb24oIlBTUFNCRVhULkRMTCIsICIuXFxXYXZlcHJvYy5jIiwgNDIzLCAid29kTWVzc2FnZSgpIC0gV09ETV9TRVRWT0xVTUUiKTsKICAgICAgICAgIHJlc3VsdCA9IHN1Yl8yMDUwOEZFMChEYXRhKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgMTY6CiAgICAgICAgICBmbkxPR0Z1bmN0aW9uKCJQU1BTQkVYVC5ETEwiLCAiLlxcV2F2ZXByb2MuYyIsIDQyNywgIndvZE1lc3NhZ2UoKSAtIFdPRE1fR0VUVk9MVU1FIik7CiAgICAgICAgICByZXN1bHQgPSBzdWJfMjA1MDkxMDAodjYsIChMUERXT1JEKURhdGEpOwogICAgICAgICAgYnJlYWs7CiAgICAgICAgZGVmYXVsdDoKICAgICAgICAgIGdvdG8gTEFCRUxfMzM7CiAgICAgIH0KICAgIH0KICB9CiAgcmV0dXJuIHJlc3VsdDsKfQ==">Download</a></span></div><div class=codebody><pre class=language-c><code class=language-c>signed int __stdcall PSPSBEXTwodMessage(int a1, DWORD lpMem, DWORD Data, int cbwh)
+{
+  signed int result; // eax@3
+  int v5; // ebx@5
+  HWAVEOUT v6; // ecx@21
+
+  if ( byte_20598544 )
+  {
+    if ( sub_205030E0(a1, lpMem, Data, cbwh, 2, (int)&amp;cbwh) )
+    {
+      result = cbwh;
+    }
+    else
+    {
+      fnLOGNumErr(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 363, 0, &#34;Error in redirecting command for citrix&#34;);
+      result = 8;
+    }
+  }
+  else
+  {
+    v5 = cbwh;
+    if ( byte_20598545 &amp;&amp; sub_20503260(a1, lpMem, Data, cbwh, 2, (int)&amp;cbwh) )
+    {
+      result = cbwh;
+    }
+    else if ( (unsigned int)a1 &gt; 0x4000 )
+    {
+      switch ( a1 )
+      {
+        case 16385:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 436, &#34;wodMessage() - WODM_SETSPEED&#34;);
+          result = sub_205066D0(Data);
+          break;
+        case 16386:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 440, &#34;wodMessage() - WODM_GETSPEED&#34;);
+          result = sub_20506850(Data);
+          break;
+        case 16387:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 444, &#34;wodMessage() - WODM_SETTONE&#34;);
+          result = sub_20506880(Data);
+          break;
+        case 16388:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 448, &#34;wodMessage() - WODM_GETTONE&#34;);
+          result = sub_20506A00(Data);
+          break;
+        case 16389:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 452, &#34;wodMessage() - WODM_GETSIGNAL&#34;);
+          if ( !*(_DWORD *)lpMem )
+            goto LABEL_33;
+          result = sub_20506F30(2, lpMem, Data);
+          break;
+        case 16392:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 464, &#34;wodMessage() - WODM_GETPEAK&#34;);
+          if ( !*(_DWORD *)lpMem )
+            goto LABEL_33;
+          result = sub_20506F90(2, lpMem, Data);
+          break;
+        case 16393:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 476, &#34;wodMessage() - WODM_SETCHANNELSELECTION&#34;);
+          result = sub_205070D0(Data);
+          break;
+        default:
+LABEL_33:
+          result = 8;
+          break;
+      }
+    }
+    else if ( a1 == 16384 )
+    {
+      fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 432, &#34;wodMessage() - WODM_GETPSPCAPS&#34;);
+      result = sub_20506670(2, (void *)Data, v5);
+    }
+    else
+    {
+      switch ( a1 )
+      {
+        case 3:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 380, &#34;wodMessage() - WODM_GETNUMDEVS&#34;);
+          result = waveOutGetNumDevs();
+          break;
+        case 4:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 384, &#34;wodMessage() - WODM_GETDEVCAPS&#34;);
+          result = sub_20501F00((void *)Data, v5) != 0 ? 0 : 7;
+          break;
+        case 5:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 395, &#34;wodMessage() - WODM_OPEN&#34;);
+          result = sub_20507710((HKEY)2, lpMem, Data, v5);
+          break;
+        case 6:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 399, &#34;wodMessage() - WODM_CLOSE&#34;);
+          result = sub_20509550(2, lpMem);
+          break;
+        case 9:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 403, &#34;wodMessage() - WODM_WRITE&#34;);
+          result = sub_20509190(2, lpMem, (LPWAVEHDR)Data, v5);
+          break;
+        case 10:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 407, &#34;wodMessage() - WODM_PAUSE&#34;);
+          result = sub_20509B80(2, lpMem);
+          break;
+        case 11:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 411, &#34;wodMessage() - WODM_RESTART&#34;);
+          result = sub_20509D00(2, lpMem);
+          break;
+        case 12:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 415, &#34;wodMessage() - WODM_RESET&#34;);
+          result = sub_20509DE0(2, lpMem);
+          break;
+        case 13:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 419, &#34;wodMessage() - WODM_GETPOS&#34;);
+          result = sub_20509FE0(2, lpMem, (LPMMTIME)Data, v5);
+          break;
+        case 17:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 423, &#34;wodMessage() - WODM_SETVOLUME&#34;);
+          result = sub_20508FE0(Data);
+          break;
+        case 16:
+          fnLOGFunction(&#34;PSPSBEXT.DLL&#34;, &#34;.\\Waveproc.c&#34;, 427, &#34;wodMessage() - WODM_GETVOLUME&#34;);
+          result = sub_20509100(v6, (LPDWORD)Data);
+          break;
+        default:
+          goto LABEL_33;
+      }
+    }
+  }
+  return result;
+}</code></pre></div></div><p>If you look at the marked lines you can see that message 17 is setvolume and message 16 is getvolume!</p><p>From the code in PspContr.exe we can see a sample for calling getvolume:</p><div class=codecard><div class=codehead><span class=codefile>Get Volume <span class=codelang>&#183; c</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=get-volume.c href="data:;charset=utf-8,v4%20=%20PSPSBEXTwodMessage(16,%200,%20%26a1,%200);">Download</a></span></div><div class=codebody><pre class=language-c><code class=language-c>v4 = PSPSBEXTwodMessage(16, 0, &amp;a1, 0);</code></pre></div></div><p>That made it quite easy to guess the function parameters:</p><div class=codecard><div class=codehead><span class=codefile>Sample Code <span class=codelang>&#183; delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=sample-code.pas href="data:;charset=utf-8,%7B$WARN%20SYMBOL_PLATFORM%20OFF%7D%0Afunction%20PSPSBEXTwodMessage(Msg:%20Integer;%20lpMem:%20DWORD;%20Data:%20PDWORD;%0A%20%20cbwh:%20Integer):%20DWORD;%20stdcall%20external%20'pspsbext.dll'%20delayed;%0A%7B$WARN%20SYMBOL_PLATFORM%20ON%7D%0A%0Afunction%20GetVolume(var%20Vol:%20TPspVolume):%20Boolean;%0Abegin%0A%20%20Result%20:=%20PSPSBEXTwodMessage(WODM_GETVOLUME,%200,%20@Vol.Volume,%200)%20=%200;%0Aend;%0A%0Afunction%20SetVolume(const%20Vol:%20TPspVolume):%20Boolean;%0Abegin%0A%20%20Result%20:=%20PSPSBEXTwodMessage(WODM_SETVOLUME,%200,%20Pointer(Vol.Volume),%200)%20=%200;%0Aend;">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>{$WARN SYMBOL_PLATFORM OFF}
+function PSPSBEXTwodMessage(Msg: Integer; lpMem: DWORD; Data: PDWORD;
+  cbwh: Integer): DWORD; stdcall external &#39;pspsbext.dll&#39; delayed;
+{$WARN SYMBOL_PLATFORM ON}
+
+function GetVolume(var Vol: TPspVolume): Boolean;
+begin
+  Result := PSPSBEXTwodMessage(WODM_GETVOLUME, 0, @Vol.Volume, 0) = 0;
+end;
+
+function SetVolume(const Vol: TPspVolume): Boolean;
+begin
+  Result := PSPSBEXTwodMessage(WODM_SETVOLUME, 0, Pointer(Vol.Volume), 0) = 0;
+end;</code></pre></div></div><p>I made a commandline tool to get and set the volume so it could be deployed with the customer's deployment tool (RES Automation Manager).</p><p><a href=/blog/wp-content/uploads/2013/01/image19.webp class="glightbox thickbox" data-type=image data-gallery=post-3007><img loading=lazy decoding=async style=display:inline title=image alt=image src=/blog/wp-content/uploads/2013/01/image_thumb19.webp width=421 height=93></a></p><p><a class=download href=/blog/files/PspVolume.zip>PspVolume.zip</a></p></div><div class=author-foot><img class=avatar-img src=/blog/img/remko-avatar.png alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>RW</span><div class=who><div class=side-h>> written by</div><div class=name>Remko Weijnen</div><p>I work on Windows internals, application delivery, security, reverse engineering, automation and AI — building tools, debugging strange behaviour and taking systems apart to understand how they work.</p><div class=links><a href=https://github.com/rweijnen rel=me>GitHub</a>
+<a href=https://www.linkedin.com/in/remkoweijnen/ rel=me>LinkedIn</a></div></div></div></article><aside class=rail><div class=side-modules><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Citrix</div><div class=related-list><a class=related-item href=/blog/2017/12/13/change-netscaler-password-hash-sha1-sha512/><span class=rt>Change NetScaler Password Hash from SHA1 to SHA512</span>
+<span class=rm>2017 &#183; 1 min</span>
+</a><a class=related-item href=/blog/2017/03/23/where-does-the-citrix-linux-vda-store-settings/><span class=rt>Where does the Citrix Linux VDA store settings?</span>
+<span class=rm>2017 &#183; 2 min</span>
+</a><a class=related-item href=/blog/2017/02/20/google-earth-fix-xenapp-rdsh-horizon/><span class=rt>Google Earth fix for XenApp, RDSH & Horizon</span>
+<span class=rm>2017 &#183; 6 min</span>
+</a><a class=related-all href=/blog/categories/citrix/>All Citrix posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2011/02/14/the-case-of-the-intermittent-hangs/>The case of the intermittent hangs</a><div class=random-meta id=randomMeta>2011 &#183; General</div><script type=application/json id=randomPool>[{"c":"General","t":"The case of the intermittent hangs","u":"/blog/2011/02/14/the-case-of-the-intermittent-hangs/","y":"2011"},{"c":"Programming","t":"Cannot redeclare class Snoopy","u":"/blog/2013/01/14/cannot-redeclare-class-snoopy/","y":"2013"},{"c":"iPhone","t":"From Jailbreak to Jailbreak part 2","u":"/blog/2012/01/21/from-jailbreak-to-jailbreak-part-2/","y":"2012"},{"c":"Citrix","t":"Detecting a Citrix Published Application","u":"/blog/2010/07/05/detecting-a-citrix-published-application/","y":"2010"},{"c":"Altiris","t":"Compiling Drivers for Altiris Linux PXE Image Part 1","u":"/blog/2011/03/17/compiling-drivers-for-altiris-linux-pxe-image-part-1/","y":"2011"},{"c":"Citrix","t":"Application causes Screen Flickering in Citrix XenApp Session","u":"/blog/2012/11/30/application-causes-screen-flickering-in-citrix-xenapp-session/","y":"2012"},{"c":"General","t":"My presentation at E2EVC in Rome","u":"/blog/2013/10/29/my-presentation-at-e2evc-in-rome/","y":"2013"},{"c":"Delphi","t":"Accessing kernel objects in other sessions part 2","u":"/blog/2009/02/03/accessing-kernel-objects-in-other-sessions-part-2/","y":"2009"},{"c":"Delphi","t":"Compatibility Issue with RAD Studio XE","u":"/blog/2010/09/02/compatibility-issue-with-rad-studio-xe/","y":"2010"},{"c":"General","t":"Move WSUS content folder","u":"/blog/2011/02/02/move-wsus-content-folder/","y":"2011"},{"c":"PowerShell","t":"Take ownership of a registry key in PowerShell","u":"/blog/2012/01/16/take-ownership-of-a-registry-key-in-powershell/","y":"2012"},{"c":"General","t":"Run multiple instances of Lync 2010–POC","u":"/blog/2012/03/06/run-multiple-instances-of-lync-2010poc/","y":"2012"},{"c":"Automotive","t":"Remember Driver Seat Heater Level","u":"/blog/2011/12/04/remember-driver-seat-heater-level/","y":"2011"},{"c":"PowerShell","t":"PowerShell RegEx Fun","u":"/blog/2012/03/06/powershell-regex-fun/","y":"2012"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script src=/blog/js/glightbox.min.js></script><script>window.GLightbox&&GLightbox({selector:".glightbox",loop:!0})</script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

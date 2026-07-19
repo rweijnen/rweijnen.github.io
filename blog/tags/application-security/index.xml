@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Application Security on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/application-security/</link><description>Recent content in Application Security on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 27 Jan 2012 16:15:38 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/application-security/index.xml" rel="self" type="application/rss+xml"/><item><title>Bypassing RES/Appsense Application Security</title><link>https://remkoweijnen.nl/blog/2012/01/27/bypassing-res-application-security/</link><pubDate>Fri, 27 Jan 2012 16:15:38 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/01/27/bypassing-res-application-security/</guid><description>&lt;p&gt;The video below shows a Proof of Concept of bypassing Application Security in RES Workspace Manager .&lt;/p&gt;
+&lt;p&gt;Please note that at this time the code is not publicly available so please don&amp;rsquo;t ask for it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;EDIT 2&lt;/strong&gt;: I added a video that I received from someone who tried my Excel Sheet with AppSense Application Manager.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;EDIT:&lt;/strong&gt; I wanted to clarify a couple of things regarding this post.&lt;/p&gt;
+&lt;p&gt;First of all I would like to explain why I wrote this code and why I choose to test it with RES WM.&lt;/p&gt;
+&lt;p&gt;I had the idea about this approach a long time ago but I never got around to actually do it. The main reason was that I needed to convert Delphi code to VBA and especially converting some Windows headers was a lot of work. Then suddenly I noticed that someone had already converted the headers, so I all I had to do was rewrite the code that used it to VBA.&lt;/p&gt;
+&lt;p&gt;The choice for RES was made because of two reasons:&lt;/p&gt;
+&lt;ol&gt;
+	&lt;li&gt;If you want to beat something, you want to beat the best and I most certainly consider RES WM to be one of the top products.&lt;/li&gt;
+	&lt;li&gt;At the time I wrote the POC code I had access to an enviroment with RES in it.&lt;/li&gt;
+&lt;/ol&gt;
+I would like to emphasize that RES contacted me very quickly after publishing this blog. I've had contact with RES and they showed a very constructive approach with their primary goal being a fix or guidance for their customers. Hats of to RES taking a constructive approach and I will be working together with RES on this issue.
+&lt;p&gt;Finally I would like to state that I didn&amp;rsquo;t expect this post to draw this much attention, if I did I would have probably taken another approach.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt; &lt;/p&gt;</description></item></channel></rss>

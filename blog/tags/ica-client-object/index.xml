@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ICA Client Object on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/ica-client-object/</link><description>Recent content in ICA Client Object on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 13 Dec 2011 10:58:24 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/ica-client-object/index.xml" rel="self" type="application/rss+xml"/><item><title>Citrix online plug-in received a corrupt ICA File</title><link>https://remkoweijnen.nl/blog/2011/12/13/citrix-online-plug-in-received-a-corrupt-ica-file/</link><pubDate>Tue, 13 Dec 2011 10:58:24 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/12/13/citrix-online-plug-in-received-a-corrupt-ica-file/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/image4.webp" class="glightbox" data-type="image" data-gallery="post-2242"&gt;&lt;img loading="lazy" decoding="async" style="display: inline; float: left" title="image" alt="image" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/image_thumb4.webp" width="38" height="35" /&gt;&lt;/a&gt;I was testing a Script I wrote to launch a Citrix XenApp session using the Ica Client Object. Typical code to do this may look like this:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;vb.net&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".vb" href="data:text/plain;charset=utf-8;base64,Q29uc3QgY0h0dHBCcm93c2VyID0gInNvbWV1cmwubG9jYWwiCkNvbnN0IGNDb2xvckRlcHRoID0gNAoKJyBDcmVhdGUgdGhlIElDQSBDbGllbnQgT2JqZWN0CkRpbSBvYmpJY2EgOiBTZXQgb2JqSWNhID0gQ3JlYXRlT2JqZWN0KCJDaXRyaXguSWNhQ2xpZW50LjIiKQoKJyBTZXQgQ3JlZGVudGlhbHMKb2JqSWNhLlVzZXJuYW1lID0gIkpvaG5Eb2UiCm9iakljYS5TZXRQcm9wICJDbGVhclBhc3N3b3JkIiwgIlNlY3JldDAxIgpvYmpJY2EuRG9tYWluID0gIkNPTlRPU08iCgonIENvbm5lY3Rpb24gU2V0dGluZ3MKb2JqSWNhLkJyb3dzZXJQcm90b2NvbCA9ICJIVFRQb25UQ1AiCm9iakljYS5UcmFuc3BvcnRSZWNvbm5lY3RFbmFibGVkID0gVHJ1ZQpvYmpJY2EuSHR0cEJyb3dzZXJBZGRyZXNzID0gY0h0dHBCcm93c2VyCgonIFNlc3Npb24gU2V0dGluZ3MKb2JqSWNhLkFkZHJlc3MgPSAiTXlBcHAiCm9iakljYS5BcHBsaWNhdGlvbiA9ICJNeUFwcCIKb2JqSWNhLkRlc2lyZWRDb2xvciA9IGNDb2xvckRlcHRoCm9iakljYS5TY3JlZW5QZXJjZW50ID0gMCAnIEZ1bGwgU2NyZWVuCm9iakljYS5EZXNpcmVkSFJlcyA9IDAKb2JqSWNhLkRlc2lyZWRWUmVzID0gMApvYmpJY2EuTGF1bmNoID0gVHJ1ZQoKJyBDb25uZWN0Cm9iakljYS5Db25uZWN0"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-vbnet"&gt;&lt;code class="language-vbnet"&gt;Const cHttpBrowser = &amp;#34;someurl.local&amp;#34;
+Const cColorDepth = 4
+
+&amp;#39; Create the ICA Client Object
+Dim objIca : Set objIca = CreateObject(&amp;#34;Citrix.IcaClient.2&amp;#34;)
+
+&amp;#39; Set Credentials
+objIca.Username = &amp;#34;JohnDoe&amp;#34;
+objIca.SetProp &amp;#34;ClearPassword&amp;#34;, &amp;#34;Secret01&amp;#34;
+objIca.Domain = &amp;#34;CONTOSO&amp;#34;
+
+&amp;#39; Connection Settings
+objIca.BrowserProtocol = &amp;#34;HTTPonTCP&amp;#34;
+objIca.TransportReconnectEnabled = True
+objIca.HttpBrowserAddress = cHttpBrowser
+
+&amp;#39; Session Settings
+objIca.Address = &amp;#34;MyApp&amp;#34;
+objIca.Application = &amp;#34;MyApp&amp;#34;
+objIca.DesiredColor = cColorDepth
+objIca.ScreenPercent = 0 &amp;#39; Full Screen
+objIca.DesiredHRes = 0
+objIca.DesiredVRes = 0
+objIca.Launch = True
+
+&amp;#39; Connect
+objIca.Connect&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;On my testmachine it ran nicely but on a customer machine the script failed with the error 2312 "&lt;em&gt;The Citrix online plug-in received a corrupt ICA File. The ICA File has no [ApplicationServer] section&lt;/em&gt;":&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/SNAGHTML108b7fef.webp" class="glightbox" data-type="image" data-gallery="post-2242"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-right-width: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="Error number 2312" border="0" alt="The Citrix online plug-in received a corrupt ICA File. The ICA File has no [ApplicationServer] section" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/SNAGHTML108b7fef_thumb.webp" width="419" height="98" /&gt;&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

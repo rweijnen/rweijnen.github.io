@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>T-SQL on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/t-sql/</link><description>Recent content in T-SQL on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 03 May 2011 10:27:30 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/t-sql/index.xml" rel="self" type="application/rss+xml"/><item><title>Deleting scheduled Altiris tasks from SQL</title><link>https://remkoweijnen.nl/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/</link><pubDate>Tue, 03 May 2011 10:27:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/</guid><description>&lt;p&gt;I needed to delete around 50 scheduled tasks from several machines in Altiris because something went wrong in on of the first jobs.&lt;/p&gt; &lt;p&gt;It would have better if the jobs were configured to fail on error and not continue but they weren't.&lt;/p&gt; &lt;p&gt;Deleting the jobs from the Altiris console is very, very, slow. First the console asks for confirmation (after showing the hourglass for a long time): &lt;br /&gt; &lt;br /&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/05/image10.webp" class="glightbox" data-type="image" data-gallery="post-1731"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-bottom: 0px; border-left: 0px; margin: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top: 0px; border-right: 0px; padding-top: 0px" title="image" border="0" alt="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/05/image_thumb10.webp" width="244" height="88" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Then the actual delete can take a few minutes and then the next server and so on.&lt;/p&gt; &lt;p&gt;I decided to delete the tasks directly from SQL.&lt;/p&gt; &lt;p&gt;I know this is not preferred but I think in the end it's safe enough because I found a stored procedure called &lt;em&gt;del_event_schedule&lt;/em&gt; which looks like this:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,QUxURVIgcHJvY2VkdXJlIFtkYm9dLltkZWxfZXZlbnRfc2NoZWR1bGVdCiAgIEBzY2hlZHVsZV9pZCAgICAgICAgIGludAphcwogICBiZWdpbiB0cmFuc2FjdGlvbgoKICAgZGVsZXRlIGZyb20gZXZlbnRfc2NoZWR1bGUgd2hlcmUgc2NoZWR1bGVfaWQgPSBAc2NoZWR1bGVfaWQKCiAgIGlmIChAQGVycm9yICE9IDApCiAgICAgIHJvbGxiYWNrIHRyYW5zYWN0aW9uCiAgIGVsc2UKICAgICAgY29tbWl0IHRyYW5zYWN0aW9u"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;ALTER procedure [dbo].[del_event_schedule]
+ @schedule_id int
+as
+ begin transaction
+
+ delete from event_schedule where schedule_id = @schedule_id
+
+ if (@@error != 0)
+ rollback transaction
+ else
+ commit transaction&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;So al it does is a (transacted) delete from the table. &lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>SQL Query to get the Full Path of an Altiris Job #3</title><link>https://remkoweijnen.nl/blog/2010/12/12/sql-query-to-get-the-full-path-of-an-altiris-job-3/</link><pubDate>Sun, 12 Dec 2010 19:50:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/12/sql-query-to-get-the-full-path-of-an-altiris-job-3/</guid><description>&lt;p&gt;Last time I &lt;a title="SQL Query to get the Full Path of an Altiris Job #2" href="https://remkoweijnen.nl/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/" target="_blank"&gt;showed&lt;/a&gt; a User Defined Function to the Full Path of an Altiris Job given it&amp;rsquo;s id (event_id). Note that Altiris calls a Job an Event so the terms Event and Jobs are interchangeable here.&lt;/p&gt;
+&lt;p&gt;To complete it we first need to prepend the server and share name to the path.&lt;/p&gt;
+&lt;p&gt;I looked into the Altiris database tables to find the best place to get the servername and it seems that the hostname column of the mmsettings table is a good way.&lt;/p&gt;
+&lt;p&gt;In my database there was only one row in the table but I restrict the results by adding top 1:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,U0VMRUNUIFRPUCAxIGhvc3RuYW1lIEZST00gbW1zZXR0aW5ncw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;SELECT TOP 1 hostname FROM mmsettings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Then I looked into the available tokens for one that returns a job id but we can only return a job name or a computer id. Since a job name is not unique I decided to use the computername and find the active job for this computer.&lt;/p&gt;
+&lt;p&gt;When a Job is scheduled an entry is added to the event_schedule table. If you look into this table you will notice a column status_code which is NULL initially and when the job start it will get a value of -1 which indicates the job is active.&lt;/p&gt;
+&lt;p&gt;When the job has finished the status will always be 0 or higher.&lt;/p&gt;</description></item><item><title>SQL Query to get the Full Path of an Altiris Job #2</title><link>https://remkoweijnen.nl/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/</link><pubDate>Thu, 09 Dec 2010 10:00:43 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/</guid><description>&lt;p&gt;Earlier I described a &lt;a href="https://remkoweijnen.nl/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/"&gt;SQL Query to get the Full Path of an Altiris Job&lt;/a&gt;, today I will describe how we can make a &lt;a title="User Defined Functions" href="http://msdn.microsoft.com/en-us/library/ms189593.aspx" target="_blank"&gt;User Defined Function&lt;/a&gt; (UDF) in SQL so we can call it easier.&lt;/p&gt;
+&lt;p&gt;I am using an UDF because it allows us to specify parameters, in this case a single parameter (the EventId (or job id).&lt;/p&gt;
+&lt;p&gt;This is the SQL that creates the UDF:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,Q1JFQVRFIEZVTkNUSU9OIEdldEZ1bGxQYXRoCiAgKCBARXZlbnRJZCBpbnQpClJFVFVSTlMgbnZhcmNoYXIoNDAwMCkKQVMKQkVHSU4KCURFQ0xBUkUgQHN0ciBudmFyY2hhcig0MDAwKTsKCVdJVEggdDEgKGZvbGRlcl9pZCwgbmFtZSwgcGFyZW50X2lkLCBsZXZlbCkKCUFTCgkoCgktLSBBbmNob3IgbWVtYmVyIGRlZmluaXRpb24KCQlTRUxFQ1QgZm9sZGVyX2lkLCBuYW1lLCBwYXJlbnRfaWQsIDAgQVMgTGV2ZWwKCQlGUk9NIGV2ZW50X2ZvbGRlcgoJCVdIRVJFIGZvbGRlcl9pZCBpbiAoCgkJCVNFTEVDVCBmb2xkZXJfaWQgRlJPTSBldmVudCBXSEVSRSBldmVudF9pZCA9IEBFdmVudElkKQoJCVVOSU9OIEFMTAoKCS0tIFJlY3Vyc2l2ZSBtZW1iZXIgZGVmaW5pdGlvbgoJCVNFTEVDVCB0Mi5mb2xkZXJfaWQsdDIubmFtZSwgdDIucGFyZW50X2lkLCBMZXZlbCsxCgkJRlJPTSBldmVudF9mb2xkZXIgQVMgdDIsIHQxCgkJV0hFUkUgdDIuZm9sZGVyX2lkID0gdDEucGFyZW50X2lkCgkpCgoJLS0gU3RhdGVtZW50IHRoYXQgZXhlY3V0ZXMgdGhlIENURQoJLS0gU1RVRkYgYW5kIEZPUiBYTUwgYXJlIHVzZWQgdG8gQ29uY2F0ZW5hdGUgdGhlIFZhbHVlcyBhbmQgc2VwZXJhdGUgdGhlbSBieSBcIGNoYXJhY3RlcgoKCVNFTEVDVCBAc3RyID0gU1RVRkYoKFNFTEVDVCAnXCcgKyBuYW1lIGZyb20gdDEgb3JkZXIgYnkgbGV2ZWwgZGVzYyBGT1IgWE1MIFBBVEgoJycpKSwxLDEsJycpCglSRVRVUk4gQHN0cgpFTkQKR08="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;CREATE FUNCTION GetFullPath
+ ( @EventId int)
+RETURNS nvarchar(4000)
+AS
+BEGIN
+	DECLARE @str nvarchar(4000);
+	WITH t1 (folder_id, name, parent_id, level)
+	AS
+	(
+	-- Anchor member definition
+		SELECT folder_id, name, parent_id, 0 AS Level
+		FROM event_folder
+		WHERE folder_id in (
+			SELECT folder_id FROM event WHERE event_id = @EventId)
+		UNION ALL
+
+	-- Recursive member definition
+		SELECT t2.folder_id,t2.name, t2.parent_id, Level&amp;#43;1
+		FROM event_folder AS t2, t1
+		WHERE t2.folder_id = t1.parent_id
+	)
+
+	-- Statement that executes the CTE
+	-- STUFF and FOR XML are used to Concatenate the Values and seperate them by \ character
+
+	SELECT @str = STUFF((SELECT &amp;#39;\&amp;#39; &amp;#43; name from t1 order by level desc FOR XML PATH(&amp;#39;&amp;#39;)),1,1,&amp;#39;&amp;#39;)
+	RETURN @str
+END
+GO&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>SQL Query to get the Full Path of an Altiris Job</title><link>https://remkoweijnen.nl/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/</link><pubDate>Tue, 07 Dec 2010 22:22:56 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/</guid><description>&lt;p&gt;I wanted to query the full path name of an Altiris Job, this sounds easier that it is though.&lt;/p&gt;
+&lt;p&gt;Consider the following hierarchy:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/tree1.webp" alt="Tree" width="302" height="360" /&gt;
+&lt;p&gt;Now I want to assemble the full Path, in this case: RPA\Getronics\PKG_p007.Citrix_Components.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VB.NET on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/vb.net/</link><description>Recent content in VB.NET on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 02 May 2008 08:53:13 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/vb.net/index.xml" rel="self" type="application/rss+xml"/><item><title>Encrypting RDP Passwords in VB.NET</title><link>https://remkoweijnen.nl/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/</link><pubDate>Fri, 02 May 2008 08:53:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/</guid><description>&lt;p&gt;Justin Shepard converted my code to &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;encrypt RPD passwords&lt;/a&gt; to VB.NET:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;vb.net&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".vb" href="data:text/plain;charset=utf-8;base64,Jz09PT09PVNPRgoKSW1wb3J0cyBTeXN0ZW0KSW1wb3J0cyBTeXN0ZW0uVGV4dApJbXBvcnRzIFN5c3RlbS5SdW50aW1lLkludGVyb3BTZXJ2aWNlcwpJbXBvcnRzIFN5c3RlbS5Db21wb25lbnRNb2RlbApJbXBvcnRzIE1pY3Jvc29mdC5WaXN1YWxCYXNpYwoKUHVibGljIE1vZHVsZSBSZHBFbmNyeXB0CgogICAgUHVibGljIENsYXNzIERQQVBJCjxkbGxpbXBvcnQ&amp;#43;IF8KICAgICAgICBQcml2YXRlIFNoYXJlZCBGdW5jdGlvbiBDcnlwdFByb3RlY3REYXRhKCBfCiAgICAgICAgICAgIEJ5UmVmIHBQbGFpblRleHQgQXMgREFUQV9CTE9CLCBfCiAgICAgICAgICAgIEJ5VmFsIHN6RGVzY3JpcHRpb24gQXMgU3RyaW5nLCBfCiAgICAgICAgICAgIEJ5UmVmIHBFbnRyb3B5IEFzIERBVEFfQkxPQiwgXwogICAgICAgICAgICBCeVZhbCBwUmVzZXJ2ZWQgQXMgSW50UHRyLCBfCiAgICAgICAgICAgIEJ5UmVmIHBQcm9tcHQgQXMgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVCwgXwogICAgICAgICAgICBCeVZhbCBkd0ZsYWdzIEFzIEludGVnZXIsIF8KICAgICAgICAgICAgQnlSZWYgcENpcGhlclRleHQgQXMgREFUQV9CTE9CIF8KICAgICAgICApIEFzIEJvb2xlYW4KICAgICAgICBFbmQgRnVuY3Rpb24KCjxkbGxpbXBvcnQ&amp;#43;IF8KICAgICAgICBQcml2YXRlIFNoYXJlZCBGdW5jdGlvbiBDcnlwdFVucHJvdGVjdERhdGEoIF8KICAgICAgICAgICAgQnlSZWYgcENpcGhlclRleHQgQXMgREFUQV9CTE9CLCBfCiAgICAgICAgICAgIEJ5UmVmIHBzekRlc2NyaXB0aW9uIEFzIFN0cmluZywgXwogICAgICAgICAgICBCeVJlZiBwRW50cm9weSBBcyBEQVRBX0JMT0IsIF8KICAgICAgICAgICAgQnlWYWwgcFJlc2VydmVkIEFzIEludFB0ciwgXwogICAgICAgICAgICBCeVJlZiBwUHJvbXB0IEFzIENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QsIF8KICAgICAgICAgICAgQnlWYWwgZHdGbGFncyBBcyBJbnRlZ2VyLCBfCiAgICAgICAgICAgIEJ5UmVmIHBQbGFpblRleHQgQXMgREFUQV9CTE9CIF8KICAgICAgICApIEFzIEJvb2xlYW4KICAgICAgICBFbmQgRnVuY3Rpb24KCjxzdHJ1Y3RsYXlvdXQ&amp;#43;IF8KICAgICAgICBGcmllbmQgU3RydWN0dXJlIERBVEFfQkxPQgogICAgICAgICAgICBQdWJsaWMgY2JEYXRhIEFzIEludGVnZXIKICAgICAgICAgICAgUHVibGljIHBiRGF0YSBBcyBJbnRQdHIKICAgICAgICBFbmQgU3RydWN0dXJlCgo8c3RydWN0bGF5b3V0PiBfCiAgICAgICAgRnJpZW5kIFN0cnVjdHVyZSBDUllQVFBST1RFQ1RfUFJPTVBUU1RSVUNUCiAgICAgICAgICAgIFB1YmxpYyBjYlNpemUgQXMgSW50ZWdlcgogICAgICAgICAgICBQdWJsaWMgZHdQcm9tcHRGbGFncyBBcyBJbnRlZ2VyCiAgICAgICAgICAgIFB1YmxpYyBod25kQXBwIEFzIEludFB0cgogICAgICAgICAgICBQdWJsaWMgc3pQcm9tcHQgQXMgU3RyaW5nCiAgICAgICAgRW5kIFN0cnVjdHVyZQoKICAgICAgICBQcml2YXRlIENvbnN0IENSWVBUUFJPVEVDVF9VSV9GT1JCSURERU4gQXMgSW50ZWdlciA9IDEKICAgICAgICBQcml2YXRlIENvbnN0IENSWVBUUFJPVEVDVF9MT0NBTF9NQUNISU5FIEFzIEludGVnZXIgPSA0CgogICAgICAgIFByaXZhdGUgU2hhcmVkIFN1YiBJbml0UHJvbXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlSZWYgcHMgQXMgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVCBfCiAgICAgICAgKQogICAgICAgICAgICBwcy5jYlNpemUgPSBNYXJzaGFsLlNpemVPZihHZXRUeXBlKENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QpKQogICAgICAgICAgICBwcy5kd1Byb21wdEZsYWdzID0gMAogICAgICAgICAgICBwcy5od25kQXBwID0gSW50UHRyLlplcm8KICAgICAgICAgICAgcHMuc3pQcm9tcHQgPSBOb3RoaW5nCiAgICAgICAgRW5kIFN1YgoKICAgICAgICBQcml2YXRlIFNoYXJlZCBTdWIgSW5pdEJMT0IgXwogICAgICAgICggXwogICAgICAgICAgICBCeVZhbCBkYXRhIEFzIEJ5dGUoKSwgXwogICAgICAgICAgICBCeVJlZiBibG9iIEFzIERBVEFfQkxPQiBfCiAgICAgICAgKQogICAgICAgICAgICAnIFVzZSBlbXB0eSBhcnJheSBmb3IgbnVsbCBwYXJhbWV0ZXIuCiAgICAgICAgICAgIElmIGRhdGEgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBkYXRhID0gTmV3IEJ5dGUoMCkge30KICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICAnIEFsbG9jYXRlIG1lbW9yeSBmb3IgdGhlIEJMT0IgZGF0YS4KICAgICAgICAgICAgYmxvYi5wYkRhdGEgPSBNYXJzaGFsLkFsbG9jSEdsb2JhbChkYXRhLkxlbmd0aCkKCiAgICAgICAgICAgICcgTWFrZSBzdXJlIHRoYXQgbWVtb3J5IGFsbG9jYXRpb24gd2FzIHN1Y2Nlc3NmdWwuCiAgICAgICAgICAgIElmIGJsb2IucGJEYXRhLkVxdWFscyhJbnRQdHIuWmVybykgVGhlbgogICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbiggXwogICAgICAgICAgICAgICAgICAgICAgICAiVW5hYmxlIHRvIGFsbG9jYXRlIGRhdGEgYnVmZmVyIGZvciBCTE9CIHN0cnVjdHVyZS4iKQogICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICcgU3BlY2lmeSBudW1iZXIgb2YgYnl0ZXMgaW4gdGhlIEJMT0IuCiAgICAgICAgICAgIGJsb2IuY2JEYXRhID0gZGF0YS5MZW5ndGgKICAgICAgICAgICAgTWFyc2hhbC5Db3B5KGRhdGEsIDAsIGJsb2IucGJEYXRhLCBkYXRhLkxlbmd0aCkKICAgICAgICBFbmQgU3ViCgogICAgICAgIFB1YmxpYyBFbnVtIEtleVR5cGUKICAgICAgICAgICAgVXNlcktleSA9IDEKICAgICAgICAgICAgTWFjaGluZUtleQogICAgICAgIEVuZCBFbnVtCgogICAgICAgIFByaXZhdGUgU2hhcmVkIGRlZmF1bHRLZXlUeXBlIEFzIEtleVR5cGUgPSBLZXlUeXBlLlVzZXJLZXkKCiAgICAgICAgUHVibGljIFNoYXJlZCBGdW5jdGlvbiBFbmNyeXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlWYWwga2V5VHlwZSBBcyBLZXlUeXBlLCBfCiAgICAgICAgICAgIEJ5VmFsIHBsYWluVGV4dCBBcyBTdHJpbmcsIF8KICAgICAgICAgICAgQnlWYWwgZW50cm9weSBBcyBTdHJpbmcsIF8KICAgICAgICAgICAgQnlWYWwgZGVzY3JpcHRpb24gQXMgU3RyaW5nIF8KICAgICAgICApIEFzIFN0cmluZwogICAgICAgICAgICBJZiBwbGFpblRleHQgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBwbGFpblRleHQgPSBTdHJpbmcuRW1wdHkKICAgICAgICAgICAgRW5kIElmCiAgICAgICAgICAgIElmIGVudHJvcHkgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBlbnRyb3B5ID0gU3RyaW5nLkVtcHR5CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgRGltIHJlc3VsdCBBcyBCeXRlKCkKICAgICAgICAgICAgRGltIGVuY3J5cHRlZCBBcyBTdHJpbmcgPSAiIgogICAgICAgICAgICBEaW0gaSBBcyBJbnRlZ2VyCiAgICAgICAgICAgIHJlc3VsdCA9IEVuY3J5cHQoa2V5VHlwZSwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY29kaW5nLlVuaWNvZGUuR2V0Qnl0ZXMocGxhaW5UZXh0KSwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY29kaW5nLlVuaWNvZGUuR2V0Qnl0ZXMoZW50cm9weSksIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbikKICAgICAgICAgICAgRm9yIGkgPSAwIFRvIHJlc3VsdC5MZW5ndGggLSAxCiAgICAgICAgICAgICAgICBlbmNyeXB0ZWQgPSBlbmNyeXB0ZWQgJiBDb252ZXJ0LlRvU3RyaW5nKHJlc3VsdChpKSwgMTYpLlBhZExlZnQoMiwgIjAiKS5Ub1VwcGVyKCkKICAgICAgICAgICAgTmV4dAogICAgICAgICAgICBSZXR1cm4gZW5jcnlwdGVkLlRvU3RyaW5nKCkKICAgICAgICBFbmQgRnVuY3Rpb24KCiAgICAgICAgUHVibGljIFNoYXJlZCBGdW5jdGlvbiBFbmNyeXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlWYWwga2V5VHlwZSBBcyBLZXlUeXBlLCBfCiAgICAgICAgICAgIEJ5VmFsIHBsYWluVGV4dEJ5dGVzIEFzIEJ5dGUoKSwgXwogICAgICAgICAgICBCeVZhbCBlbnRyb3B5Qnl0ZXMgQXMgQnl0ZSgpLCBfCiAgICAgICAgICAgIEJ5VmFsIGRlc2NyaXB0aW9uIEFzIFN0cmluZyBfCiAgICAgICAgKSBBcyBCeXRlKCkKICAgICAgICAgICAgSWYgcGxhaW5UZXh0Qnl0ZXMgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBwbGFpblRleHRCeXRlcyA9IE5ldyBCeXRlKDApIHt9CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgSWYgZW50cm9weUJ5dGVzIElzIE5vdGhpbmcgVGhlbgogICAgICAgICAgICAgICAgZW50cm9weUJ5dGVzID0gTmV3IEJ5dGUoMCkge30KICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICBJZiBkZXNjcmlwdGlvbiBJcyBOb3RoaW5nIFRoZW4KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uID0gU3RyaW5nLkVtcHR5CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgRGltIHBsYWluVGV4dEJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgogICAgICAgICAgICBEaW0gY2lwaGVyVGV4dEJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgogICAgICAgICAgICBEaW0gZW50cm9weUJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgoKICAgICAgICAgICAgRGltIHByb21wdCBBcyAgXwogICAgICAgICAgICAgICAgICAgIENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QgPSBOZXcgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVAogICAgICAgICAgICBJbml0UHJvbXB0KHByb21wdCkKCiAgICAgICAgICAgIFRyeQogICAgICAgICAgICAgICAgVHJ5CiAgICAgICAgICAgICAgICAgICAgSW5pdEJMT0IocGxhaW5UZXh0Qnl0ZXMsIHBsYWluVGV4dEJsb2IpCiAgICAgICAgICAgICAgICBDYXRjaCBleCBBcyBFeGNlcHRpb24KICAgICAgICAgICAgICAgICAgICBUaHJvdyBOZXcgRXhjZXB0aW9uKCJDYW5ub3QgaW5pdGlhbGl6ZSBwbGFpbnRleHQgQkxPQi4iLCBleCkKICAgICAgICAgICAgICAgIEVuZCBUcnkKCiAgICAgICAgICAgICAgICBUcnkKICAgICAgICAgICAgICAgICAgICBJbml0QkxPQihlbnRyb3B5Qnl0ZXMsIGVudHJvcHlCbG9iKQogICAgICAgICAgICAgICAgQ2F0Y2ggZXggQXMgRXhjZXB0aW9uCiAgICAgICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiQ2Fubm90IGluaXRpYWxpemUgZW50cm9weSBCTE9CLiIsIGV4KQogICAgICAgICAgICAgICAgRW5kIFRyeQoKICAgICAgICAgICAgICAgIERpbSBmbGFncyBBcyBJbnRlZ2VyID0gQ1JZUFRQUk9URUNUX1VJX0ZPUkJJRERFTgoKICAgICAgICAgICAgICAgIElmIGtleVR5cGUgPSBrZXlUeXBlLk1hY2hpbmVLZXkgVGhlbgogICAgICAgICAgICAgICAgICAgIGZsYWdzID0gZmxhZ3MgT3IgKENSWVBUUFJPVEVDVF9MT0NBTF9NQUNISU5FKQogICAgICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICAgICAgRGltIHN1Y2Nlc3MgQXMgQm9vbGVhbiA9IENyeXB0UHJvdGVjdERhdGEoIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGxhaW5UZXh0QmxvYiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbnRyb3B5QmxvYiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJbnRQdHIuWmVybywgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcm9tcHQsIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmxhZ3MsIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2lwaGVyVGV4dEJsb2IpCgogICAgICAgICAgICAgICAgSWYgTm90IHN1Y2Nlc3MgVGhlbgogICAgICAgICAgICAgICAgICAgIERpbSBlcnJDb2RlIEFzIEludGVnZXIgPSBNYXJzaGFsLkdldExhc3RXaW4zMkVycm9yKCkKCiAgICAgICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiQ3J5cHRQcm90ZWN0RGF0YSBmYWlsZWQuIiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOZXcgV2luMzJFeGNlcHRpb24oZXJyQ29kZSkpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBEaW0gY2lwaGVyVGV4dEJ5dGVzKGNpcGhlclRleHRCbG9iLmNiRGF0YSkgQXMgQnl0ZQoKICAgICAgICAgICAgICAgIE1hcnNoYWwuQ29weShjaXBoZXJUZXh0QmxvYi5wYkRhdGEsIGNpcGhlclRleHRCeXRlcywgMCwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNpcGhlclRleHRCbG9iLmNiRGF0YSkKCiAgICAgICAgICAgICAgICBSZXR1cm4gY2lwaGVyVGV4dEJ5dGVzCiAgICAgICAgICAgIENhdGNoIGV4IEFzIEV4Y2VwdGlvbgogICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiRFBBUEkgd2FzIHVuYWJsZSB0byBlbmNyeXB0IGRhdGEuIiwgZXgpCiAgICAgICAgICAgIEZpbmFsbHkKICAgICAgICAgICAgICAgIElmIE5vdCAocGxhaW5UZXh0QmxvYi5wYkRhdGEuRXF1YWxzKEludFB0ci5aZXJvKSkgVGhlbgogICAgICAgICAgICAgICAgICAgIE1hcnNoYWwuRnJlZUhHbG9iYWwocGxhaW5UZXh0QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBJZiBOb3QgKGNpcGhlclRleHRCbG9iLnBiRGF0YS5FcXVhbHMoSW50UHRyLlplcm8pKSBUaGVuCiAgICAgICAgICAgICAgICAgICAgTWFyc2hhbC5GcmVlSEdsb2JhbChjaXBoZXJUZXh0QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBJZiBOb3QgKGVudHJvcHlCbG9iLnBiRGF0YS5FcXVhbHMoSW50UHRyLlplcm8pKSBUaGVuCiAgICAgICAgICAgICAgICAgICAgTWFyc2hhbC5GcmVlSEdsb2JhbChlbnRyb3B5QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKICAgICAgICAgICAgRW5kIFRyeQogICAgICAgIEVuZCBGdW5jdGlvbgoKICAgIEVuZCBDbGFzcwoKICAgIFN1YiBNYWluKEJ5VmFsIGFyZ3MgQXMgU3RyaW5nKCkpCiAgICAgICAgVHJ5CiAgICAgICAgICAgIERpbSB0ZXh0IEFzIFN0cmluZyA9IGFyZ3MoMCkKICAgICAgICAgICAgRGltIGVuY3J5cHRlZCBBcyBTdHJpbmcKCiAgICAgICAgICAgIGVuY3J5cHRlZCA9IERQQVBJLkVuY3J5cHQoRFBBUEkuS2V5VHlwZS5NYWNoaW5lS2V5LCB0ZXh0LCBOb3RoaW5nLCAicHN3IikKCiAgICAgICAgICAgIENvbnNvbGUuV3JpdGVMaW5lKCJ7MH0iICYgQ2hyKDEzKSAmIENocigxMCksIGVuY3J5cHRlZCkKCiAgICAgICAgQ2F0Y2ggZXggQXMgRXhjZXB0aW9uCiAgICAgICAgICAgIFdoaWxlIE5vdCAoZXggSXMgTm90aGluZykKICAgICAgICAgICAgICAgIENvbnNvbGUuV3JpdGVMaW5lKGV4Lk1lc3NhZ2UpCiAgICAgICAgICAgICAgICBleCA9IGV4LklubmVyRXhjZXB0aW9uCiAgICAgICAgICAgIEVuZCBXaGlsZQogICAgICAgIEVuZCBUcnkKICAgIEVuZCBTdWIKCkVuZCBNb2R1bGUKJz09PT09PUVPRg=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-vbnet"&gt;&lt;code class="language-vbnet"&gt;&amp;#39;======SOF
+
+Imports System
+Imports System.Text
+Imports System.Runtime.InteropServices
+Imports System.ComponentModel
+Imports Microsoft.VisualBasic
+
+Public Module RdpEncrypt
+
+ Public Class DPAPI
+&amp;lt;dllimport&amp;gt; _
+ Private Shared Function CryptProtectData( _
+ ByRef pPlainText As DATA_BLOB, _
+ ByVal szDescription As String, _
+ ByRef pEntropy As DATA_BLOB, _
+ ByVal pReserved As IntPtr, _
+ ByRef pPrompt As CRYPTPROTECT_PROMPTSTRUCT, _
+ ByVal dwFlags As Integer, _
+ ByRef pCipherText As DATA_BLOB _
+ ) As Boolean
+ End Function
+
+&amp;lt;dllimport&amp;gt; _
+ Private Shared Function CryptUnprotectData( _
+ ByRef pCipherText As DATA_BLOB, _
+ ByRef pszDescription As String, _
+ ByRef pEntropy As DATA_BLOB, _
+ ByVal pReserved As IntPtr, _
+ ByRef pPrompt As CRYPTPROTECT_PROMPTSTRUCT, _
+ ByVal dwFlags As Integer, _
+ ByRef pPlainText As DATA_BLOB _
+ ) As Boolean
+ End Function
+
+&amp;lt;structlayout&amp;gt; _
+ Friend Structure DATA_BLOB
+ Public cbData As Integer
+ Public pbData As IntPtr
+ End Structure
+
+&amp;lt;structlayout&amp;gt; _
+ Friend Structure CRYPTPROTECT_PROMPTSTRUCT
+ Public cbSize As Integer
+ Public dwPromptFlags As Integer
+ Public hwndApp As IntPtr
+ Public szPrompt As String
+ End Structure
+
+ Private Const CRYPTPROTECT_UI_FORBIDDEN As Integer = 1
+ Private Const CRYPTPROTECT_LOCAL_MACHINE As Integer = 4
+
+ Private Shared Sub InitPrompt _
+ ( _
+ ByRef ps As CRYPTPROTECT_PROMPTSTRUCT _
+ )
+ ps.cbSize = Marshal.SizeOf(GetType(CRYPTPROTECT_PROMPTSTRUCT))
+ ps.dwPromptFlags = 0
+ ps.hwndApp = IntPtr.Zero
+ ps.szPrompt = Nothing
+ End Sub
+
+ Private Shared Sub InitBLOB _
+ ( _
+ ByVal data As Byte(), _
+ ByRef blob As DATA_BLOB _
+ )
+ &amp;#39; Use empty array for null parameter.
+ If data Is Nothing Then
+ data = New Byte(0) {}
+ End If
+
+ &amp;#39; Allocate memory for the BLOB data.
+ blob.pbData = Marshal.AllocHGlobal(data.Length)
+
+ &amp;#39; Make sure that memory allocation was successful.
+ If blob.pbData.Equals(IntPtr.Zero) Then
+ Throw New Exception( _
+ &amp;#34;Unable to allocate data buffer for BLOB structure.&amp;#34;)
+ End If
+
+ &amp;#39; Specify number of bytes in the BLOB.
+ blob.cbData = data.Length
+ Marshal.Copy(data, 0, blob.pbData, data.Length)
+ End Sub
+
+ Public Enum KeyType
+ UserKey = 1
+ MachineKey
+ End Enum
+
+ Private Shared defaultKeyType As KeyType = KeyType.UserKey
+
+ Public Shared Function Encrypt _
+ ( _
+ ByVal keyType As KeyType, _
+ ByVal plainText As String, _
+ ByVal entropy As String, _
+ ByVal description As String _
+ ) As String
+ If plainText Is Nothing Then
+ plainText = String.Empty
+ End If
+ If entropy Is Nothing Then
+ entropy = String.Empty
+ End If
+
+ Dim result As Byte()
+ Dim encrypted As String = &amp;#34;&amp;#34;
+ Dim i As Integer
+ result = Encrypt(keyType, _
+ Encoding.Unicode.GetBytes(plainText), _
+ Encoding.Unicode.GetBytes(entropy), _
+ description)
+ For i = 0 To result.Length - 1
+ encrypted = encrypted &amp;amp; Convert.ToString(result(i), 16).PadLeft(2, &amp;#34;0&amp;#34;).ToUpper()
+ Next
+ Return encrypted.ToString()
+ End Function
+
+ Public Shared Function Encrypt _
+ ( _
+ ByVal keyType As KeyType, _
+ ByVal plainTextBytes As Byte(), _
+ ByVal entropyBytes As Byte(), _
+ ByVal description As String _
+ ) As Byte()
+ If plainTextBytes Is Nothing Then
+ plainTextBytes = New Byte(0) {}
+ End If
+
+ If entropyBytes Is Nothing Then
+ entropyBytes = New Byte(0) {}
+ End If
+
+ If description Is Nothing Then
+ description = String.Empty
+ End If
+
+ Dim plainTextBlob As DATA_BLOB = New DATA_BLOB
+ Dim cipherTextBlob As DATA_BLOB = New DATA_BLOB
+ Dim entropyBlob As DATA_BLOB = New DATA_BLOB
+
+ Dim prompt As _
+ CRYPTPROTECT_PROMPTSTRUCT = New CRYPTPROTECT_PROMPTSTRUCT
+ InitPrompt(prompt)
+
+ Try
+ Try
+ InitBLOB(plainTextBytes, plainTextBlob)
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;Cannot initialize plaintext BLOB.&amp;#34;, ex)
+ End Try
+
+ Try
+ InitBLOB(entropyBytes, entropyBlob)
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;Cannot initialize entropy BLOB.&amp;#34;, ex)
+ End Try
+
+ Dim flags As Integer = CRYPTPROTECT_UI_FORBIDDEN
+
+ If keyType = keyType.MachineKey Then
+ flags = flags Or (CRYPTPROTECT_LOCAL_MACHINE)
+ End If
+
+ Dim success As Boolean = CryptProtectData( _
+ plainTextBlob, _
+ description, _
+ entropyBlob, _
+ IntPtr.Zero, _
+ prompt, _
+ flags, _
+ cipherTextBlob)
+
+ If Not success Then
+ Dim errCode As Integer = Marshal.GetLastWin32Error()
+
+ Throw New Exception(&amp;#34;CryptProtectData failed.&amp;#34;, _
+ New Win32Exception(errCode))
+ End If
+
+ Dim cipherTextBytes(cipherTextBlob.cbData) As Byte
+
+ Marshal.Copy(cipherTextBlob.pbData, cipherTextBytes, 0, _
+ cipherTextBlob.cbData)
+
+ Return cipherTextBytes
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;DPAPI was unable to encrypt data.&amp;#34;, ex)
+ Finally
+ If Not (plainTextBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(plainTextBlob.pbData)
+ End If
+
+ If Not (cipherTextBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(cipherTextBlob.pbData)
+ End If
+
+ If Not (entropyBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(entropyBlob.pbData)
+ End If
+ End Try
+ End Function
+
+ End Class
+
+ Sub Main(ByVal args As String())
+ Try
+ Dim text As String = args(0)
+ Dim encrypted As String
+
+ encrypted = DPAPI.Encrypt(DPAPI.KeyType.MachineKey, text, Nothing, &amp;#34;psw&amp;#34;)
+
+ Console.WriteLine(&amp;#34;{0}&amp;#34; &amp;amp; Chr(13) &amp;amp; Chr(10), encrypted)
+
+ Catch ex As Exception
+ While Not (ex Is Nothing)
+ Console.WriteLine(ex.Message)
+ ex = ex.InnerException
+ End While
+ End Try
+ End Sub
+
+End Module
+&amp;#39;======EOF&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;2 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="http://Decript" rel="nofollow ugc"&gt;James&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2010-07-05"&gt;Jul 5, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;Hi friends, anyone know where I can find the code to decrypt in vb.net? Thanks for your help&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Aspnet_regiis on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/aspnet_regiis/</link><description>Recent content in Aspnet_regiis on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 26 Nov 2010 12:37:01 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/aspnet_regiis/index.xml" rel="self" type="application/rss+xml"/><item><title>Script to register ASP.NET in IIS</title><link>https://remkoweijnen.nl/blog/2010/11/26/script-to-register-asp-net-in-iis/</link><pubDate>Fri, 26 Nov 2010 12:37:01 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/26/script-to-register-asp-net-in-iis/</guid><description>&lt;p&gt;I did an unattended install of the Citrix WebInterface on a testmachine and it failed with error 258.&lt;/p&gt;
+&lt;p&gt;The logfile clearly indicates the reason:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,WyBFUlJPUiBdIGNvbS5jaXRyaXgud2kuaW5zdGFsbC5TZXR1cEVycm9yUmVwb3J0ZXI6IEVycm9yIDI1OCBvY2N1cnJlZDogQVNQLk5FVCAyLjAgbXVzdCBiZSByZWdpc3RlcmVkIGFuZCBlbmFibGVkIGluIE1pY3Jvc29mdCBJbnRlcm5ldCBJbmZvcm1hdGlvbiBTZXJ2aWNlcyBiZWZvcmUgdGhlIFdlYiBJbnRlcmZhY2UgY2FuIGJlIGluc3RhbGxlZC4="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;[ ERROR ] com.citrix.wi.install.SetupErrorReporter: Error 258 occurred: ASP.NET 2.0 must be registered and enabled in Microsoft Internet Information Services before the Web Interface can be installed.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;We can register ASP.NET in IIS with the &lt;a title="ASP.NET IIS Registration Tool (Aspnet_regiis.exe)" href="http://msdn.microsoft.com/en-us/library/k6h9cz8h(VS.80).aspx" target="_blank"&gt;Aspnet_regiis.exe&lt;/a&gt; tool that comes with the .NET framework.&lt;/p&gt;</description></item></channel></rss>

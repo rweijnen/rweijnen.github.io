@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Windows 2008 on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/windows-2008/</link><description>Recent content in Windows 2008 on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 04 Feb 2011 11:22:26 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/windows-2008/index.xml" rel="self" type="application/rss+xml"/><item><title>Script to install SNMP</title><link>https://remkoweijnen.nl/blog/2011/02/04/script-to-install-snmp/</link><pubDate>Fri, 04 Feb 2011 11:22:26 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/02/04/script-to-install-snmp/</guid><description>&lt;p&gt;In my project the monitoring group required that SNMP was installed and configured on all servers. &lt;p&gt;I wrote scripts for Windows 2003 and Windows 2008 that I deploy from my Altiris Server.&lt;/p&gt; &lt;p&gt;This is the script for Windows 2003:&lt;/p&gt;&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;batch&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".bat" href="data:text/plain;charset=utf-8;base64,QGVjaG8gb2ZmCnJlbSBJbnN0YWxsIFNOTVAKCnJlbSBDcmVhdGUgU3lzb2MgQW5zd2VyIEZpbGUKZWNobyBbTmV0T3B0aW9uYWxDb21wb25lbnRzXSAgPkluc3RhbGxTTk1QLnR4dAplY2hvIFNOTVAgPSAxID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8uID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gW1NOTVBdID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gQWNjZXB0X0NvbW11bml0eU5hbWUgPSBNWUNPTU1VTklUWTpSZWFkX09ubHkgPj5JbnN0YWxsU05NUC50eHQKZWNobyBBbnlfSG9zdCA9IE5vID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gQ29tbXVuaXR5X05hbWUgPSAiTVlDT01NVU5JVFkiID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gQ29udGFjdF9OYW1lID0gIk1ZQ09OVEFOVCIgID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gTGltaXRfSG9zdCA9IE1ZSVAgID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gTG9jYXRpb24gPSAiTVlMT0NBVElPTiIgID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gU2VuZF9BdXRoZW50aWNhdGlvbiA9IFllcyA&amp;#43;Pkluc3RhbGxTTk1QLnR4dAplY2hvIFNlcnZpY2UgPSBBcHBsaWNhdGlvbnMsIEludGVybmV0LCBFbmQtdG8tRW5kLCBQaHlzaWNhbCwgRGF0YWxpbmsgPj5JbnN0YWxsU05NUC50eHQKZWNobyBUcmFwcyA9IFRIRVRSQVBJUCAgPj5JbnN0YWxsU05NUC50eHQKClN5c29jbWdyLmV4ZSAvaTpcd2luZG93c1xpbmZcc3lzb2MuaW5mIC91OlxXaW5kb3dzXFRlbXBcSW5zdGFsbFNOTVAudHh0IC9y"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-batch"&gt;&lt;code class="language-batch"&gt;@echo off
+rem Install SNMP
+
+rem Create Sysoc Answer File
+echo [NetOptionalComponents] &amp;gt;InstallSNMP.txt
+echo SNMP = 1 &amp;gt;&amp;gt;InstallSNMP.txt
+echo. &amp;gt;&amp;gt;InstallSNMP.txt
+echo [SNMP] &amp;gt;&amp;gt;InstallSNMP.txt
+echo Accept_CommunityName = MYCOMMUNITY:Read_Only &amp;gt;&amp;gt;InstallSNMP.txt
+echo Any_Host = No &amp;gt;&amp;gt;InstallSNMP.txt
+echo Community_Name = &amp;#34;MYCOMMUNITY&amp;#34; &amp;gt;&amp;gt;InstallSNMP.txt
+echo Contact_Name = &amp;#34;MYCONTANT&amp;#34; &amp;gt;&amp;gt;InstallSNMP.txt
+echo Limit_Host = MYIP &amp;gt;&amp;gt;InstallSNMP.txt
+echo Location = &amp;#34;MYLOCATION&amp;#34; &amp;gt;&amp;gt;InstallSNMP.txt
+echo Send_Authentication = Yes &amp;gt;&amp;gt;InstallSNMP.txt
+echo Service = Applications, Internet, End-to-End, Physical, Datalink &amp;gt;&amp;gt;InstallSNMP.txt
+echo Traps = THETRAPIP &amp;gt;&amp;gt;InstallSNMP.txt
+
+Sysocmgr.exe /i:\windows\inf\sysoc.inf /u:\Windows\Temp\InstallSNMP.txt /r&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Desktop Icons, hide, show, prevent rename or delete</title><link>https://remkoweijnen.nl/blog/2010/12/19/desktop-icons-hide-show-prevent-rename-or-delete/</link><pubDate>Sun, 19 Dec 2010 15:14:04 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/19/desktop-icons-hide-show-prevent-rename-or-delete/</guid><description>&lt;p&gt;I was cleaning up some old data on my Hard Drive when I found a program I wrote about a year ago.&lt;/p&gt;
+&lt;p&gt;At that time I was doing a project where I was deploying a Windows 2008 based Citrix Environment.&lt;/p&gt;
+&lt;p&gt;I wanted to get rid of the new Personal Folders or User&amp;rsquo;s files icon on the Desktop and replace it with the familiar My Documents icon.&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/personal.webp" alt="Personal" width="64" height="91" /&gt;
+&lt;p&gt;These settings are stored in the Registry under HKEY_CLASSES_ROOT\CLSID{folder&amp;rsquo;s GUID}\ShellFolder.&lt;/p&gt;</description></item><item><title>Cannot complete customization when cloning from Template</title><link>https://remkoweijnen.nl/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/</link><pubDate>Wed, 03 Nov 2010 11:24:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/</guid><description>&lt;p&gt;I am currently provisioning a lot of Virtual Machines in VMWare vSphere 4.1. Because I had already sized the Virtual Machines I am doing this from &lt;a title="VMWare vSphere PowerCLI" href="http://communities.vmware.com/community/vmtn/vsphere/automationtools/powercli" target="_blank"&gt;PowerCLI&lt;/a&gt; based on my Excel Sheet.&lt;/p&gt;
+&lt;p&gt;I will probably blog later about the details of how I am doing this in PowerCLI (would you be interested in that?) but after successfully deploying some Windows 2008 VM&amp;rsquo;s I got this error in PowerShell:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,TmV3LVZNIDogMy0xMS0yMDEwIDEwOjAwOjUwIE5ldy1WTSBUaGUgb3BlcmF0aW9uIGZvciB0aGUgZW50aXR5IFZpcnR1YWxNYWNoaW5lLXZtLTE1MCBmYWlsZWQgd2l0aCB0aGUgZm9sbG93aW5nIG1lc3NhZ2U6ICJDYW5ub3QgY29tcGxldGUgY3VzdG9taXphdGlvbi4iCgpBdCBDOlxVc2Vyc1xBZG1pbmlzdHJhdG9yXERvY3VtZW50c1xOZXdWbS5wczE6NjQgY2hhcjoxNAoKKyAkVk0gPSBOZXctVk0gPDw8PCAtTmFtZSAkTmFtZSAtVk1Ib3N0ICRWTUhvc3QgLVRlbXBsYXRlICRUZW1wbGF0ZSAtT1NDdXN0b21pemF0aW9uU3BlYyAkU3BlYyAtRGlza1N0b3JhZ2VGb3JtYXQgJERpc2tGb3JtYXQgLURhdGFzdG9yZSAkTGFyZ2VzdERhdGFTdG9yZQoKKyBDYXRlZ29yeUluZm8gOiBOb3RTcGVjaWZpZWQ6ICg6KSBbTmV3LVZNXSwgQ3VzdG9taXphdGlvbkZhdWx0CgorIEZ1bGx5UXVhbGlmaWVkRXJyb3JJZCA6IENsaWVudDIwX1Rhc2tTZXJ2aWNlSW1wbF9DaGVja1NlcnZlclNpZGVUYXNrVXBkYXRlc19PcGVyYXRpb25GYWlsZWQsVk13YXJlLlZpbUF1dG9tYXRpb24uVmlDb3JlLkNtZGxldHMuQ29tbWFuZHMuTmV3Vk0="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;New-VM : 3-11-2010 10:00:50 New-VM The operation for the entity VirtualMachine-vm-150 failed with the following message: &amp;#34;Cannot complete customization.&amp;#34;
+
+At C:\Users\Administrator\Documents\NewVm.ps1:64 char:14
+
+&amp;#43; $VM = New-VM &amp;lt;&amp;lt;&amp;lt;&amp;lt; -Name $Name -VMHost $VMHost -Template $Template -OSCustomizationSpec $Spec -DiskStorageFormat $DiskFormat -Datastore $LargestDataStore
+
+&amp;#43; CategoryInfo : NotSpecified: (:) [New-VM], CustomizationFault
+
+&amp;#43; FullyQualifiedErrorId : Client20_TaskServiceImpl_CheckServerSideTaskUpdates_OperationFailed,VMware.VimAutomation.ViCore.Cmdlets.Commands.NewVM&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;In the vCenter console the following error was logged:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,Q2Fubm90IGRlcGxveSB0ZW1wbGF0ZTogQ2Fubm90IGNvbXBsZXRlIGN1c3RvbWl6YXRpb24u"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;Cannot deploy template: Cannot complete customization.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Windows Installer proxy information not correctly registered</title><link>https://remkoweijnen.nl/blog/2009/11/05/windows-installer-proxy-information-not-correctly-registered/</link><pubDate>Thu, 05 Nov 2009 22:11:06 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/05/windows-installer-proxy-information-not-correctly-registered/</guid><description>&lt;p&gt;I was deploying an unattended installation of Citrix XenApp 5.0 with Altiris Deployment Server. The installation consists of several prerequisites, the installation of XenApp and finally the Citrix Management Consoles.&lt;/p&gt;
+&lt;p&gt;The installation is performed with a special account and not the Local System account because the install packages are located on the network.&lt;/p&gt;
+&lt;p&gt;When testing the deployment on a Windows Server 2008 I noticed that sometimes MSI based installations would fail with error code 1603 or 1601.&lt;/p&gt;</description></item><item><title>How to deactivate Internet Explorer Enhanced Security Configuration in Windows Server 2008?</title><link>https://remkoweijnen.nl/blog/2008/04/04/how-to-deactivate-internet-explorer-enhanced-security-configuration-in-windows-server-2008/</link><pubDate>Fri, 04 Apr 2008 15:44:33 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/04/04/how-to-deactivate-internet-explorer-enhanced-security-configuration-in-windows-server-2008/</guid><description>&lt;p&gt;Open Server Manager and in the Security Information tab click Configure IE ESC. An improvement in Server 2008 is that you can disable it for Administators but enable it for Normal Users, this is nice for Terminal Server and Citrix environments.&lt;/p&gt;</description></item><item><title>How to install Powershell in Server 2008?</title><link>https://remkoweijnen.nl/blog/2008/04/04/how-to-install-powershell-in-server-2008/</link><pubDate>Fri, 04 Apr 2008 15:40:02 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/04/04/how-to-install-powershell-in-server-2008/</guid><description>&lt;p&gt;Even though Powershell is included with Windows Server 2008 it&amp;rsquo;s not installed by default. You can do this in Server Manager by going to Features and then Click Add Features in the Tasks bar on the right. Select Windows Powershell in the list and there you go!&lt;/p&gt;</description></item></channel></rss>

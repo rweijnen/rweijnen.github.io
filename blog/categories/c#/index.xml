@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C# on Remko's Blog</title><link>https://remkoweijnen.nl/blog/categories/c%23/</link><description>Recent content in C# on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 13 Mar 2013 10:01:31 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/categories/c%23/index.xml" rel="self" type="application/rss+xml"/><item><title>Returning a string from unmanaged dll to .net</title><link>https://remkoweijnen.nl/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/</link><pubDate>Wed, 13 Mar 2013 10:01:31 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/</guid><description>&lt;p&gt;&lt;img style="display: inline; float: right;" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/40dc8d791b9e08ae.png" width="88" height="88" align="right" /&gt;I write most of my code in unmanaged languages such as Delphi and C/C++. Sometimes customers ask me to interface my code to their .net code in which case I create a dll for them.&lt;/p&gt;
+&lt;p&gt;A recurring thing is that I need to return string to .net.&lt;/p&gt;
+&lt;p&gt;There are many ways to do this of course but in all cases we need to manage memory: who will allocate the memory for the string and who is responsible for freeing it?&lt;/p&gt;</description></item><item><title>Convert an IP Address to an Integer in C# in host byte ordering</title><link>https://remkoweijnen.nl/blog/2012/10/13/convert-an-ip-address-to-an-integer-in-c-in-host-byte-ordering/</link><pubDate>Sat, 13 Oct 2012 15:18:26 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/10/13/convert-an-ip-address-to-an-integer-in-c-in-host-byte-ordering/</guid><description>&lt;p&gt;Yesterday I wrote about &lt;a href="https://remkoweijnen.nl/blog/2012/10/12/warning-cs0618-system-net-ipaddress-address-is-obsolete/"&gt;converting an IP Address to an Integer in C#&lt;/a&gt;. But both methods I presented return the IP Address in network byte order.&lt;/p&gt;
+&lt;p&gt;However in some cases, especially when calling WinApi functions, you will need to convert the Integer to host byte order which is &lt;em&gt;little-endian&lt;/em&gt; on Intel processors.&lt;/p&gt;</description></item><item><title>warning CS0618: 'System.Net.IPAddress.Address' is obsolete</title><link>https://remkoweijnen.nl/blog/2012/10/12/warning-cs0618-system-net-ipaddress-address-is-obsolete/</link><pubDate>Fri, 12 Oct 2012 13:43:21 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/10/12/warning-cs0618-system-net-ipaddress-address-is-obsolete/</guid><description>&lt;p&gt;For a call to a WinApi function I needed to convert an IP Address to an Integer in C#.&lt;/p&gt; &lt;p&gt;This can be done using the &lt;a href="http://msdn.microsoft.com/en-us/library/system.net.ipaddress.aspx"&gt;System.Net.IPAddress&lt;/a&gt; class:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;Using Address Property &lt;span class="codelang"&gt;&amp;middot; c#&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="using-address-property.cs" href="data:text/plain;charset=utf-8;base64,dXNpbmcgU3lzdGVtLk5ldDsKCklQQWRkcmVzcyBpcGEgPSBJUEFkZHJlc3MuUGFyc2UoIjEwLjQuMi45MSIpOwp1aW50IGlwID0gKHVpbnQpaXBhLkFkZHJlc3M7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-csharp"&gt;&lt;code class="language-csharp"&gt;using System.Net;
+
+IPAddress ipa = IPAddress.Parse(&amp;#34;10.4.2.91&amp;#34;);
+uint ip = (uint)ipa.Address;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Although this works, the compiler issues a warning:&amp;#160; &lt;/p&gt;</description></item><item><title>Calling a function inside another assembly in .NET</title><link>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</link><pubDate>Wed, 22 Aug 2012 09:42:06 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</guid><description>&lt;p&gt;&lt;img style="display: inline; float: right" alt="Red Gate .NET Reflector" align="right" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/920a4b121ffc2422.jpg" width="32" height="32" /&gt;I wanted to call a hash function from a .net executable from my code. My first step was to inspect the executable with &lt;a href="http://www.reflector.net/"&gt;Reflector&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;The Hash function was in a namespace called Core:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;namespace Core &lt;span class="codelang"&gt;&amp;middot; c#&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="namespace-core.cs" href="data:text/plain;charset=utf-8;base64,bmFtZXNwYWNlIFRoZUV4ZS5Db3JlCnsKICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBBc3NlbWJseUluZm8KICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCn0KCmludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCnsKICAgIC8vIE1ldGhvZHMKICAgIHB1YmxpYyBzdGF0aWMgc3RyaW5nIEhhc2godGhpcyBzdHJpbmcgb3JpZ2luYWwsIHN0cmluZyBwYXNzd29yZCk7CiAgICAvLyBNb3JlIG1ldGhvZHMuLi4KfQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-csharp"&gt;&lt;code class="language-csharp"&gt;namespace TheExe.Core
+{
+ internal static class AssemblyInfo
+ internal static class StringExtensionMethods
+}
+
+internal static class StringExtensionMethods
+{
+ // Methods
+ public static string Hash(this string original, string password);
+ // More methods...
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that the Core namespace is marked as internal so it was not meant to be callable outside of the executable. It's still possible to call it using Reflection:&lt;/p&gt;</description></item><item><title>Making String.IndexOf case insensitive</title><link>https://remkoweijnen.nl/blog/2011/01/29/making-string-indexof-case-insensitive/</link><pubDate>Sat, 29 Jan 2011 10:41:24 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/29/making-string-indexof-case-insensitive/</guid><description>&lt;p&gt;I don't do much programming in .NET based languages but I have to for some things like the Windows Live Writer plugin I am creating.&lt;/p&gt; &lt;p&gt;I didn't expect this but the &lt;a href="http://msdn.microsoft.com/en-us/library/system.string.indexof.aspx" target="_blank"&gt;String.IndexOf&lt;/a&gt; Method is by default case sensitive.&lt;/p&gt; &lt;p&gt;But we can make it case insensitive if we use one of the overloads: &lt;a href="http://msdn.microsoft.com/en-us/library/ms224425.aspx"&gt;IndexOf(String, StringComparison)&lt;/a&gt;.&lt;/p&gt;</description></item></channel></rss>

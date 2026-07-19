@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Exchange2003 on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/exchange2003/</link><description>Recent content in Exchange2003 on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 04 Oct 2011 15:21:42 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/exchange2003/index.xml" rel="self" type="application/rss+xml"/><item><title>Exchange Move Mailbox Experiences Part 5</title><link>https://remkoweijnen.nl/blog/2011/10/04/exchange-move-mailbox-experiences-part-5/</link><pubDate>Tue, 04 Oct 2011 15:21:42 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/10/04/exchange-move-mailbox-experiences-part-5/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/09/image1.webp" class="glightbox" data-type="image" data-gallery="post-2135"&gt;&lt;img loading="lazy" decoding="async" title="image" border="0" alt="image" align="right" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/09/image_thumb1.webp" width="81" height="67" /&gt;&lt;/a&gt;Another interesting Move Mailbox error and in this case I am really unsure how this would be possible!&lt;/p&gt; &lt;p&gt;Let's look at the Move Mailbox log:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,MS0xMC0yMDExIDExOjQ5OjE4IFtUaGUgRXhjaGFuZ2UgU2VydmVyXSBBIGNvcnJ1cHRlZCBpdGVtIHdhcyBlbmNvdW50ZXJlZCBkdXJpbmcgdGhlIG1vdmUgb3BlcmF0aW9uLiBUaGUgaXRlbSB3YXNuJ3QgY29waWVkIHRvIHRoZSBkZXN0aW5hdGlvbiBtYWlsYm94Lgo8YmFkaXRlbSBpZD0iMDAwMDAwMDA4OEI0MUVCMkE3NzRFMTRCQTNCMjk3NTk1MjdFQkJEMDA3MDA3QTA4RTRFMTg1NzQ2QTQ1QkY1QzZFRjJBMTdFOEQ1NTAwMDAwNTkwMjg1ODAwMDA3QTA4RTRFMTg1NzQ2QTQ1QkY1QzZFRjJBMTdFOEQ1NTAwMDAwNTkwMjg3MjAwMDAiIGZsYWdzPSIweDAwMDAwMDAwIiBlcnJvcmNvZGU9IjB4ODAwMDQwMDUiIGVycm9ydHlwZT0iTWFwaUV4Y2VwdGlvbk1heFN1Ym1pc3Npb25FeGNlZWRlZCI&amp;#43;CiAgPGZvbGRlciBpZD0iMDAwMDAwMDA4OEI0MUVCMkE3NzRFMTRCQTNCMjk3NTk1MjdFQkJEMDAxMDA3QTA4RTRFMTg1NzQ2QTQ1QkY1QzZFRjJBMTdFOEQ1NTAwMDAwNTkwMjg1ODAwMDAiPlRvcCBvZiBJbmZvcm1hdGlvbiBTdG9yZTwvZm9sZGVyPgogIDxzZW5kZXI&amp;#43;Sm9obiBEb2U8L3NlbmRlcj4KICA8cmVjaXBpZW50PjwvcmVjaXBpZW50PgogIDxzdWJqZWN0PmFyY2hpdmUucHN0PC9zdWJqZWN0PgogIDxtZXNzYWdlY2xhc3M&amp;#43;SVBNLkRvY3VtZW50LlBTVEZpbGU8L21lc3NhZ2VjbGFzcz4KICA8c2l6ZT4zODYyMTg3OTwvc2l6ZT4KICA8ZGF0ZXNlbnQ&amp;#43;MDEvMTkvMjAwNiAxNDozMDo1NzwvZGF0ZXNlbnQ&amp;#43;CiAgPGRhdGVyZWNlaXZlZD4wMS8xOS8yMDA2IDE0OjMwOjE5PC9kYXRlcmVjZWl2ZWQ&amp;#43;CiAgPGVycm9ybWVzc2FnZT5NZXNzYWdlIChzaXplIDM2LjgzIE1CICgzOCw2MjEsODc5IGJ5dGVzKSkgZXhjZWVkcyB0aGUgbWF4aW11bSBhbGxvd2VkIHNpemUgZm9yIHN1Ym1pc3Npb24gdG8gdGhlIHRhcmdldCBtYWlsYm94LiBZb3UgY2FuIGluY3JlYXNlIHRoaXMgbGltaXQgYnkgdXNpbmcgdGhlIFNldC1NYWlsYm94IGNtZGxldCBpbiB0aGUgRXhjaGFuZ2UgTWFuYWdlbWVudCBTaGVsbC4KRXJyb3IgZGV0YWlsczogTWFwaUV4Y2VwdGlvbk1heFN1Ym1pc3Npb25FeGNlZWRlZDogSUV4Y2hhbmdlRmFzdFRyYW5zZmVyRXguVHJhbnNmZXJCdWZmZXIgZmFpbGVkIChocj0weDgwMDA0MDA1LCBlYz0xMjQyKQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;1-10-2011 11:49:18 [The Exchange Server] A corrupted item was encountered during the move operation. The item wasn&amp;#39;t copied to the destination mailbox.
+&amp;lt;baditem id=&amp;#34;0000000088B41EB2A774E14BA3B29759527EBBD007007A08E4E185746A45BF5C6EF2A17E8D5500000590285800007A08E4E185746A45BF5C6EF2A17E8D550000059028720000&amp;#34; flags=&amp;#34;0x00000000&amp;#34; errorcode=&amp;#34;0x80004005&amp;#34; errortype=&amp;#34;MapiExceptionMaxSubmissionExceeded&amp;#34;&amp;gt;
+ &amp;lt;folder id=&amp;#34;0000000088B41EB2A774E14BA3B29759527EBBD001007A08E4E185746A45BF5C6EF2A17E8D550000059028580000&amp;#34;&amp;gt;Top of Information Store&amp;lt;/folder&amp;gt;
+ &amp;lt;sender&amp;gt;John Doe&amp;lt;/sender&amp;gt;
+ &amp;lt;recipient&amp;gt;&amp;lt;/recipient&amp;gt;
+ &amp;lt;subject&amp;gt;archive.pst&amp;lt;/subject&amp;gt;
+ &amp;lt;messageclass&amp;gt;IPM.Document.PSTFile&amp;lt;/messageclass&amp;gt;
+ &amp;lt;size&amp;gt;38621879&amp;lt;/size&amp;gt;
+ &amp;lt;datesent&amp;gt;01/19/2006 14:30:57&amp;lt;/datesent&amp;gt;
+ &amp;lt;datereceived&amp;gt;01/19/2006 14:30:19&amp;lt;/datereceived&amp;gt;
+ &amp;lt;errormessage&amp;gt;Message (size 36.83 MB (38,621,879 bytes)) exceeds the maximum allowed size for submission to the target mailbox. You can increase this limit by using the Set-Mailbox cmdlet in the Exchange Management Shell.
+Error details: MapiExceptionMaxSubmissionExceeded: IExchangeFastTransferEx.TransferBuffer failed (hr=0x80004005, ec=1242)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;This error occurs because of a size constraint just like the one in the &lt;a href="https://remkoweijnen.nl/blog/2011/10/04/exchange-move-mailbox-experiences-part-4/" target="_blank"&gt;previous part&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/10/image2.webp" class="glightbox" data-type="image" data-gallery="post-2135"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-bottom: 0px; border-left: 0px; margin: 0px 10px 0px 0px; padding-left: 0px; padding-right: 0px; display: inline; float: left; border-top: 0px; border-right: 0px; padding-top: 0px" title="image" border="0" alt="image" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/10/image_thumb2.webp" width="32" height="30" /&gt;&lt;/a&gt;But the strange part is that it seems to be a PST file (type IPM.Document.PSTFile) located in the Root folder of the Exchange mailbox (which is not possible AFAIK).&lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>Exchange Move Mailbox Experiences Part 4</title><link>https://remkoweijnen.nl/blog/2011/10/04/exchange-move-mailbox-experiences-part-4/</link><pubDate>Tue, 04 Oct 2011 13:43:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/10/04/exchange-move-mailbox-experiences-part-4/</guid><description>&lt;p&gt;The previous part (&lt;a href="https://remkoweijnen.nl/blog/2011/09/28/exchange-move-mailbox-experiences-part-3/" target="_blank"&gt;part 3&lt;/a&gt;) addressed Mailbox Size but did you know that even Message Size (or rather Item size) can prevent a successful move as well?&lt;/p&gt; &lt;p&gt;Here's an example move mailbox log:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,Mi0xMC0yMDExIDM6MTg6NTggW1RoZSBFeGNoYW5nZSBTZXJ2ZXJdIEEgY29ycnVwdGVkIGl0ZW0gd2FzIGVuY291bnRlcmVkIGR1cmluZyB0aGUgbW92ZSBvcGVyYXRpb24uIFRoZSBpdGVtIHdhc24ndCBjb3BpZWQgdG8gdGhlIGRlc3RpbmF0aW9uIG1haWxib3guCjxiYWRpdGVtIGlkPSIwMDAwMDAwMDQ2OUY2OEJCM0FEN0U3NDVCMkI4QTA0MUZDMUI2ODhDMDcwMDdBMDhFNEUxODU3NDZBNDVCRjVDNkVGMkExN0U4RDU1MDAwMDAxNTM3QTlEMDAwMDdBMDhFNEUxODU3NDZBNDVCRjVDNkVGMkExN0U4RDU1MDAwMDAxNTQwRkYzMDAwMCIgZmxhZ3M9IjB4MDAwMDAwMDAiIGVycm9ydHlwZT0iTWFwaUV4Y2VwdGlvbk1heFN1Ym1pc3Npb25FeGNlZWRlZCIgZXJyb3Jjb2RlPSIweDgwMDA0MDA1Ij4KICA8Zm9sZGVyIGlkPSIwMDAwMDAwMDQ2OUY2OEJCM0FEN0U3NDVCMkI4QTA0MUZDMUI2ODhDMDEwMDdBMDhFNEUxODU3NDZBNDVCRjVDNkVGMkExN0U4RDU1MDAwMDAxNTM3QTlEMDAwMCI&amp;#43;dmVyem9uZGVuIG5vdiAyMDA0LWF1ZyAyMDA1PC9mb2xkZXI&amp;#43;CiAgPHNlbmRlcj5KYW5lIERvZQogIDxyZWNpcGllbnQ&amp;#43;PC9yZWNpcGllbnQ&amp;#43;CiAgPHN1YmplY3Q&amp;#43;Rm90bydzIGFmc2NoZWlkIEpvaG4gRG9lIDEwIGZlYnJ1YXJpIGpsLjwvc3ViamVjdD4KICA8bWVzc2FnZWNsYXNzPklQTS5Ob3RlPC9tZXNzYWdlY2xhc3M&amp;#43;CiAgPHNpemU&amp;#43;NzYxMjE2OTQ8L3NpemU&amp;#43;CiAgPGRhdGVzZW50PjAyLzE1LzIwMDUgMTU6Mjg6MDY8L2RhdGVzZW50PgogIDxkYXRlcmVjZWl2ZWQ&amp;#43;MDIvMTUvMjAwNSAxNToyODowNjwvZGF0ZXJlY2VpdmVkPgogIDxlcnJvcm1lc3NhZ2U&amp;#43;TWVzc2FnZSAoc2l6ZSA3Mi42IE1CICg3NiwxMjEsNjk0IGJ5dGVzKSkgZXhjZWVkcyB0aGUgbWF4aW11bSBhbGxvd2VkIHNpemUgZm9yIHN1Ym1pc3Npb24gdG8gdGhlIHRhcmdldCBtYWlsYm94LiBZb3UgY2FuIGluY3JlYXNlIHRoaXMgbGltaXQgYnkgdXNpbmcgdGhlIFNldC1NYWlsYm94IGNtZGxldCBpbiB0aGUgRXhjaGFuZ2UgTWFuYWdlbWVudCBTaGVsbC4KRXJyb3IgZGV0YWlsczogTWFwaUV4Y2VwdGlvbk1heFN1Ym1pc3Npb25FeGNlZWRlZDogSUV4Y2hhbmdlRmFzdFRyYW5zZmVyRXguVHJhbnNmZXJCdWZmZXIgZmFpbGVkIChocj0weDgwMDA0MDA1LCBlYz0xMjQyKQpEaWFnbm9zdGljIGNvbnRleHQ6"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;2-10-2011 3:18:58 [The Exchange Server] A corrupted item was encountered during the move operation. The item wasn&amp;#39;t copied to the destination mailbox.
+&amp;lt;baditem id=&amp;#34;00000000469F68BB3AD7E745B2B8A041FC1B688C07007A08E4E185746A45BF5C6EF2A17E8D55000001537A9D00007A08E4E185746A45BF5C6EF2A17E8D55000001540FF30000&amp;#34; flags=&amp;#34;0x00000000&amp;#34; errortype=&amp;#34;MapiExceptionMaxSubmissionExceeded&amp;#34; errorcode=&amp;#34;0x80004005&amp;#34;&amp;gt;
+ &amp;lt;folder id=&amp;#34;00000000469F68BB3AD7E745B2B8A041FC1B688C01007A08E4E185746A45BF5C6EF2A17E8D55000001537A9D0000&amp;#34;&amp;gt;verzonden nov 2004-aug 2005&amp;lt;/folder&amp;gt;
+ &amp;lt;sender&amp;gt;Jane Doe
+ &amp;lt;recipient&amp;gt;&amp;lt;/recipient&amp;gt;
+ &amp;lt;subject&amp;gt;Foto&amp;#39;s afscheid John Doe 10 februari jl.&amp;lt;/subject&amp;gt;
+ &amp;lt;messageclass&amp;gt;IPM.Note&amp;lt;/messageclass&amp;gt;
+ &amp;lt;size&amp;gt;76121694&amp;lt;/size&amp;gt;
+ &amp;lt;datesent&amp;gt;02/15/2005 15:28:06&amp;lt;/datesent&amp;gt;
+ &amp;lt;datereceived&amp;gt;02/15/2005 15:28:06&amp;lt;/datereceived&amp;gt;
+ &amp;lt;errormessage&amp;gt;Message (size 72.6 MB (76,121,694 bytes)) exceeds the maximum allowed size for submission to the target mailbox. You can increase this limit by using the Set-Mailbox cmdlet in the Exchange Management Shell.
+Error details: MapiExceptionMaxSubmissionExceeded: IExchangeFastTransferEx.TransferBuffer failed (hr=0x80004005, ec=1242)
+Diagnostic context:&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;As you can see in the log this mailbox there is one item with a size of 72 MegaBytes.&lt;/p&gt;</description></item><item><title>Exchange Move Mailbox Experiences Part 3</title><link>https://remkoweijnen.nl/blog/2011/09/28/exchange-move-mailbox-experiences-part-3/</link><pubDate>Wed, 28 Sep 2011 11:08:21 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/09/28/exchange-move-mailbox-experiences-part-3/</guid><description>&lt;p&gt;In &lt;a href="https://remkoweijnen.nl/blog/2011/09/27/exchange-move-mailbox-experiences-part-2/" target="_blank"&gt;Part 2&lt;/a&gt; I showed some details about Mailbox Rule corruptions that can disturb Mailbox Moves.&lt;/p&gt; &lt;p&gt;For this part the topic is Mailbox size, which can be an important factor in deciding which mailboxes you want to move first.&lt;/p&gt; &lt;p&gt;In my case the mailbox size was important because we agreed to move smaller mailboxes during the day but larger mailboxes only outside working hours.&lt;/p&gt; &lt;p&gt;For Exchange 2010 mailboxes it's very easy to obtain the size using PowerShell. &lt;/p&gt; &lt;p&gt;Example:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,R2V0LU1haWxib3ggInJ3ZWlqbmVuIiB8IEdldC1NYWlsYm94U3RhdGlzdGljcyB8IHNlbGVjdCBEaXNwbGF5TmFtZSwgSXRlbUNvdW50LCBUb3RhbEl0ZW1TaXpl"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;Get-Mailbox &amp;#34;rweijnen&amp;#34; | Get-MailboxStatistics | select DisplayName, ItemCount, TotalItemSize&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;table border="0" cellspacing="10" cellpadding="2" width="430"&gt;&lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td valign="top" width="130"&gt;DisplayName&lt;/td&gt;
+&lt;pre&gt;&lt;code&gt; &amp;lt;td valign=&amp;quot;top&amp;quot; width=&amp;quot;70&amp;quot; align=&amp;quot;right&amp;quot;&amp;gt;ItemCount&amp;lt;/td&amp;gt;
+
+ &amp;lt;td valign=&amp;quot;top&amp;quot; width=&amp;quot;230&amp;quot; align=&amp;quot;right&amp;quot;&amp;gt;TotalItemSize&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+
+&amp;lt;tr&amp;gt;
+ &amp;lt;td valign=&amp;quot;top&amp;quot; width=&amp;quot;130&amp;quot;&amp;gt;Remko Weijnen&amp;lt;/td&amp;gt;
+
+ &amp;lt;td valign=&amp;quot;top&amp;quot; width=&amp;quot;70&amp;quot; align=&amp;quot;right&amp;quot;&amp;gt;313&amp;lt;/td&amp;gt;
+
+ &amp;lt;td valign=&amp;quot;top&amp;quot; width=&amp;quot;230&amp;quot; align=&amp;quot;right&amp;quot;&amp;gt;34.87 MB (36,564,183 bytes&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+ &lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;But how can we get the Mailbox Size for Exchange 2003 mailboxes?&lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item></channel></rss>

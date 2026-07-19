@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Delphi on Remko's Blog</title><link>https://remkoweijnen.nl/blog/categories/delphi/</link><description>Recent content in Delphi on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 18 Dec 2017 12:10:51 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/categories/delphi/index.xml" rel="self" type="application/rss+xml"/><item><title>RAD Studio Tokyo 10.2(.2) Data Collection</title><link>https://remkoweijnen.nl/blog/2017/12/18/rad-studio-tokyo-10-2-2-data-collection/</link><pubDate>Mon, 18 Dec 2017 12:10:51 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2017/12/18/rad-studio-tokyo-10-2-2-data-collection/</guid><description>&lt;p&gt;Just a very quick note: I was just installing RAD Studio 10.2.2 when I noticed the installer has an Options button:&lt;/p&gt; &lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image-2.webp" class="glightbox" data-type="image" data-gallery="post-4192"&gt;&lt;img loading="lazy" decoding="async" title="image" style="display: inline;" alt="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image_thumb-2.webp" width="417" height="316" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;So I clicked it to see what options are available and noticed that the &amp;quot;Embarcadero Customer Experience Program&amp;quot; is opted-in by default:&lt;/p&gt;</description></item><item><title>Returning a string from unmanaged dll to .net</title><link>https://remkoweijnen.nl/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/</link><pubDate>Wed, 13 Mar 2013 10:01:31 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/</guid><description>&lt;p&gt;&lt;img style="display: inline; float: right;" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/40dc8d791b9e08ae.png" width="88" height="88" align="right" /&gt;I write most of my code in unmanaged languages such as Delphi and C/C++. Sometimes customers ask me to interface my code to their .net code in which case I create a dll for them.&lt;/p&gt;
+&lt;p&gt;A recurring thing is that I need to return string to .net.&lt;/p&gt;
+&lt;p&gt;There are many ways to do this of course but in all cases we need to manage memory: who will allocate the memory for the string and who is responsible for freeing it?&lt;/p&gt;</description></item><item><title>Get Process Id of a running Service</title><link>https://remkoweijnen.nl/blog/2012/11/28/get-process-id-of-a-running-service/</link><pubDate>Wed, 28 Nov 2012 12:20:40 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/11/28/get-process-id-of-a-running-service/</guid><description>&lt;p&gt;Sometimes you need to know the Process Id (PID) of a running service. Since Windows 2003 you can use the tasklist.exe tool with the /SVC switch. But how to do this programmatically?&lt;/p&gt; &lt;p&gt;The &lt;a href="http://msdn.microsoft.com/en-us/library/ms684941%28VS.85%29.aspx"&gt;QueryServiceStatusE&lt;/a&gt;x API returns a &lt;a href="http://msdn.microsoft.com/en-us/library/ms685992(v=vs.85).aspx"&gt;SERVICE_STATUS_PROCESS&lt;/a&gt; structure that contains the PID.&lt;/p&gt;</description></item><item><title>Decoding Citrix IMA Datastore Password</title><link>https://remkoweijnen.nl/blog/2012/05/29/decoding-citrix-ima-datastore-password/</link><pubDate>Tue, 29 May 2012 21:46:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/05/29/decoding-citrix-ima-datastore-password/</guid><description>&lt;p&gt;This morning &lt;a href="http://www.twitter.com/arbeijer/status/207398601066942464"&gt;Arjan Beijer&lt;/a&gt; sent me an interesting link to a &lt;a href="http://www.youtube.com/watch?v=Cb8-kvJkojY"&gt;youtube video&lt;/a&gt; about obtaining the Citrix IMA Datastore password using Windbg.&lt;/p&gt;
+&lt;p&gt;The video shows a method, discovered by &lt;a href="https://twitter.com/#!/fdwl"&gt;Denis Gundarev&lt;/a&gt; to obtain the IMA Datastore password. Basically he uses DSMaint.exe and set&amp;rsquo;s a breakpoint on the call to &lt;a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa380882(v=vs.85).aspx"&gt;CryptUnprotectData&lt;/a&gt; and then reads the password from memory.&lt;/p&gt;
+&lt;p&gt;I tried to call the CryptUnprotectData API with the data read from the registry directly but this failed with error NTE_BAD_KEY_STATE, this is defined in winerror.h and it means &amp;ldquo;Key not valid for use in specified state&amp;rdquo;.&lt;/p&gt;</description></item><item><title>Citrix Launcher Progress Update 1</title><link>https://remkoweijnen.nl/blog/2012/05/17/citrix-launcher-progress-update-1/</link><pubDate>Thu, 17 May 2012 23:19:12 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/05/17/citrix-launcher-progress-update-1/</guid><description>&lt;p&gt;After figuring out how to &lt;a href="https://remkoweijnen.nl/blog/2012/05/13/encoding-and-decoding-citrix-passwords/"&gt;encode and decode the Citrix passwords&lt;/a&gt; my next step for the upcoming Citrix Launcher is experiment with config.xml and authenticating to the Citrix Web Interface.&lt;/p&gt;
+&lt;p&gt;&lt;a class="glightbox thickbox" href="https://remkoweijnen.nl/blog/wp-content/uploads/2012/05/image4.webp" data-type="image" data-gallery="post-2609"&gt;&lt;img loading="lazy" decoding="async" style="float: left; display: inline;" title="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2012/05/image_thumb4.webp" alt="image" width="45" height="39" align="left" /&gt;&lt;/a&gt;I imported the NFuse.dtd from the Citrix Web Interface into Delphi with the XML Data Binding Wizard. The results in an NFuse Unit so I can easily create the XML data.&lt;/p&gt;
+&lt;p&gt;To create an authentication packet I use the following code:&lt;/p&gt;</description></item><item><title>Switching to the Services Session</title><link>https://remkoweijnen.nl/blog/2012/02/24/switching-to-the-services-session/</link><pubDate>Fri, 24 Feb 2012 14:49:21 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/02/24/switching-to-the-services-session/</guid><description>&lt;p&gt;Just read a tweet from &lt;a href="http://twitter.com/andyjmorgan" target="_blank"&gt;@andyjmorgan&lt;/a&gt; about &lt;a href="http://twitter.com/andyjmorgan/statuses/173033102514462720" target="_blank"&gt;Interactive Service Detection&lt;/a&gt;. This made me remember that it's possible to switch to the Session 0 with an undocumented api in winsta.dll.&lt;/p&gt; &lt;p&gt;For this API to work you must have the Interactive Services Detection (UI0Detect) service running.&lt;/p&gt;</description></item><item><title>GetUserObjectInformation fails with Access Denied</title><link>https://remkoweijnen.nl/blog/2011/08/16/getuserobjectinformation-fails-with-access-denied/</link><pubDate>Tue, 16 Aug 2011 21:11:01 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/08/16/getuserobjectinformation-fails-with-access-denied/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/08/image2.webp" class="glightbox" data-type="image" data-gallery="post-1994"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-bottom: 0px; border-left: 0px; margin: 0px 10px 0px 0px; padding-left: 0px; padding-right: 0px; display: inline; float: left; border-top: 0px; border-right: 0px; padding-top: 0px" title="Logon SID" border="0" alt="Logon SID" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/08/image_thumb2.webp" width="48" height="44" /&gt;&lt;/a&gt;Today I was reusing some old (pre vista) code the retrieves the Logon SID that I wrote a few years ago. The Logon SID is a special SID that identifies a logon session that has the form S-1-5-5-X-Y.&lt;/p&gt; &lt;p&gt;You can view your Logon SID with Process Explorer, right click a GUI process, select Properties and goto the Security Tab:&lt;/p&gt; &lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/08/SNAGHTML1b84fe6b.webp" class="glightbox" data-type="image" data-gallery="post-1994"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-bottom: 0px; border-left: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top: 0px; border-right: 0px; padding-top: 0px" title="explorer.exe:4484 Properties" border="0" alt="Process Explorer|Security Tab|Logon SID" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/08/SNAGHTML1b84fe6b_thumb.webp" width="274" height="317" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>Programmatically Check if User Account Control is Enabled</title><link>https://remkoweijnen.nl/blog/2011/08/11/programmatically-check-if-user-account-control-is-enabled/</link><pubDate>Thu, 11 Aug 2011 11:27:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/08/11/programmatically-check-if-user-account-control-is-enabled/</guid><description>&lt;p&gt;&lt;img style="margin: 0px 10px 0px 0px; display: inline; float: left" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/ac92b77a899e8666.png" width="28" height="34" /&gt;Snippet below can be used to programmatically determine if User Account Control is enabled:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dXNlcwogIEp3YVdpbmJhc2UsIEp3YVdpbk50OwoKZnVuY3Rpb24gSXNVQUNFbmFibGVkOiBCb29sZWFuOwp2YXIKICBoVG9rZW46IFRIYW5kbGU7CiAgdGV0OiBUT0tFTl9FTEVWQVRJT05fVFlQRTsKICBkd1NpemU6IERXT1JEOwpiZWdpbgogIFdpbjMyQ2hlY2soT3BlblByb2Nlc3NUb2tlbihHZXRDdXJyZW50UHJvY2VzcywgVE9LRU5fUVVFUlksIGhUb2tlbikpOwogIC8vIFRva2VuRWxldmF0aW9uVHlwZSBjbGFzcyBvbmx5IGF2YWlsYWJsZSBvbiBWaXN0YSsKICBXaW4zMkNoZWNrKEdldFRva2VuSW5mb3JtYXRpb24oaFRva2VuLCBUb2tlbkVsZXZhdGlvblR5cGUsIEB0ZXQsIFNpemVPZih0ZXQpLCBkd1NpemUpKTsKCiAgUmVzdWx0IDo9IHRldCA8PiBUb2tlbkVsZXZhdGlvblR5cGVEZWZhdWx0OwplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;uses
+ JwaWinbase, JwaWinNt;
+
+function IsUACEnabled: Boolean;
+var
+ hToken: THandle;
+ tet: TOKEN_ELEVATION_TYPE;
+ dwSize: DWORD;
+begin
+ Win32Check(OpenProcessToken(GetCurrentProcess, TOKEN_QUERY, hToken));
+ // TokenElevationType class only available on Vista&amp;#43;
+ Win32Check(GetTokenInformation(hToken, TokenElevationType, @tet, SizeOf(tet), dwSize));
+
+ Result := tet &amp;lt;&amp;gt; TokenElevationTypeDefault;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;1 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="https://remkoweijnen.nl/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/" rel="nofollow ugc"&gt;GetTokenInformation with TokenLinkedToken returns error 1312&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2011-08-11"&gt;Aug 11, 2011&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;[...] specified logon session does not exist. It may already have been terminated.&amp;#8221;So you should check if User Account Control is enabled in such cases (or make this error non critical).share: Bookmark on Delicious Digg this post [...]&lt;/p&gt;</description></item><item><title>Delphi TSaveDialog doesn’t work on Windows PE</title><link>https://remkoweijnen.nl/blog/2011/06/21/delphi-tsavedialog-doesnt-work-on-windows-pe/</link><pubDate>Tue, 21 Jun 2011 15:03:07 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/06/21/delphi-tsavedialog-doesnt-work-on-windows-pe/</guid><description>&lt;p&gt;In my &lt;a href="https://remkoweijnen.nl/blog/2011/06/18/switch-sata-operation-mode/"&gt;SATA Controller Identification tool&lt;/a&gt; I was using the TSaveDialog (Delphi 2010) but I got a report that under Windows PE the dialog is never shown.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s no exception and I didn&amp;rsquo;t really bother to check why it fails. Instead I decided to replace it with the &lt;a href="http://msdn.microsoft.com/en-us/library/ms646928(v=vs.85).aspx" target="_blank"&gt;GetSaveFileName&lt;/a&gt; API which does work under Windows PE.&lt;/p&gt;</description></item><item><title>Determining stack size</title><link>https://remkoweijnen.nl/blog/2011/05/27/determining-stack-size/</link><pubDate>Fri, 27 May 2011 15:10:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/27/determining-stack-size/</guid><description>&lt;p&gt;I just read an answer on &lt;a href="http://stackoverflow.com/questions/6150018/what-is-a-safe-maximum-stack-size-or-how-to-measure-use-of-stack" target="_blank"&gt;StackOverflow&lt;/a&gt; with this code:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgZXU6RFdPUkQ7CmJlZ2luCiAgYXNtCiAgICBtb3YgZWF4LFtmczokNF0KICAgIG1vdiBlYngsW2ZzOiQ4XQogICAgc3ViIGVheCxlYngKICAgIG1vdiBldSxlYXgKICBlbmQ7CgogIFNob3dNZXNzYWdlKEludFRvU3RyKGV1KSk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ eu:DWORD;
+begin
+ asm
+ mov eax,[fs:$4]
+ mov ebx,[fs:$8]
+ sub eax,ebx
+ mov eu,eax
+ end;
+
+ ShowMessage(IntToStr(eu));
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Unfortunately it lacked explanation, so what does this code do?&lt;/p&gt;
+&lt;p&gt;It reads offset $4 from the Thread Information Block (the top of stack) into eax and then offset $8 (stack base) into ebx.&lt;/p&gt;</description></item><item><title>How Outlook and Exchange handle Timezones</title><link>https://remkoweijnen.nl/blog/2011/05/18/how-outlook-and-exchange-handle-timezones/</link><pubDate>Wed, 18 May 2011 19:53:27 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/18/how-outlook-and-exchange-handle-timezones/</guid><description>&lt;p&gt;Again an old war story, this time about timezone handling in Outlook/Exchange.&lt;/p&gt; &lt;p&gt;I am not sure which year it was but I had just started to work for a new company and inherited an Exchange 5.5 Server.&lt;/p&gt; &lt;p&gt;The mail had been migrated from an earlier version and calendar data was migrated from &lt;a href="http://en.wikipedia.org/wiki/Microsoft_Schedule_Plus" target="_blank"&gt;Schedule+&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;On the first change to Daylight Savings (DTS) all recurring appointments where shown one hour later (or earlier can't remember) in Outlook. A manual change was not an option: there were over 2000 mailboxes each with a lot of appointments.&lt;/p&gt; &lt;p&gt;We first tried a workaround by disabling DTS on the the workstations and then manually change the time when changing from and to DTS.&amp;#160; &lt;/p&gt; &lt;p&gt;But this influenced the timestamps on externals mails and of course appointments with external parties.&lt;/p&gt; &lt;p&gt;After a lot of (and I really mean a lot) of researching I found that Outlook stores all times in an appointment as relative (UTC) time. &lt;/p&gt; &lt;p&gt;Upon display it uses an undocumented TimeZone descriptor field to convert to Local Time.&lt;/p&gt; &lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>Programmatically determine if we run server core</title><link>https://remkoweijnen.nl/blog/2011/05/17/programmatically-determine-if-we-run-server-core/</link><pubDate>Tue, 17 May 2011 21:32:22 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/17/programmatically-determine-if-we-run-server-core/</guid><description>&lt;p&gt;If you want to check if you are running on a Server Core edition of Windows you can use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724358.aspx" target="_blank"&gt;GetProductInfo&lt;/a&gt; API.&lt;/p&gt; &lt;p&gt;GetProductInfo takes 4 input parameters that can be obtained using &lt;a href="http://msdn.microsoft.com/en-us/library/ms724451(VS.85).aspx" target="_blank"&gt;GetVersionEx&lt;/a&gt; and the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724833(v=VS.85).aspx" target="_blank"&gt;OSVERSIONINFOEX&lt;/a&gt; structure:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgb3N2aTogT1NWRVJTSU9OSU5GT0VYOwpiZWdpbgogIFplcm9NZW1vcnkoQG9zdmksIFNpemVPZihvc3ZpKSk7CiAgb3N2aS5kd09TVmVyc2lvbkluZm9TaXplIDo9IFNpemVPZihvc3ZpKTsKICBXaW4zMkNoZWNrKEdldFZlcnNpb25FeChvc3ZpKSk7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ osvi: OSVERSIONINFOEX;
+begin
+ ZeroMemory(@osvi, SizeOf(osvi));
+ osvi.dwOSVersionInfoSize := SizeOf(osvi);
+ Win32Check(GetVersionEx(osvi));&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;No we call GetProductInfo:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgZHdQcm9kVHlwZTogRFdPUkQ7CmJlZ2luCiAgV2luMzJDaGVjayhHZXRQcm9kdWN0SW5mbyhvc3ZpLmR3TWFqb3JWZXJzaW9uLCBvc3ZpLmR3TWlub3JWZXJzaW9uLAogICAgb3N2aS53U2VydmljZVBhY2tNYWpvciwgb3N2aS53U2VydmljZVBhY2tNaW5vciwgZHdQcm9kVHlwZSkpOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ dwProdType: DWORD;
+begin
+ Win32Check(GetProductInfo(osvi.dwMajorVersion, osvi.dwMinorVersion,
+ osvi.wServicePackMajor, osvi.wServicePackMinor, dwProdType));&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)</title><link>https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/</link><pubDate>Thu, 03 Mar 2011 13:00:46 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/</guid><description>&lt;p&gt;In the previous parts (&lt;a href="https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/"&gt;part 1&lt;/a&gt; &lt;a href="https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/"&gt;part 2&lt;/a&gt;) i&amp;rsquo;ve described the theoretical part and implementation problems. So, now we can write the code:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;In case we login the user, we just call &lt;a href="http://msdn.microsoft.com/en-us/library/aa378292(v=vs.85).aspx"&gt;LsaLogonUser&lt;/a&gt; to get the token:&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds)</title><link>https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/</link><pubDate>Wed, 02 Mar 2011 00:10:02 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/</guid><description>&lt;p&gt;In &lt;a href="https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/"&gt;part 1&lt;/a&gt; I&amp;rsquo;ve described the theoretical parts needed for a custom autologon application implementation.&lt;/p&gt;
+&lt;p&gt;But there are some practical problems which I will describe here.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I use the &lt;a href="http://msdn.microsoft.com/en-us/library/aa378292(v=vs.85).aspx"&gt;LsaLogonUser&lt;/a&gt; function to log in the user. However, if I do not pass not null for the &lt;em&gt;LocalGroups&lt;/em&gt; parameter, msgina.dll fails to process the logon.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Why? Because it looks for the &lt;strong&gt;SE_GROUP_LOGON_ID&lt;/strong&gt; SID and treat it as logon SID. So we have to add the logon SID manually:&lt;/p&gt;</description></item><item><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 1 (theory)</title><link>https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/</link><pubDate>Mon, 28 Feb 2011 10:46:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/</guid><description>&lt;p&gt;Windows XP introduced the ability to use Fast User Switching (FUS from here on), which is implemented using &lt;em&gt;Terminal Services&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;But in some cases (i.e. when FUS is not enabled, or when you connect to the console in Windows 2003 server), the Winlogon process in an RDP session needs to transfer credentials to Session 0.&lt;/p&gt;
+&lt;p&gt;Although not documented in MSDN, the process of transferring credentials is described by Keith Brown in the June 2005 issue of MSDN magazine: &lt;a href="http://msdn.microsoft.com/en-us/magazine/cc163786.aspx"&gt;Customizing GINA, Part 2&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/aa380577(v=vs.85).aspx"&gt;WlxQueryConsoleSwitchCredentials&lt;/a&gt; and &lt;a href="http://msdn.microsoft.com/en-us/library/aa380563(v=vs.85).aspx"&gt;WlxGetConsoleSwitchCredentials&lt;/a&gt; are used in the transfer with the semi-documented &lt;strong&gt;WLX_SAS_TYPE_AUTHENTICATED&lt;/strong&gt; SAS code constant.&lt;/p&gt;
+&lt;p&gt;Internally, &lt;em&gt;winlogon.exe&lt;/em&gt; uses a Named Pipe, &lt;strong&gt;\.\Pipe\TerminalServer\AutoReconnect, &lt;/strong&gt;to implement both of these functions.&lt;/p&gt;
+&lt;p&gt;The pipe format is described in this structure:&lt;/p&gt;</description></item><item><title>Querying a user token under 64 bit version of 2003/XP</title><link>https://remkoweijnen.nl/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/</link><pubDate>Sat, 29 Jan 2011 22:17:52 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/</guid><description>&lt;p&gt;If you want to obtain a user&amp;rsquo;s token in a Terminal Server or Citrix session (eg to launch a process in a session) you can call the &lt;a href="http://msdn.microsoft.com/en-us/library/aa383840(v=vs.85).aspx"&gt;WTSQueryUserToken&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On the x64 versions of Windows XP and Server 2003 this function fails however and returns &lt;strong&gt;ERROR_INSUFFICIENT_BUFFER&lt;/strong&gt; (&amp;quot;&lt;em&gt;The data area passed to a system call is too small&lt;/em&gt;.&amp;quot;) when called from a 32 bit process.&lt;/p&gt;
+&lt;p&gt;Internally WTSQueryUserToken calls the undocumented function &lt;a href="http://msdn.microsoft.com/en-us/library/aa383827(v=vs.85).aspx"&gt;WinstationQueryInformationW&lt;/a&gt; with the &lt;strong&gt;WinStationUserToken&lt;/strong&gt; class (14) and passing a &lt;a href="http://msdn.microsoft.com/en-us/library/cc248658(PROT.10).aspx"&gt;WINSTATIONUSERTOKEN&lt;/a&gt; struct, filled with caller ProcessId and ThreadId.&lt;/p&gt;
+&lt;p&gt;But on x64 Windows the size of this structure is 24 bytes, while on 32 bit Windows the size of the structure is 12 bytes!&lt;/p&gt;</description></item><item><title>Determine the System Page Size</title><link>https://remkoweijnen.nl/blog/2011/01/24/determine-the-system-page-size/</link><pubDate>Mon, 24 Jan 2011 15:46:58 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/24/determine-the-system-page-size/</guid><description>&lt;p&gt;Just a quick note: if you want to determine the page size of the OS (Windows) you can use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724381(v=vs.85).aspx" target="_blank"&gt;GetSystemInfo&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgU3lzdGVtSW5mbzogU1lTVEVNX0lORk87CiAgUGFnZVNpemU6IERXT1JEOwpiZWdpbgogIEdldFN5c3RlbUluZm8oU3lzdGVtSW5mbyk7CiAgUGFnZVNpemUgOj0gU3lzdGVtSW5mby5kd1BhZ2VTaXplOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ SystemInfo: SYSTEM_INFO;
+ PageSize: DWORD;
+begin
+ GetSystemInfo(SystemInfo);
+ PageSize := SystemInfo.dwPageSize;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that MSDN recommends to use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724340(v=vs.85).aspx" target="_blank"&gt;GetNativeSystemInfo&lt;/a&gt; function when running in a 32 bit app on an x64 OS (and you can use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms684139(v=vs.85).aspx" target="_blank"&gt;IsWow64Process&lt;/a&gt; function to determine that).&lt;/p&gt;</description></item><item><title>Enumerating Session Processes with NtQuerySystemInformation</title><link>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</link><pubDate>Thu, 20 Jan 2011 15:34:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</guid><description>&lt;p&gt;As you may know, you can enumerate processes of a specific Terminal Server or Citrix session using the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724509(VS.85).aspx"&gt;NtQuerySystemInformation&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On x86 system the code below works fine:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgU3RhdHVzIDogTlRTVEFUVVM7CiAgUmV0TGVuZ3RoIDogRFdPUkQ7CiAgU2Vzc2lvbkluZm8gOiAgU1lTVEVNX1NFU1NJT05fUFJPQ0VTU19JTkZPUk1BVElPTjsKICBDdXJyZW50UHJvY2VzcyA6IFBTeXN0ZW1Qcm9jZXNzZXM7CmJlZ2luCgogIFNlc3Npb25JbmZvLlNlc3Npb25JZCA6PSBTZXNzaW9uSWQ7CiAgU2Vzc2lvbkluZm8uQnVmZmVyIDo9IG5pbDsKICBTZXNzaW9uSW5mby5TaXplT2ZCdWYgOj0gMDsKCiAgU3RhdHVzIDo9IE50UXVlcnlTeXN0ZW1JbmZvcm1hdGlvbihTeXN0ZW1TZXNzaW9uUHJvY2Vzc2VzSW5mb3JtYXRpb24sIEBTZXNzaW9uSW5mbywgU2l6ZU9mKFNlc3Npb25JbmZvKSwgQFJldExlbmd0aCk7CiAgd2hpbGUgKFN0YXR1cyA9IFNUQVRVU19JTkZPX0xFTkdUSF9NSVNNQVRDSCkgZG8KICBiZWdpbgogICAgU2Vzc2lvbkluZm8uU2l6ZU9mQnVmIDo9IFJldExlbmd0aDsKICAgIFNlc3Npb25JbmZvLkJ1ZmZlciA6PSBHZXRNZW1vcnkoUmV0TGVuZ3RoKTsKICAgIHRyeQogICAgICBTdGF0dXMgOj0gTnRRdWVyeVN5c3RlbUluZm9ybWF0aW9uKFN5c3RlbVNlc3Npb25Qcm9jZXNzZXNJbmZvcm1hdGlvbiwgQFNlc3Npb25JbmZvLCBTaXplT2YoU2Vzc2lvbkluZm8pLCBAUmV0TGVuZ3RoKTsKICAgICAgaWYgTlRfU1VDQ0VTUyhTdGF0dXMpIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBDdXJyZW50UHJvY2VzcyA6PSBTZXNzaW9uSW5mby5CdWZmZXI7CiAgICAgICAgd2hpbGUgVHJ1ZSBkbwogICAgICAgIGJlZ2luCiAgICAgICAgICAvLyBZb3VyIGNvZGUgaGVyZQoKICAgICAgICAgIGlmIChDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGEgPSAwKSB0aGVuCiAgICAgICAgICAgIEJyZWFrOwoKICAgICAgICAgIENhcmRpbmFsKEN1cnJlbnRQcm9jZXNzKSA6PSBDYXJkaW5hbChDdXJyZW50UHJvY2VzcykgKyBDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGE7CiAgICAgICAgZW5kOwoKICAgICAgICBFeGl0OwogICAgICBlbmQ7CiAgICBmaW5hbGx5CiAgICAgIEZyZWVNZW1vcnkoU2Vzc2lvbkluZm8uQnVmZmVyKTsKICAgIGVuZDsKICBlbmQ7CgogIFNldExhc3RFcnJvcihSdGxOdFN0YXR1c1RvRG9zRXJyb3IoU3RhdHVzKSk7CiAgUmFpc2VMYXN0T1NFcnJvcjsKZW5kOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ Status : NTSTATUS;
+ RetLength : DWORD;
+ SessionInfo : SYSTEM_SESSION_PROCESS_INFORMATION;
+ CurrentProcess : PSystemProcesses;
+begin
+
+ SessionInfo.SessionId := SessionId;
+ SessionInfo.Buffer := nil;
+ SessionInfo.SizeOfBuf := 0;
+
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ while (Status = STATUS_INFO_LENGTH_MISMATCH) do
+ begin
+ SessionInfo.SizeOfBuf := RetLength;
+ SessionInfo.Buffer := GetMemory(RetLength);
+ try
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ if NT_SUCCESS(Status) then
+ begin
+ CurrentProcess := SessionInfo.Buffer;
+ while True do
+ begin
+ // Your code here
+
+ if (CurrentProcess^.NextEntryDelta = 0) then
+ Break;
+
+ Cardinal(CurrentProcess) := Cardinal(CurrentProcess) &amp;#43; CurrentProcess^.NextEntryDelta;
+ end;
+
+ Exit;
+ end;
+ finally
+ FreeMemory(SessionInfo.Buffer);
+ end;
+ end;
+
+ SetLastError(RtlNtStatusToDosError(Status));
+ RaiseLastOSError;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;While this works fine on Windows XP and 2003 x86, it fails to work correctly on the x64 versions of Windows XP and 2003 (or maybe even higher).&lt;/p&gt;
+&lt;p&gt;The problem is that RetLength is always SizeOf(SYSTEM_SESSION_PROCESS_INFORMATION) and thus we are in an endless loop!&lt;/p&gt;</description></item><item><title>Convert Drive Bitmask to Drive Letter</title><link>https://remkoweijnen.nl/blog/2011/01/14/convert-drive-bitmask-to-drive-letter/</link><pubDate>Fri, 14 Jan 2011 11:06:03 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/14/convert-drive-bitmask-to-drive-letter/</guid><description>&lt;p&gt;I was writing a test program that will perform some actions when a USB Memory Stick is inserted.&lt;/p&gt; &lt;p&gt;When this happens Windows send a Broadcast a &lt;a href="http://msdn.microsoft.com/en-us/library/aa363480(VS.85).aspx" target="_blank"&gt;WM_DEVICECHANGE&lt;/a&gt; message.&lt;/p&gt; &lt;p&gt;The wParam member of this Message contains a (pointer to) a &lt;a href="http://msdn.microsoft.com/en-us/library/aa363246(VS.85).aspx" target="_blank"&gt;DEV_BROADCAST_HDR&lt;/a&gt; structure.&lt;/p&gt; &lt;p&gt;if the dbch_devicetype member of this structure is of type DBT_DEVTYP_VOLUME then we can cast the structure to &lt;a href="http://msdn.microsoft.com/en-us/library/aa363249(v=VS.85).aspx" target="_blank"&gt;DEV_BROADCAST_VOLUME&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Cannot Access Files, But Need the Origin?</title><link>https://remkoweijnen.nl/blog/2011/01/03/cannot-access-files-but-need-the-origin/</link><pubDate>Mon, 03 Jan 2011 09:52:20 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/03/cannot-access-files-but-need-the-origin/</guid><description>&lt;p&gt;Have you developed an application that accesses files and may stop because a file cannot be accessed but you need to?&lt;/p&gt;
+&lt;p&gt;Since Windows Vista it is possible to find out the name of the application which holds open a file.&lt;/p&gt;</description></item><item><title>Packaging an Application that uses the BDE</title><link>https://remkoweijnen.nl/blog/2010/12/14/packaging-an-application-that-uses-the-bde/</link><pubDate>Tue, 14 Dec 2010 21:12:58 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/14/packaging-an-application-that-uses-the-bde/</guid><description>&lt;p&gt;Today I needed to package an application that uses the Borland Database Engine (BDE).&lt;/p&gt;
+&lt;p&gt;The BDE is a database engine/connectivity component commonly used in Delphi and C++ Builder applications. It has been deprecated since 2000 when it was replaced by dbExpress.&lt;/p&gt;
+&lt;p&gt;But it&amp;rsquo;s still widely used so you may still find applications that require the BDE.&lt;/p&gt;
+&lt;p&gt;In my environment I already have a package for the BDE itsself. But the application I needed to package today, needs to have an Alias addded.&lt;/p&gt;
+&lt;p&gt;This is usually done manually by going into the BDEADMIN control panel applet or by copying the file where BDE saves the aliases (IDAPI32.CFG).&lt;/p&gt;
+&lt;p&gt;Here is a screenshot of the Alias my application needs (it uses an Interbase database):&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/bde.webp" class="glightbox" data-type="image" data-gallery="post-868"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/bde-small.webp" alt="BDE" width="430" height="302" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I didn&amp;rsquo;t like the copy approach and didn&amp;rsquo;t even consider the manual option so I wrote 2 little tools.&lt;/p&gt;</description></item><item><title>Altiris Job Builder</title><link>https://remkoweijnen.nl/blog/2010/11/23/altiris-job-builder/</link><pubDate>Tue, 23 Nov 2010 10:26:34 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/23/altiris-job-builder/</guid><description>&lt;p&gt;I have created a little tool for myself that I have call Altiris Job Builder, it retreives the Jobs from the Altiris database and shows them in a Treeview.&lt;/p&gt;
+&lt;p&gt;Then I can assemble a Master Build Job by dragging the needed Jobs to another Treeview on the right. Since it&amp;rsquo;s just for me it doesn&amp;rsquo;t have a fancy gui:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/jobbuilder2.webp" class="glightbox" data-type="image" data-gallery="post-784"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/jobbuilder2-small.webp" alt="JobBuilder2" width="430" height="406" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;So why did I write it? Well I have divided my Jobs into Prerequisites and Packages, for instance IIS and Terminal Server and Java are prereqisuites for Citrix. But many prereqisuites are required for one or more other packages, eg Java is also used for certain applications.&lt;/p&gt;</description></item><item><title>The case of the VMware vSphere Client</title><link>https://remkoweijnen.nl/blog/2010/10/27/the-case-of-the-vmware-vsphere-client/</link><pubDate>Wed, 27 Oct 2010 21:59:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/27/the-case-of-the-vmware-vsphere-client/</guid><description>&lt;p&gt;Today I connected with my laptop to VMWare Virtual Center using vSphere client. Because I had an older version of the client I needed to update and the installer failed with this message:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/visualjinstall.webp" class="glightbox" data-type="image" data-gallery="post-711"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/visualjinstall-small5.webp" alt="The Microsoft Visual J# 2.0 Second Edition installer returned the error code '4113'" width="430" height="157" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I remembered this error from the last install of this client (about a year ago), it happens because Microsoft Visual J# was already installed (in my case it was previously installed by Embarcadero&amp;rsquo;s Rad Studio).&lt;/p&gt;
+&lt;p&gt;Last year I &amp;ldquo;fixed&amp;rdquo; it by modifying the msi file but I remembered that Assarbad posted an easier solution on his &lt;a title="VMware vSphere client 4.1 installation woes" href="http://blog.assarbad.net/20100808/vmware-vsphere-client-4-1-installation-woes/" target="_blank"&gt;Blog&lt;/a&gt; a while ago.&lt;/p&gt;
+&lt;p&gt;His solution was to set a public property in the MSI (USING_VIM_INSTALLER) but it means we need to unpack the installer exe first to obtain the MSI file.&lt;/p&gt;</description></item><item><title>Compatibility Issue with RAD Studio XE</title><link>https://remkoweijnen.nl/blog/2010/09/02/compatibility-issue-with-rad-studio-xe/</link><pubDate>Thu, 02 Sep 2010 19:50:42 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/09/02/compatibility-issue-with-rad-studio-xe/</guid><description>&lt;p&gt;After launching the newly installed RAD Studio XE for the first time it tried to install something. This failed because I didn't run it elevated which makes Windows 7 fire the Program Compatibility Assistant:&lt;/p&gt;
+&lt;p&gt;&lt;img loading="lazy" decoding="async" alt="RadStudioXECompat" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/09/radstudioxecompat.webp" width="409" height="342" /&gt;&lt;/p&gt;
+&lt;p&gt;It would be better for Embarcadero to detect if we run elevated and only run the installer when we are (or request elevation).&lt;/p&gt;</description></item><item><title>RAD Studio XE destroys RAD Studio 2010?</title><link>https://remkoweijnen.nl/blog/2010/09/02/rad-studio-xe-destroys-rad-studio-2010/</link><pubDate>Thu, 02 Sep 2010 19:46:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/09/02/rad-studio-xe-destroys-rad-studio-2010/</guid><description>&lt;p&gt;Just noticed this is my Start Menu after installing RAD Studio XE:&lt;/p&gt;
+&lt;p align="center"&gt;&lt;img loading="lazy" decoding="async" alt="DelphiXEStartMenu" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/09/delphixestartmenu.webp" width="425" height="474" /&gt;&lt;/p&gt;
+&lt;p&gt;Luckily Clicking Delphi XE launches 2010...&lt;/p&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;2 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;Chris&lt;/span&gt; &lt;time datetime="2010-09-10"&gt;Sep 10, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;It seems harsh to state it 'destroys" RAD Studio 2010 when a shortcut label changes, but points to the right place.&lt;/p&gt;</description></item><item><title>Rad Studio XE has been released</title><link>https://remkoweijnen.nl/blog/2010/08/30/rad-studio-xe-has-been-released/</link><pubDate>Mon, 30 Aug 2010 22:15:04 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/08/30/rad-studio-xe-has-been-released/</guid><description>&lt;p&gt;RAD Studio XE has (just?) been released, see &lt;a href="http://www.embarcadero.com/rad-studio-xe-preview"&gt;http://www.embarcadero.com/rad-studio-xe-preview&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Fun with asm</title><link>https://remkoweijnen.nl/blog/2010/06/18/fun-with-asm/</link><pubDate>Fri, 18 Jun 2010 12:02:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/18/fun-with-asm/</guid><description>&lt;p&gt;Today just some fun stuff with ASM, probably not the most recommended way to do things but for sure the most geeky way :P&lt;/p&gt;
+&lt;p&gt;Get the Current Session Id:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,ZnVuY3Rpb24gR2V0Q3VycmVudFNlc3Npb25JZDogRFdPUkQ7CmFzbQogIG1vdiAgICAgZWF4LGZzOlskMDAwMDAwMThdOyAgIC8vIEdldCBURUIKICBtb3YgICAgIGVheCxbZWF4KyQzMF07ICAgICAgICAvLyBQUEVCCiAgbW92ICAgICBlYXgsW2VheCskMWQ0XTsgICAgICAgLy8gUEVCLlNlc3Npb25JZAplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;function GetCurrentSessionId: DWORD;
+asm
+ mov eax,fs:[$00000018]; // Get TEB
+ mov eax,[eax&amp;#43;$30]; // PPEB
+ mov eax,[eax&amp;#43;$1d4]; // PEB.SessionId
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Get the Current Console Session Id:&lt;/p&gt;</description></item><item><title>Obtain Fully Qualified Domain Name from Netbios Domain Name</title><link>https://remkoweijnen.nl/blog/2010/06/17/obtain-fully-qualified-domain-name-from-netbios-domain-name/</link><pubDate>Thu, 17 Jun 2010 14:34:42 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/17/obtain-fully-qualified-domain-name-from-netbios-domain-name/</guid><description>&lt;p&gt;I needed to obtain the Fully Qualified Domain Name (FQDN) for a given NetBios domain name. Eg from MYDOMAIN to dc=mydomain,dc=local.&lt;/p&gt;
+&lt;p&gt;I did some tests with the &lt;a href="http://msdn.microsoft.com/en-us/library/ms725484%28VS.85%29.aspx" target="_blank"&gt;TranslateName&lt;/a&gt; API and if you append a \ to the domain name it returns the FQDN.&lt;/p&gt;
+&lt;p&gt;Here is a short example:&lt;/p&gt;</description></item><item><title>Memory Leaks when using the Virtual TreeView Component</title><link>https://remkoweijnen.nl/blog/2010/06/09/memory-leaks-when-using-virtual-treeview-component/</link><pubDate>Wed, 09 Jun 2010 09:50:49 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/09/memory-leaks-when-using-virtual-treeview-component/</guid><description>&lt;p&gt;Again a about post about using the &lt;a href="http://www.soft-gems.net/index.php?option=com_content&amp;amp;task=view&amp;amp;id=12&amp;amp;Itemid=33" target="_blank"&gt;Virtual TreeView component&lt;/a&gt; (did I mention it&amp;rsquo;s brilliant?), this time I will talk about memory leaks.&lt;/p&gt;
+&lt;p&gt;I often use Records to hold the treedata, and usually the record holds some string data (eg a caption) and an (a reference to) an Interface or Object(List) that holds more data.&lt;/p&gt;
+&lt;p&gt;If you are familiar with Virtual Tree then you know that you must can the NodeData in the OnFreeNode event.&lt;/p&gt;</description></item><item><title>Setting ChildCount in a Virtual Tree</title><link>https://remkoweijnen.nl/blog/2010/06/08/setting-childcount-in-a-virtual-tree/</link><pubDate>Tue, 08 Jun 2010 17:39:57 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/08/setting-childcount-in-a-virtual-tree/</guid><description>&lt;p&gt;When working with the &lt;a href="http://www.soft-gems.net/index.php?option=com_content&amp;amp;task=view&amp;amp;id=12&amp;amp;Itemid=33" target="_blank"&gt;Virtual TreeView component&lt;/a&gt; the most optimized way of adding (or removing child nodes is by changing the ChildCount.&lt;/p&gt;
+&lt;p&gt;I often make the mistake of change the ChildCount of a Node using:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Tm9kZV4uQ2hpbGRDb3VudCA6PSBDb3VudDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;Node^.ChildCount := Count;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;If you look into the source you will see why this will not work, the proper way is:&lt;/p&gt;</description></item><item><title>Random Active Directory Notes #4</title><link>https://remkoweijnen.nl/blog/2010/03/30/random-active-directory-notes-4/</link><pubDate>Tue, 30 Mar 2010 15:04:51 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/30/random-active-directory-notes-4/</guid><description>&lt;p&gt;Previously I discussed IDirectoryObject, today I will show how to change a user&amp;rsquo;s password with IDirectoryObject.&lt;/p&gt;
+&lt;p&gt;I didn&amp;rsquo;t find any documentation except a &lt;a href="http://support.microsoft.com/kb/269190" target="_self"&gt;kb article&lt;/a&gt; describing how to use pure ldap to do it. Of course I could have used IADsUser::SetPassword but I decided not to because of the following reasons:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;IADs interfaces are terribly slow (although for one use you probably wouldn't really notice).&lt;/li&gt;
+	&lt;li&gt;IADsUser::SetPassword tries 3 different methods to set the password (ldap over ssl, kerberos and finally NetUserSetInfo) which makes it even slower (most domain controllers do not have an ssl certificate) and unpredictable.&lt;/li&gt;
+&lt;/ul&gt;
+All example code I found was .NET based using the .NET wrappers for Active Directory and seemed to be meant for use in Adam rather than full Active Directory (it set port number to 389 and password mode to cleartext).
+&lt;p&gt;In the end it&amp;rsquo;s not very difficult but nonetheless it took me a while before I got it right.&lt;/p&gt;
+&lt;p&gt;We can write to the unicodePwd attribute which wants the password as a double quoted unicode string. If you look at this attribute with AdsiEdit you&amp;rsquo;ll see that the type is Octet String and that it can be written only.&lt;/p&gt;
+&lt;p&gt;I was tricked with Delphi&amp;rsquo;s QuotedStr function for a while because it doesn&amp;rsquo;t return a double but single quoted string ;-)&lt;/p&gt;
+&lt;p&gt;Below a small snippet from the upcoming JwsclActiveDirectory that shows how to use it:&lt;/p&gt;</description></item><item><title>Using Windows Resource Strings</title><link>https://remkoweijnen.nl/blog/2010/03/28/using-windows-resource-strings/</link><pubDate>Sun, 28 Mar 2010 10:45:05 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/28/using-windows-resource-strings/</guid><description>&lt;p&gt;A few days ago I wrote about Using &lt;a href="https://remkoweijnen.nl/blog/2010/03/24/using-windows-dialogs-from-delphi/" target="_blank"&gt;Windows Dialogs&lt;/a&gt; in your own programs, wouldn&amp;rsquo;t it be nice to be able to use Windows Resource Strings for the same reasons?&lt;/p&gt;
+&lt;p&gt;Loading a resource string is not difficult, let&amp;rsquo;s look at some examples:&lt;/p&gt;</description></item><item><title>Using Windows Dialogs from Delphi</title><link>https://remkoweijnen.nl/blog/2010/03/24/using-windows-dialogs-from-delphi/</link><pubDate>Wed, 24 Mar 2010 11:48:41 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/24/using-windows-dialogs-from-delphi/</guid><description>&lt;p&gt;Today I reused a unit I wrote a long time ago for TSAdminEx that shows Resource Dialogs from DLL&amp;rsquo;s or Executables. I wrote it for a couple of reasons:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Reusing existing dialogs is conventient since the user already knows it.&lt;/li&gt;
+	&lt;li&gt;Windows takes care of translating it into the user's language.&lt;/li&gt;
+	&lt;li&gt;I am too lazy to recreate them ;-)&lt;/li&gt;
+&lt;/ul&gt;
+The code is hardly rocket science and could probably be improved and made more sophisticated but it works for me. I decided to share it since you may find it usefull.
+&lt;p&gt;Here is a small usage example that shows the Reset Password dialog from Active Directory Users &amp;amp; Computers. This dialog is in dsadmin.dll (on Windows Vista/7 you will find it in ds.admin.dll.mui in the language subfolder eg %systemroot%\system32\en-US but you can load it using just the dll name).&lt;/p&gt;
+&lt;p&gt;It looks like this:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;c&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".c" href="data:text/plain;charset=utf-8;base64,MjE1IERJQUxPR0VYIDAsIDAsIDI1MiwgMTM5ClNUWUxFIERTX01PREFMRlJBTUUgfCBEU19DT05URVhUSEVMUCB8IFdTX1BPUFVQIHwgV1NfQ0FQVElPTiB8IFdTX1NZU01FTlUKRVhTVFlMRSBXU19FWF9DT05URVhUSEVMUApDQVBUSU9OICJSZXNldCBQYXNzd29yZCIKTEFOR1VBR0UgTEFOR19FTkdMSVNILCBTVUJMQU5HX0VOR0xJU0hfVVMKRk9OVCA4LCAiTVMgU2hlbGwgRGxnIgp7CiAgIENPTlRST0wgIiZOZXcgcGFzc3dvcmQ6IiwgLTEsIFNUQVRJQywgU1NfTEVGVCB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0dST1VQLCA3LCAxMCwgNzksIDEwCiAgIENPTlRST0wgIiIsIDIyMCwgRURJVCwgRVNfTEVGVCB8IEVTX1BBU1NXT1JEIHwgRVNfQVVUT0hTQ1JPTEwgfCBXU19DSElMRCB8IFdTX1ZJU0lCTEUgfCBXU19CT1JERVIgfCBXU19UQUJTVE9QLCA5MiwgNywgMTUzLCAxNAogICBDT05UUk9MICImQ29uZmlybSBwYXNzd29yZDoiLCAtMSwgU1RBVElDLCBTU19MRUZUIHwgV1NfQ0hJTEQgfCBXU19WSVNJQkxFIHwgV1NfR1JPVVAsIDcsIDI4LCA3OSwgMTAKICAgQ09OVFJPTCAiIiwgMjIyLCBFRElULCBFU19MRUZUIHwgRVNfUEFTU1dPUkQgfCBFU19BVVRPSFNDUk9MTCB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0JPUkRFUiB8IFdTX1RBQlNUT1AsIDkyLCAyNSwgMTUzLCAxNAogICBDT05UUk9MICImVXNlciBtdXN0IGNoYW5nZSBwYXNzd29yZCBhdCBuZXh0IGxvZ29uIiwgMjYxLCBCVVRUT04sIEJTX0FVVE9DSEVDS0JPWCB8IEJTX0xFRlQgfCBCU19UT1AgfCBCU19NVUxUSUxJTkUgfCBXU19DSElMRCB8IFdTX1ZJU0lCTEUgfCBXU19UQUJTVE9QLCA3LCA0NiwgMjM3LCAxMAogICBDT05UUk9MICJUaGUgdXNlciBtdXN0IGxvZ29mZiBhbmQgdGhlbiBsb2dvbiBhZ2FpbiBmb3IgdGhlIGNoYW5nZSB0byB0YWtlIGVmZmVjdC4iLCAtMSwgU1RBVElDLCBTU19MRUZUIHwgV1NfQ0hJTEQgfCBXU19WSVNJQkxFIHwgV1NfR1JPVVAsIDE0LCA2MSwgMjMxLCA4CiAgIENPTlRST0wgIiIsIDgzMjcsIFNUQVRJQywgU1NfTEVGVCB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0dST1VQLCA3LCA3NiwgMjM4LCAxNgogICBDT05UUk9MICJVbmxvY2sgdGhlIHVzZXIncyAmYWNjb3VudCIsIDgzMjgsIEJVVFRPTiwgQlNfQVVUT0NIRUNLQk9YIHwgQlNfTEVGVCB8IEJTX1RPUCB8IEJTX01VTFRJTElORSB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX1RBQlNUT1AsIDE0LCA5NiwgMjMwLCAxMAogICBDT05UUk9MICJPSyIsIDEsIEJVVFRPTiwgQlNfREVGUFVTSEJVVFRPTiB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX1RBQlNUT1AsIDE0MCwgMTE4LCA1MCwgMTQKICAgQ09OVFJPTCAiQ2FuY2VsIiwgMiwgQlVUVE9OLCBCU19QVVNIQlVUVE9OIHwgV1NfQ0hJTEQgfCBXU19WSVNJQkxFIHwgV1NfVEFCU1RPUCwgMTk1LCAxMTgsIDUwLCAxNAp9"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-c"&gt;&lt;code class="language-c"&gt;215 DIALOGEX 0, 0, 252, 139
+STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION &amp;#34;Reset Password&amp;#34;
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+FONT 8, &amp;#34;MS Shell Dlg&amp;#34;
+{
+ CONTROL &amp;#34;&amp;amp;New password:&amp;#34;, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 7, 10, 79, 10
+ CONTROL &amp;#34;&amp;#34;, 220, EDIT, ES_LEFT | ES_PASSWORD | ES_AUTOHSCROLL | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP, 92, 7, 153, 14
+ CONTROL &amp;#34;&amp;amp;Confirm password:&amp;#34;, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 7, 28, 79, 10
+ CONTROL &amp;#34;&amp;#34;, 222, EDIT, ES_LEFT | ES_PASSWORD | ES_AUTOHSCROLL | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP, 92, 25, 153, 14
+ CONTROL &amp;#34;&amp;amp;User must change password at next logon&amp;#34;, 261, BUTTON, BS_AUTOCHECKBOX | BS_LEFT | BS_TOP | BS_MULTILINE | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 7, 46, 237, 10
+ CONTROL &amp;#34;The user must logoff and then logon again for the change to take effect.&amp;#34;, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 14, 61, 231, 8
+ CONTROL &amp;#34;&amp;#34;, 8327, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 7, 76, 238, 16
+ CONTROL &amp;#34;Unlock the user&amp;#39;s &amp;amp;account&amp;#34;, 8328, BUTTON, BS_AUTOCHECKBOX | BS_LEFT | BS_TOP | BS_MULTILINE | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 14, 96, 230, 10
+ CONTROL &amp;#34;OK&amp;#34;, 1, BUTTON, BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 140, 118, 50, 14
+ CONTROL &amp;#34;Cancel&amp;#34;, 2, BUTTON, BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 195, 118, 50, 14
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Random Active Directory Notes #3</title><link>https://remkoweijnen.nl/blog/2010/03/22/random-active-directory-notes-3/</link><pubDate>Mon, 22 Mar 2010 22:57:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/22/random-active-directory-notes-3/</guid><description>&lt;p&gt;Last time I talked briefly about IDirectoryObject and IDirectorySearch, let&amp;rsquo;s go into a little more detail today.&lt;/p&gt;
+&lt;p&gt;IDirectoryObject is an Interface that we can use to query anything in Active Directory, users, groups, organizational units, containers and so on.&lt;/p&gt;
+&lt;p&gt;I thought the best explanation would be to build a very small sample project, so let&amp;rsquo;s do that!&lt;/p&gt;
+&lt;p&gt;First we need some units, so please add the following units to your uses clause:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;ComObj (for EOleException and it calls CoInitialize for us)&lt;/li&gt;
+	&lt;li&gt;JwaWindows for the proper Adsi declarations&lt;/li&gt;
+&lt;/ul&gt;
+Next declare the following types:
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dHlwZQogIC8vIEZvciBEZWxwaGkgPCAyMDA5IHVzZSBXaWRlU3RyaW5nCiAgVVN0cmluZyA9IHskSUZERUYgVU5JQ09ERX1Vbmljb2RlU3RyaW5neyRFTFNFfVdpZGVTdHJpbmd7JEVORElGfTsKCiAgLy8gQXJyYXkgb2YgQURTX0FUVFJfSU5GTyByZWNvcmRzCiAgVEFkc0F0dHJJbmZvQXJyYXkgPSBhcnJheVswLi5BTllTSVpFX0FSUkFZLTFdIG9mIEFEU19BVFRSX0lORk87CiAgUEFkc0F0dHJJbmZvQXJyYXkgPSBeVEFkc0F0dHJJbmZvQXJyYXk7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;type
+ // For Delphi &amp;lt; 2009 use WideString
+ UString = {$IFDEF UNICODE}UnicodeString{$ELSE}WideString{$ENDIF};
+
+ // Array of ADS_ATTR_INFO records
+ TAdsAttrInfoArray = array[0..ANYSIZE_ARRAY-1] of ADS_ATTR_INFO;
+ PAdsAttrInfoArray = ^TAdsAttrInfoArray;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Random Active Directory Notes #2</title><link>https://remkoweijnen.nl/blog/2010/03/12/random-active-directory-notes-2/</link><pubDate>Fri, 12 Mar 2010 16:57:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/12/random-active-directory-notes-2/</guid><description>&lt;p&gt;If you have ever used Adsi you have probably used the &lt;a href="http://msdn.microsoft.com/en-us/library/aa705950%28VS.85%29.aspx" target="_blank"&gt;IADs&lt;/a&gt; interface or derived interfaces such as &lt;a href="http://msdn.microsoft.com/en-us/library/aa746340%28VS.85%29.aspx" target="_blank"&gt;IADsUser&lt;/a&gt; or &lt;a href="http://msdn.microsoft.com/en-us/library/aa706021%28VS.85%29.aspx" target="_blank"&gt;IADsGroup&lt;/a&gt; (maybe even without realising this).&lt;/p&gt;
+&lt;p&gt;What you need to know is that these interfaces were created to support scripting languages such as VBScript. The reason is that these scripting language have no support at all for structures such as ADSVALUE and don&amp;rsquo;t work with Pointers.&lt;/p&gt;</description></item><item><title>Random Active Directory Notes</title><link>https://remkoweijnen.nl/blog/2010/03/10/random-active-directory-notes/</link><pubDate>Wed, 10 Mar 2010 11:19:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/10/random-active-directory-notes/</guid><description>&lt;p&gt;I am working on an Customer Management Console that will present all adminstrative tasks that customers will need in their environment in a single console.&lt;/p&gt;
+&lt;p&gt;It will handle Active Directory, Terminal Server and Citrix, Printers and will offer specific Views and Reporting. For the Active Directory stuff I decided to create some classes that enabled me to work with AD in a more Delphi OOP way.&lt;/p&gt;</description></item><item><title>Random Active Directory Notes #1</title><link>https://remkoweijnen.nl/blog/2010/03/10/random-active-directory-notes-1/</link><pubDate>Wed, 10 Mar 2010 11:11:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/10/random-active-directory-notes-1/</guid><description>&lt;p&gt;If you are going to use the Active Directory Service Interface (ADSI) in Delphi, the first thing you will need is the typelibrary (TLB). This TLB is in the windows\system32 folder and has the name activeds.tlb.&lt;/p&gt;
+&lt;p&gt;We can import this tlb in Delphi (the procedure differs somewhat, depending on the Delphi version), but there are quite some problems with the resulting pas file of this import:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Ugly and non meaningfull names such as __MIDL___MIDL_itf_ads_0000_0000_001.&lt;/li&gt;
+	&lt;li&gt;Record sizes are sometimes (read: usually) wrong due to alignment errors.&lt;/li&gt;
+	&lt;li&gt;Some Interfaces have wrong declarations resulting in Access Violations or just hard to use (eg using var for input parameters).&lt;/li&gt;
+	&lt;li&gt;Delphi works with Typed Pointer but since it has no clue on the proper name it uses PUserTypexx (eg PUserType1 = ^_ADS_CASEIGNORE_LIST). It's hard to recognise later on what the real type is.&lt;/li&gt;
+&lt;/ul&gt;
+A version of the imported tlb is also in the Jedi Apilib (JwaAdsTLB) and basically it had the same errors. Because I was wondering how this would work in c++ I checked the SDK and found the header file Iads.h.</description></item><item><title>Did you make a SasLibEx enquiry? And... news!</title><link>https://remkoweijnen.nl/blog/2010/02/22/did-you-make-a-saslibex-enquiry-and-news/</link><pubDate>Mon, 22 Feb 2010 14:07:28 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/02/22/did-you-make-a-saslibex-enquiry-and-news/</guid><description>&lt;p&gt;My hoster has had some problems with the simulatesas.com domain that I use for SasLibEx enquiries. If you have sent mail to &lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/02/mail-2.gif" alt="mail" width="147" height="15" /&gt; that has not been answered I kindly request you to send it again.&lt;/p&gt;
+&lt;p&gt;I would also like to briefly tell you about an upcoming new release of SasLib, version 2.0. There is so much I would like to tell you about it but I will limit it to a few highlights here and save the rest for the upcoming website on &lt;a href="http://www.simulatesas.com"&gt;SimulateSAS.com&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>displayNotification: Out of memory error when starting Delphi 2010</title><link>https://remkoweijnen.nl/blog/2010/02/17/displaynotification-out-of-memory-error-when-starting-delphi-2010/</link><pubDate>Wed, 17 Feb 2010 11:16:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/02/17/displaynotification-out-of-memory-error-when-starting-delphi-2010/</guid><description>&lt;p&gt;Delphi 2010 crashed when starting, it was clear that this was happening when opening the welcome page.&lt;/p&gt;
+&lt;p&gt;Just before the crash an error message "Message from webpage, displayNotification: Out of memory" was displayed.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://forums.codegear.com/thread.jspa?threadID=30193&amp;amp;tstart=0" target="_blank"&gt;This post&lt;/a&gt; on the Embarcadero Developer Network which was one of the first hits in Google showed that the solution was to clear Internet Explorer's Browsing History (Temporary Internet Files). This fixed it for me.&lt;/p&gt;</description></item><item><title>Reading accountExpires attribute from Active Directory (in Delphi)</title><link>https://remkoweijnen.nl/blog/2010/02/10/reading-accountexpires-attribute-from-active-directory-in-delphi/</link><pubDate>Wed, 10 Feb 2010 15:11:48 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/02/10/reading-accountexpires-attribute-from-active-directory-in-delphi/</guid><description>&lt;p&gt;I am writing a class that wraps Active Directory into Objects that live in an Objectlist, much like my &lt;a href="http://jwscldoc.delphi-jedi.net/index.html?frmname=topic&amp;amp;frmfile=JwsclTerminalServer_pas.html" target="_blank"&gt;Terminal Server class&lt;/a&gt; in the &lt;a href="http://jwscldoc.delphi-jedi.net/index.html?frmname=topic&amp;amp;frmfile=JwsclTerminalServer_pas.html" target="_blank"&gt;Jedi Windows Security Library&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;One of the classes is TJwADUser that represents an Active Directory user with all kinds of properties. So while I was implementing them I stumbled upon the &lt;a href="http://msdn.microsoft.com/en-us/library/ms675098%28VS.85%29.aspx" target="_blank"&gt;accountExpires&lt;/a&gt; attribute which is implemented as an 8 byte integer so I figured I could read it as Int64, cast this to TFileTime (FILETIME) and convert to TDateTime.&lt;/p&gt;</description></item><item><title>Small LaunchRDP Update</title><link>https://remkoweijnen.nl/blog/2009/11/06/small-launchrdp-update/</link><pubDate>Fri, 06 Nov 2009 22:44:27 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/06/small-launchrdp-update/</guid><description>&lt;p&gt;For a long time now people have asked for a version of &lt;a href="https://remkoweijnen.nl/blog/2007/10/17/launch-rdp-from-commandline/"&gt;LaunchRDP&lt;/a&gt; that includes the Connection Bar. The original version was originally written for a very specific purpose and I never anticipated so many people would want to use it. But it seems that a lot of people like the Connection Bar (I hate it, especially with sessions in sessions, so that&amp;rsquo;s why I am using &lt;a href="https://remkoweijnen.nl/blog/2008/11/02/rdp-session-with-local-taskbar-visible/"&gt;RDPWithLocalTaskbar&lt;/a&gt;).&lt;/p&gt;</description></item><item><title>Sending WM_KEYDOWN or WM_KEYUP</title><link>https://remkoweijnen.nl/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/</link><pubDate>Mon, 30 Mar 2009 22:57:28 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/</guid><description>&lt;p&gt;If you read the MSDN documentation of &lt;a href="http://msdn.microsoft.com/en-us/library/ms646280(VS.85).aspx" target="_blank"&gt;WM_KEYDOWN&lt;/a&gt; and &lt;a href="http://msdn.microsoft.com/en-us/library/ms646281(VS.85).aspx" target="_blank"&gt;WM_KEYUP&lt;/a&gt; you can see that those message require us to interpret lParam as a bitfield:&lt;/p&gt;
+&lt;blockquote&gt;lParam
+Specifies the repeat count, scan code, extended-key flag, context code, previous key-state flag, and transition-state flag, as shown in the following table.
+&lt;p&gt;0-15&lt;br&gt;
+Specifies the repeat count for the current message. The value is the number of times the keystroke is autorepeated as a result of the user holding down the key. The repeat count is always one for a WM_KEYUP message.&lt;br&gt;
+16-23&lt;br&gt;
+Specifies the scan code. The value depends on the OEM.&lt;br&gt;
+24&lt;br&gt;
+Specifies whether the key is an extended key, such as the right-hand ALT and CTRL keys that appear on an enhanced 101- or 102-key keyboard. The value is 1 if it is an extended key; otherwise, it is 0.&lt;br&gt;
+25-28&lt;br&gt;
+Reserved; do not use.&lt;br&gt;
+29&lt;br&gt;
+Specifies the context code. The value is always 0 for a WM_KEYUP message.&lt;br&gt;
+30&lt;br&gt;
+Specifies the previous key state. The value is always 1 for a WM_KEYUP message.&lt;br&gt;
+31&lt;br&gt;
+Specifies the transition state. The value is always 1 for a WM_KEYUP message.&lt;/blockquote&gt;&lt;br&gt;
+I was looking for a convenient way to get and read the bits and this is what I made up:&lt;/p&gt;</description></item><item><title>Reading physical memory size from the registry</title><link>https://remkoweijnen.nl/blog/2009/03/20/reading-physical-memory-size-from-the-registry/</link><pubDate>Fri, 20 Mar 2009 13:15:46 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/03/20/reading-physical-memory-size-from-the-registry/</guid><description>&lt;p&gt;I&amp;rsquo;m working on a new build of &lt;a href="https://remkoweijnen.nl/blog/2009/02/20/tsadminex-beta-release/"&gt;TSAdminEx&lt;/a&gt; for which I need to query the total amount of physical memory. Locally we can use the &lt;a href="http://msdn.microsoft.com/en-us/library/aa366589(VS.85).aspx" target="_blank"&gt;GlobalMemoryStatusEx&lt;/a&gt; API but there&amp;rsquo;s no API to do this remotely. It would be possible using WMI but I decided not to use that because I dislike it because of it&amp;rsquo;s slowness and I need support for older OS versions which might not have WMI.&lt;/p&gt;
+&lt;p&gt;So I found in the registry the following key:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,SEtMTVxIQVJEV0FSRVxSRVNPVVJDRU1BUFxTeXN0ZW0gUmVzb3VyY2VzXFBoeXNpY2FsIE1lbW9yeQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;HKLM\HARDWARE\RESOURCEMAP\System Resources\Physical Memory&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;It has a value .Translated of type RES_RESOURCE_LIST which seems undocumented besides stating that it exists. Regedit knows how to handle it though. If you doubleclick on the key you will see something like this:&lt;/p&gt;</description></item><item><title>Accessing kernel objects in other sessions part 2</title><link>https://remkoweijnen.nl/blog/2009/02/03/accessing-kernel-objects-in-other-sessions-part-2/</link><pubDate>Tue, 03 Feb 2009 14:36:53 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/02/03/accessing-kernel-objects-in-other-sessions-part-2/</guid><description>&lt;p&gt;In &lt;a href="https://remkoweijnen.nl/blog/2009/01/27/accessing-kernel-objects-in-other-sessions/"&gt;part 1&lt;/a&gt; I showed how to create and open objects in Terminal Server Sessions. However, these are not all of the possible places where you can place objects via documented kernel32.dll functions.&lt;/p&gt;
+&lt;p&gt;If we look into Winobj again, we notice, that every &lt;strong&gt;BaseNamedObjects&lt;/strong&gt; directory has a subdirectory named &lt;strong&gt;Restricted&lt;/strong&gt;. To be honest, I do not know why it&amp;rsquo;s created; it&amp;rsquo;s security allows object creation for &lt;em&gt;LocalSystem&lt;/em&gt; and &lt;em&gt;RESTRICTED&lt;/em&gt; special user (in windows 2000, &lt;em&gt;Everyone&lt;/em&gt; can also create objects in it). So, we can use it as prefix for object creation, for example, &lt;strong&gt;Restricted\MyAppEvent&lt;/strong&gt;: &lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2009/02/restrictedobject.gif" class="glightbox" data-type="image" data-gallery="post-242"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2009/02/restrictedobject-small.gif" alt="RestrictedObject" height="291" width="430" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Of course, you can still use &lt;strong&gt;Global&lt;/strong&gt;, &lt;strong&gt;Local&lt;/strong&gt;, or &lt;strong&gt;Session&lt;/strong&gt; links&lt;/p&gt;</description></item><item><title>Accessing kernel objects in other sessions part 1</title><link>https://remkoweijnen.nl/blog/2009/01/27/accessing-kernel-objects-in-other-sessions/</link><pubDate>Tue, 27 Jan 2009 19:43:52 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/01/27/accessing-kernel-objects-in-other-sessions/</guid><description>&lt;p&gt;As you know, many &lt;em&gt;kernel32.dll&lt;/em&gt; functions, which are working with named objects, like &lt;em&gt;OpenEvent&lt;/em&gt;, can be used to work with global and local objects. So what are global and local objects? Global objects are created in session 0 and are actually located in the &lt;strong&gt;\BaseNamedObjects&lt;/strong&gt; directory, while local objects are created in the caller&amp;rsquo;s session (for example in the &lt;strong&gt;\Sessions\5\BaseNamedObjects&lt;/strong&gt; directory (for session 0, global and local has no meaning since they point to the same object)). MSDN says that you can access only the objects in your own session(via the &lt;strong&gt;Local\&lt;/strong&gt; prefix) and in session 0 (via the &lt;strong&gt;Global\&lt;/strong&gt; prefix). But what if you need to access an object in another session?&lt;/p&gt;</description></item><item><title>Locking a workstation - part 2</title><link>https://remkoweijnen.nl/blog/2008/12/23/locking-a-workstation-part-2/</link><pubDate>Tue, 23 Dec 2008 17:13:37 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/12/23/locking-a-workstation-part-2/</guid><description>&lt;p&gt;In &lt;a href="https://remkoweijnen.nl/blog/2008/12/13/locking-a-workstation-part-1/"&gt;part 1&lt;/a&gt; I showed how &lt;em&gt;winlogon.exe&lt;/em&gt; registers its process and main window handle.&lt;/p&gt;
+&lt;p&gt;In the &lt;em&gt;SasCreate&lt;/em&gt; function, winlogon.exe registers hotkeys like this:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Y29uc3QKICBNT0RfU0FTID0gJDgwMDA7CgogIFJlZ2lzdGVySG90S2V5KFNhc1dpbmRvdywgMCwgTU9EX1NBUyBvciBNT0RfQ09OVFJPTCBvciBNT0RfQUxULCBWS19ERUxFVEUpOwoKeyRJRkRFRiBDSEVDS0VEX0JVSUxEfQogIFJlZ2lzdGVySG90S2V5KFNhc1dpbmRvdywgMSwgTU9EX0FMVCBvciBNT0RfQ09OVFJPTCBvciBNT0RfU0hJRlQsIFZLX0RFTEVURSk7IC8vIGhhbmRsZXIganVzdCBjYWxscyBOdFNodXRkb3duU3lzdGVtCiAgaWYgRW5hYmxlRGVza3RvcFN3aXRjaGluZyB0aGVuCiAgICBSZWdpc3RlckhvdEtleShTYXNXaW5kb3csIDIsIE1PRF9BTFQgb3IgTU9EX0NPTlRST0wsIFZLX1RBQik7IC8vIGhhbmRsZXIgc3dpdGNoZXMgZGVmYXVsdCBhbmQgd2lubG9nb24gZGVza3RvcHMKICBpZiBXaW5sb2dvbkluZm9MZXZlbEZsYWcgdGhlbgogICAgUmVnaXN0ZXJIb3RrZXkoU2FzV2luZG93LCAzLCBNT0RfQUxUIG9yIE1PRF9DT05UUk9MIG9yIE1PRF9TSElGVCwgVktfVEFCKTsgLy8gaGFuZGxlciBqdXN0IGNhbGxzIERlYnVnQnJlYWsKeyRFTkRJRn0KCiAgUmVnaXN0ZXJIb3RLZXkoU2FzV2luZG93LCA0LCBNT0RfQ09OVFJPTCBvciBNT0RfU0hJRlQsIFZLX0VTQ0FQRSk7IC8vIGhhbmRsZXIgZXhlY3V0ZXMgdGFzayBtYW5hZ2VyCnskSUZERUYgV0lOWFBfT1JfTEFURVJ9CiAgUmVnaXN0ZXJIb3RLZXkoU2FzV2luZG93LCA1LCBNT0RfV0lOLCBCeXRlKCdMJyk7IC8vIGhhbmRsZXIgbG9ja3MgdGhlIHdvcmtzdGF0aW9uCiAgUmVnaXN0ZXJIb3RrZXkoU2FzV2luZG93LCA2LCBNT0RfV0lOLCBCeXRlKCdVJyk7IC8vIGhhbmRsZXIgZXhlY3V0ZXMgdXRpbG1hbiBvbiBjdXJyZW50IGRlc2t0b3AKeyRFTkRJRn0="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;const
+ MOD_SAS = $8000;
+
+ RegisterHotKey(SasWindow, 0, MOD_SAS or MOD_CONTROL or MOD_ALT, VK_DELETE);
+
+{$IFDEF CHECKED_BUILD}
+ RegisterHotKey(SasWindow, 1, MOD_ALT or MOD_CONTROL or MOD_SHIFT, VK_DELETE); // handler just calls NtShutdownSystem
+ if EnableDesktopSwitching then
+ RegisterHotKey(SasWindow, 2, MOD_ALT or MOD_CONTROL, VK_TAB); // handler switches default and winlogon desktops
+ if WinlogonInfoLevelFlag then
+ RegisterHotkey(SasWindow, 3, MOD_ALT or MOD_CONTROL or MOD_SHIFT, VK_TAB); // handler just calls DebugBreak
+{$ENDIF}
+
+ RegisterHotKey(SasWindow, 4, MOD_CONTROL or MOD_SHIFT, VK_ESCAPE); // handler executes task manager
+{$IFDEF WINXP_OR_LATER}
+ RegisterHotKey(SasWindow, 5, MOD_WIN, Byte(&amp;#39;L&amp;#39;); // handler locks the workstation
+ RegisterHotkey(SasWindow, 6, MOD_WIN, Byte(&amp;#39;U&amp;#39;); // handler executes utilman on current desktop
+{$ENDIF}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Did you notice the MOD_SAS constant?&lt;/p&gt;</description></item><item><title>Locking a workstation - part 1</title><link>https://remkoweijnen.nl/blog/2008/12/13/locking-a-workstation-part-1/</link><pubDate>Sat, 13 Dec 2008 23:13:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/12/13/locking-a-workstation-part-1/</guid><description>&lt;p&gt;Win32 API provides only 1 function for locking workstation, named &lt;strong&gt;LockWorkstation&lt;/strong&gt;. What does it do and how we can use it?&lt;/p&gt;
+&lt;p&gt;When a new session is started, &lt;em&gt;smss.exe&lt;/em&gt; invokes &lt;em&gt;winlogon.exe&lt;/em&gt;. It registers its process id in &lt;em&gt;win32k.sys&lt;/em&gt; by calling &lt;strong&gt;RegisterLogonProcess&lt;/strong&gt;. It has this prototype:&lt;/p&gt;</description></item><item><title>Converting a volume name to a device name</title><link>https://remkoweijnen.nl/blog/2008/12/10/converting-a-volume-name-to-a-device-name/</link><pubDate>Wed, 10 Dec 2008 15:41:42 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/12/10/converting-a-volume-name-to-a-device-name/</guid><description>&lt;p&gt;Windows has a couple of different formats for volume names but it is unclear how to convert a Volumename (example: \?\Volume{GUID}) to a DeviceName (example: \Device\HarddiskVolume1).&lt;/p&gt;
+&lt;p&gt;I found at that you can use the QueryDosDevice function but you need to remove the preceeding \?\ and the trailing \ of the VolumeName:&lt;/p&gt;</description></item><item><title>Executing a Fast User Switch programmatically - part 2</title><link>https://remkoweijnen.nl/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-2/</link><pubDate>Wed, 26 Nov 2008 16:45:46 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-2/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-1/"&gt;Part1&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s write our own Credential Server implementation.&lt;/p&gt;
+&lt;p&gt;At first, we need to create a named pipe with a unique name. Let&amp;rsquo;s construct the pipe name using a GUID - this should be unique, but we can do it in a cycle to be absolutely sure:&lt;/p&gt;</description></item><item><title>Executing a Fast User Switch programmatically - part 1</title><link>https://remkoweijnen.nl/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-1/</link><pubDate>Wed, 26 Nov 2008 15:23:37 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-1/</guid><description>&lt;p&gt;I think many of you have got experience with multiple Terminal Server Sessions in windows XP, also called Fast User Switching (FUS). Let&amp;rsquo;s get inside this cool feature.&lt;/p&gt;
+&lt;p&gt;How does FUS work? Each session has its own winlogon.exe. It draws the &lt;strong&gt;same&lt;/strong&gt; interface which looks like the screenshot below:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2008/11/default.webp"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align="center"&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2008/12/multiple-users-logged-on-2.webp" class="glightbox" data-type="image" data-gallery="post-149"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2008/12/multiple-users-logged-on-2-small.webp" alt="multiple-users-logged-on" height="320" width="430" /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Terminal Server Internals</title><link>https://remkoweijnen.nl/blog/2008/11/19/terminal-server-internals/</link><pubDate>Wed, 19 Nov 2008 17:55:39 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/11/19/terminal-server-internals/</guid><description>&lt;p&gt;Hello, my name is Danila Galimov and i will write here sometimes :-)&lt;/p&gt;
+&lt;p&gt;My first post is about communications between Terminal Server sessions and Terminal Server service process (termsrv.exe/dll). Terminal Server service needs to communicate with each session for many tasks, such as sending window message, getting message reply and so on. So, on init, Terminal Server creates a &lt;strong&gt;SmSsWinStationApiPort&lt;/strong&gt; port in global namespace and runs a few WinStationLpcThread threads, which are listening on port and are used to process port messages. When csrss.exe is started, it parses its command line, which usually looks like:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;ini&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ini" href="data:text/plain;charset=utf-8;base64,JVN5c3RlbVJvb3QlXHN5c3RlbTMyXGNzcnNzLmV4ZSBPYmplY3REaXJlY3Rvcnk9XFdpbmRvd3MgU2hhcmVkU2VjdGlvbj00MDk2LDQwOTYsMTAyNCBXaW5kb3dzPU9uIFN1YlN5c3RlbVR5cGU9V2luZG93cyBTZXJ2ZXJEbGw9YmFzZXNydiwxIFNlcnZlckRsbD13aW5zcnY6VXNlclNlcnZlckRsbEluaXRpYWxpemF0aW9uLDMgU2VydmVyRGxsPXdpbnNydjpDb25TZXJ2ZXJEbGxJbml0aWFsaXphdGlvbiwyIFByb2ZpbGVDb250cm9sPU9mZiBNYXhSZXF1ZXN0VGhyZWFkcz0xNg=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-ini"&gt;&lt;code class="language-ini"&gt;%SystemRoot%\system32\csrss.exe ObjectDirectory=\Windows SharedSection=4096,4096,1024 Windows=On SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=winsrv:ConServerDllInitialization,2 ProfileControl=Off MaxRequestThreads=16&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;and loads the required dlls (winsrv.dll in our case). Initialization of winsrv.dll creates a thread, which connects to &lt;strong&gt;SmSsWinStationApiPort&lt;/strong&gt; port and does the loop for processing Terminal Server messages until it receives WinStationTerminate message.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll try to fool Terminal Server&lt;/p&gt;</description></item><item><title>Working with bitfields in Delphi</title><link>https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/</link><pubDate>Thu, 01 May 2008 23:06:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/</guid><description>&lt;p&gt;Recently I needed to convert a C header file to Delphi which contained bitfields. Let&amp;rsquo;s take a look at a sample structure that contains bitfields:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;c&amp;#43;&amp;#43;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".cpp" href="data:text/plain;charset=utf-8;base64,dHlwZWRlZiBzdHJ1Y3QgX0JJVEZJRUxEU1RSVUNUVVJFIHsKICAgIERXT1JEIGR3VmFsdWUxOwogICAgVUxPTkcgQml0VmFsdWUxOiAxOwogICAgVUxPTkcgQml0VmFsdWUyOiAxOwogICAgVUxPTkcgQml0VmFsdWUzOiAxOwogICAgVUxPTkcgQml0VmFsdWU0OiAxOwp9IEJJVEZJRUxEU1RSVUNUVVJFLCAqIEJJVEZJRUxEU1RSVUNUVVJFOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-cpp"&gt;&lt;code class="language-cpp"&gt;typedef struct _BITFIELDSTRUCTURE {
+ DWORD dwValue1;
+ ULONG BitValue1: 1;
+ ULONG BitValue2: 1;
+ ULONG BitValue3: 1;
+ ULONG BitValue4: 1;
+} BITFIELDSTRUCTURE, * BITFIELDSTRUCTURE;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;It means that there is a DWORD (Cardinal) dwValue1 followed by a bitfield with the size of a ULONG (32 bits). In this bitfield 4 values are defined (BitValue1..4) which are used as boolean&amp;rsquo;s because the value can offcourse be 0 or 1. Since Delphi doesn&amp;rsquo;t know a bitfield type the question is how to translate it. Usually it would mean that we simply treat the whole bitfield value as a ULONG and extract the required properties by applying a bitmask (shl/shr). Starting from BDS2006 we can define a record with propertes and use getters and setters. Using this technique we can present boolean values to the user:&lt;/p&gt;</description></item><item><title>New home for Jedi Apilib and Jedi Security Library</title><link>https://remkoweijnen.nl/blog/2008/03/03/new-home-for-jedi-apilib-and-jedi-security-library/</link><pubDate>Mon, 03 Mar 2008 15:38:34 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/03/new-home-for-jedi-apilib-and-jedi-security-library/</guid><description>&lt;p&gt;A new website (blog) was opened for the Jedi Apilib and Jedi Security Library. I invite you all to take a look!&lt;/p&gt;
+&lt;p&gt;You can find it &lt;a href="http://blog.delphi-jedi.net/2008/03/02/welcome/"&gt;here&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Vista SP1 changes to Terminal Server API</title><link>https://remkoweijnen.nl/blog/2008/03/02/vista-sp1-changes-to-terminal-server-api/</link><pubDate>Sun, 02 Mar 2008 15:31:55 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/02/vista-sp1-changes-to-terminal-server-api/</guid><description>&lt;p&gt;In a previous &lt;a href="https://remkoweijnen.nl/blog/2007/12/19/why-tsadmin-crashes-on-windows-vista/"&gt;article&lt;/a&gt; I wrote about changes in utildll in vista that breaked compatibality for Terminal Server. Even though release notes for Service Pack 1 don&amp;rsquo;t indicate changes or fixes in this area my testing shows that Microsoft has taken over the Windows 2008 implementation of utildll to Vista.&lt;/p&gt;</description></item><item><title>Supporting for in loop in TObjectList descendants</title><link>https://remkoweijnen.nl/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/</link><pubDate>Sun, 02 Mar 2008 15:08:19 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/</guid><description>&lt;p&gt;For my Terminal Server unit in the Jedi Security library I use 2 TObjectList descendants to hold a list of Terminal Server Sessions and Processes. Consider the sample below which connects to a server and enumerates all sessions:&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgQVRlcm1pbmFsU2VydmVyOiBUSndUZXJtaW5hbFNlcnZlcjsKICBpOiBJbnRlZ2VyOwpiZWdpbgogIEFUZXJtaW5hbFNlcnZlciA6PSBUandUZXJtaW5hbFNlcnZlci5DcmVhdGU7CgogIEFUZXJtaW5hbFNlcnZlci5TZXJ2ZXIgOj0gJ1RTMDAxJzsKCiAgdHJ5CiAgICBpZiBBVGVybWluYWxTZXJ2ZXIuRW51bWVyYXRlU2Vzc2lvbnMgdGhlbgogICAgYmVnaW4KCiAgICAgIC8vIE5vdyBsb29wIHRocm91Z2ggdGhlIGxpc3QKICAgICAgZm9yIGkgOj0gMCB0byBBVGVybWluYWxTZXJ2ZXIuU2Vzc2lvbnMuQ291bnQgLSAxIGRvCiAgICAgIGJlZ2luCiAgICAgICAgTWVtbzEuTGluZXMuQWRkKEFUZXJtaW5hbFNlcnZlci5TZXNzaW9uc1tpXS5Vc2VybmFtZSk7CiAgICAgIGVuZDsKCiAgICBlbmQ7CiAgZXhjZXB0CiAgICBvbiBFOiBFSndzY2xXaW5DYWxsRmFpbGVkRXhjZXB0aW9uIGRvCiAgICBiZWdpbgogICAgICAvLyBIYW5kbGUgRXhjZXB0aW9uIGhlcmUKICAgIGVuZDsKICBlbmQ7CgogIC8vIEZyZWUgTWVtb3J5CiAgQVRlcm1pbmFsU2VydmVyLkZyZWU7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ ATerminalServer: TJwTerminalServer;
+ i: Integer;
+begin
+ ATerminalServer := TjwTerminalServer.Create;
+
+ ATerminalServer.Server := &amp;#39;TS001&amp;#39;;
+
+ try
+ if ATerminalServer.EnumerateSessions then
+ begin
+
+ // Now loop through the list
+ for i := 0 to ATerminalServer.Sessions.Count - 1 do
+ begin
+ Memo1.Lines.Add(ATerminalServer.Sessions[i].Username);
+ end;
+
+ end;
+ except
+ on E: EJwsclWinCallFailedException do
+ begin
+ // Handle Exception here
+ end;
+ end;
+
+ // Free Memory
+ ATerminalServer.Free;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+In the sample I loop through the sessions with a for loop. Even though Delphi supports the for in loop since Delphi 2005 it's not possible to use this in TObjectList descendants, so we cannot use this:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Ly8gTm93IGxvb3AgdGhyb3VnaCB0aGUgbGlzdApmb3IgU2Vzc2lvbiBpbiBBVGVybWluYWxTZXJ2ZXIuU2Vzc2lvbkxpc3QgZG8KYmVnaW4KICBNZW1vMS5MaW5lcy5BZGQoU2Vzc2lvbi5Vc2VybmFtZSk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;// Now loop through the list
+for Session in ATerminalServer.SessionList do
+begin
+ Memo1.Lines.Add(Session.Username);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+To make this possible we need to implement GetEnumerator and an Enumerator class:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,VEp3U2Vzc2lvbnNFbnVtZXJhdG9yID0gY2xhc3MKcHJpdmF0ZQogIEZJbmRleDogSW50ZWdlcjsKICBGU2Vzc2lvbnM6IFRKd1dUU1Nlc3Npb25MaXN0OwpwdWJsaWMKICBjb25zdHJ1Y3RvciBDcmVhdGUoQVNlc3Npb25MaXN0OiBUSndXVFNTZXNzaW9uTGlzdCk7CiAgZnVuY3Rpb24gR2V0Q3VycmVudDogVEp3V1RTU2Vzc2lvbjsKICBmdW5jdGlvbiBNb3ZlTmV4dDogQm9vbGVhbjsKICBwcm9wZXJ0eSBDdXJyZW50OiBUSndXVFNTZXNzaW9uIHJlYWQgR2V0Q3VycmVudDsKZW5kOwoKY29uc3RydWN0b3IgVEp3U2Vzc2lvbnNFbnVtZXJhdG9yLkNyZWF0ZShBU2Vzc2lvbkxpc3Q6IFRKd1dUU1Nlc3Npb25MaXN0KTsKYmVnaW4KICBpbmhlcml0ZWQgQ3JlYXRlOwogIEZJbmRleCA6PSAtMTsKICBGU2Vzc2lvbnMgOj0gQVNlc3Npb25MaXN0OwplbmQ7CgpmdW5jdGlvbiBUSndTZXNzaW9uc0VudW1lcmF0b3IuR2V0Q3VycmVudDsKYmVnaW4KICBSZXN1bHQgOj0gRlNlc3Npb25zW0ZJbmRleF07CmVuZDsKCmZ1bmN0aW9uIFRKd1Nlc3Npb25zRW51bWVyYXRvci5Nb3ZlTmV4dDogQm9vbGVhbjsKYmVnaW4KICBSZXN1bHQgOj0gRkluZGV4IDwgRlNlc3Npb25zLkNvdW50IC0gMTsKICBpZiBSZXN1bHQgdGhlbgogICAgSW5jKEZJbmRleCk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;TJwSessionsEnumerator = class
+private
+ FIndex: Integer;
+ FSessions: TJwWTSSessionList;
+public
+ constructor Create(ASessionList: TJwWTSSessionList);
+ function GetCurrent: TJwWTSSession;
+ function MoveNext: Boolean;
+ property Current: TJwWTSSession read GetCurrent;
+end;
+
+constructor TJwSessionsEnumerator.Create(ASessionList: TJwWTSSessionList);
+begin
+ inherited Create;
+ FIndex := -1;
+ FSessions := ASessionList;
+end;
+
+function TJwSessionsEnumerator.GetCurrent;
+begin
+ Result := FSessions[FIndex];
+end;
+
+function TJwSessionsEnumerator.MoveNext: Boolean;
+begin
+ Result := FIndex &amp;lt; FSessions.Count - 1;
+ if Result then
+ Inc(FIndex);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+Now we add a function with the name GetEnumerator in the SessionList class:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,ZnVuY3Rpb24gVEp3V1RTU2Vzc2lvbkxpc3QuR2V0RW51bWVyYXRvcjogVEp3U2Vzc2lvbnNFbnVtZXJhdG9yOwpiZWdpbgogIFJlc3VsdCA6PSBUSndTZXNzaW9uc0VudW1lcmF0b3IuQ3JlYXRlKFNlbGYpOwplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;function TJwWTSSessionList.GetEnumerator: TJwSessionsEnumerator;
+begin
+ Result := TJwSessionsEnumerator.Create(Self);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+And that's really all!
+&lt;section class="comments"&gt;
+&lt;h2&gt;1 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="http://blog.delphi-jedi.net/2008/03/03/remko-shows-us-how-to-use-the-terminal-server-feature-of-jwscl/" rel="nofollow ugc"&gt;&amp;amp;nbsp; Remko shows us how to use the Terminal Server feature of JWSCL&amp;amp;nbsp;by&amp;amp;nbsp;JEDI Windows API&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2008-03-03"&gt;Mar 3, 2008&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;[...] Go and learn more about it here. [...]&lt;/p&gt;</description></item><item><title>TSAdminEx Progress</title><link>https://remkoweijnen.nl/blog/2008/01/27/test-2/</link><pubDate>Sun, 27 Jan 2008 23:04:07 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/01/27/test-2/</guid><description>&lt;p&gt;I just wanted to show some of the progress that I made in development of TSAdminEx. I thought the best way would be to show some screenshots. Which reminds me I installed a nice Javascript to enlarge the thumbnails, click to see it&amp;hellip;&lt;/p&gt;</description></item><item><title>Using WTSWaitSystemEvent</title><link>https://remkoweijnen.nl/blog/2008/01/25/using-wtswaitsystemevent/</link><pubDate>Fri, 25 Jan 2008 18:02:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/01/25/using-wtswaitsystemevent/</guid><description>&lt;p&gt;If you develop an application for Terminal Server you might want to react on session events. This means that your application is notified when a user logs on, logs off or becomes idle. This can be done with the &lt;a target="_blank" href="http://msdn2.microsoft.com/en-us/library/aa383856(VS.85).aspx"&gt;WTSWaitSystemEvent&lt;/a&gt; function. Implementing it is rather simple and could look something like this:&lt;/p&gt;</description></item><item><title>Undocumented API's from Utildll</title><link>https://remkoweijnen.nl/blog/2007/12/09/undocumented-apis-from-utildll/</link><pubDate>Sun, 09 Dec 2007 11:05:04 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/12/09/undocumented-apis-from-utildll/</guid><description>&lt;p&gt;Several of Microsoft&amp;rsquo;s Terminal Server tools use undocumented API&amp;rsquo;s from Utildll.dll. For instance Terminal Server Admin uses it to get a localised connect state string and to format time strings like idle time, logon time etc.&lt;/p&gt;
+&lt;p&gt;Functions below seems to be the most usefull ones, I will add those to the JwaWinsta unit:&lt;/p&gt;</description></item><item><title>Delphi and Terminal Server Aware</title><link>https://remkoweijnen.nl/blog/2007/11/24/delphi-and-terminal-server-aware/</link><pubDate>Sat, 24 Nov 2007 23:21:37 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/24/delphi-and-terminal-server-aware/</guid><description>&lt;p&gt;When an application is not Terminal Server aware (also known as a legacy application), Terminal Server makes certain modifications to the legacy application to make it work properly in a multiuser environment. For example, Terminal Server will create a virtual Windows folder, such that each user gets a Windows folder instead of getting the system&amp;rsquo;s Windows directory. This gives users access to their own INI files. In addition, Terminal Server makes some adjustments to the registry for a legacy application. These modifications slow the loading of the legacy application on Terminal Server and require up to 8 MegaBytes extra memory. This behaviour can be avoided if the TSAware flag is present in the PE header of an executable as can be read &lt;a target="_blank" href="http://msdn2.microsoft.com/en-us/library/microsoft.visualstudio.vcprojectengine.vclinkertool.terminalserveraware(VS.80).aspx"&gt;here&lt;/a&gt; at MSDN.&lt;/p&gt;</description></item><item><title>JEDI Apilib and JEDI Windows Security Code Library</title><link>https://remkoweijnen.nl/blog/2007/11/08/jedi-apilib-and-jedi-windows-security-code-library/</link><pubDate>Thu, 08 Nov 2007 12:35:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/08/jedi-apilib-and-jedi-windows-security-code-library/</guid><description>&lt;p&gt;It has been a little silent on the &lt;a target="_blank" href="http://sourceforge.net/projects/jedi-apilib/"&gt;&lt;font color="#22229c"&gt;JEDI Apilib project&lt;/font&gt;&lt;/a&gt; lately, but this will change!&lt;/p&gt;
+&lt;p&gt;We had some change in the team members: Marcel van Brakel, founder and large contributor of the project has signed off because he no longer actively uses Delphi. Christian Wimmer has joined the team and he is a very promising member.&lt;/p&gt;
+&lt;p&gt;Christian has been working on a new include model (optional) of the Jedi Apilib which has the advantage that you only need to use one unit (JwaWindows) for the whole library.&lt;/p&gt;
+&lt;p&gt;Chris has also published the JEDI Windows Security Code Library (Jwscl). This is library that tremendously simplifies using Win32 API calls from Delphi. At this point the library contains:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Windows Version&lt;/li&gt;
+	&lt;li&gt;Token&lt;/li&gt;
+	&lt;li&gt;Impersonation&lt;/li&gt;
+	&lt;li&gt;Login&lt;/li&gt;
+	&lt;li&gt;SID&lt;/li&gt;
+	&lt;li&gt;Access Control List&lt;/li&gt;
+	&lt;li&gt;Security Descriptor&lt;/li&gt;
+	&lt;li&gt;Owner, Group, DACL, SACL&lt;/li&gt;
+	&lt;li&gt;WindowStation&lt;/li&gt;
+	&lt;li&gt;Desktop&lt;/li&gt;
+	&lt;li&gt;LSA&lt;/li&gt;
+	&lt;li&gt;Rights mapping&lt;/li&gt;
+	&lt;li&gt;Secured Objects Files, Registry (+Inheritance), etc.&lt;/li&gt;
+	&lt;li&gt;Credentials (Login Dialog)&lt;/li&gt;
+	&lt;li&gt;Encryption (MS Crypto API)&lt;/li&gt;
+	&lt;li&gt;Well Known SIDs&lt;/li&gt;
+	&lt;li&gt;Privileges&lt;/li&gt;
+	&lt;li&gt;Security Dialogs (The "ACL Editor" you see on the security yab when you rightclick object in Explorer)&lt;/li&gt;
+	&lt;li&gt;Terminal Sessions&lt;/li&gt;
+	&lt;li&gt;Unicode + Ansicode&lt;/li&gt;
+	&lt;li&gt;Vista Elevation&lt;/li&gt;
+	&lt;li&gt;Vista Integrity Level&lt;/li&gt;
+&lt;/ul&gt;
+Although Jwscl is in beta stage it is already very well useable.</description></item><item><title>How to get Client IP Address?</title><link>https://remkoweijnen.nl/blog/2007/10/31/how-to-get-client-ip-address/</link><pubDate>Wed, 31 Oct 2007 11:10:10 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/31/how-to-get-client-ip-address/</guid><description>&lt;p&gt;When a client is connected to a Terminal Server Session you can use the Terminal Server API to retrieve the client&amp;rsquo;s local IP address.&lt;/p&gt;
+&lt;p&gt;Start by enumerating all sessions with &lt;a target="_blank" href="http://msdn2.microsoft.com/en-us/library/aa383833.aspx"&gt;WtsEnumerateSessions&lt;/a&gt; and then for each session get the ClientAddress with a call to &lt;a target="_blank" href="http://msdn2.microsoft.com/en-us/library/aa383838.aspx"&gt;WTSQuerySessionInformation&lt;/a&gt; with the WTSClientAddress parameter. Sound simple, no?&lt;/p&gt;
+&lt;p&gt;WTSQuerySessionInformation returns a pointer to a &lt;a target="_blank" href="http://msdn2.microsoft.com/en-us/library/aa383857.aspx"&gt;WTS_CLIENT_ADDRESS&lt;/a&gt; structure. You need to know that the IP address is located at on &lt;em&gt;offset of 2 bytes&lt;/em&gt; in the Address member of WTS_CLIENT_ADDRESS.&lt;/p&gt;
+&lt;p&gt;So here&amp;rsquo;s a sample:&lt;/p&gt;</description></item><item><title>TSAdminEx</title><link>https://remkoweijnen.nl/blog/2007/10/23/tsadminex/</link><pubDate>Tue, 23 Oct 2007 19:48:50 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/23/tsadminex/</guid><description>&lt;p&gt;You will probably know Microsofts Tool to Manage Terminal Server, it&amp;rsquo;s called Terminal Services Manager (you will probably know it as TSAdmin). It can be used to view information about terminal servers including all sessions, users, and processes for each terminal server.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2007/10/tsadmin1.webp" title="TSAdmin Screenshot" class="glightbox" data-type="image" data-gallery="post-32"&gt;&lt;img width="128" height="67" loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2007/10/tsadmin.thumbnail1.webp" alt="TSAdmin Screenshot" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m currently working on a TSAdmin replacement (codename TSAdminEx). Purpose is to show how to use the Terminal Server API&amp;rsquo;s and as a little bonus we will add some extra functionality to TSAdminEx.&lt;/p&gt;</description></item><item><title>How to launch a process in a Terminal Session</title><link>https://remkoweijnen.nl/blog/2007/10/20/how-to-launch-a-process-in-a-terminal-session/</link><pubDate>Sat, 20 Oct 2007 22:45:24 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/20/how-to-launch-a-process-in-a-terminal-session/</guid><description>&lt;p&gt;This is an often asked question but the solution is simple:&lt;/p&gt;
+&lt;p&gt;So how does it work?&lt;br&gt;
+First we obtain the user&amp;rsquo;s primary access token with the &lt;a target="_blank" href="http://msdn2.microsoft.com/en-us/library/aa383840.aspx"&gt;WtsQueryUserToken &lt;/a&gt; API call. To call this function successfully, the calling application must be running within the context of the LocalSystem account and have the SE_TCB_NAME privilege (LocalSystem has this privilege by default). Since the function returns a primary acces token we can just pass this to CreateProcessAsUser and voila!&lt;/p&gt;</description></item></channel></rss>

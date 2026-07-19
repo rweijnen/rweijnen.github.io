@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Page Size on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/page-size/</link><description>Recent content in Page Size on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 24 Jan 2011 15:46:58 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/page-size/index.xml" rel="self" type="application/rss+xml"/><item><title>Determine the System Page Size</title><link>https://remkoweijnen.nl/blog/2011/01/24/determine-the-system-page-size/</link><pubDate>Mon, 24 Jan 2011 15:46:58 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/24/determine-the-system-page-size/</guid><description>&lt;p&gt;Just a quick note: if you want to determine the page size of the OS (Windows) you can use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724381(v=vs.85).aspx" target="_blank"&gt;GetSystemInfo&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgU3lzdGVtSW5mbzogU1lTVEVNX0lORk87CiAgUGFnZVNpemU6IERXT1JEOwpiZWdpbgogIEdldFN5c3RlbUluZm8oU3lzdGVtSW5mbyk7CiAgUGFnZVNpemUgOj0gU3lzdGVtSW5mby5kd1BhZ2VTaXplOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ SystemInfo: SYSTEM_INFO;
+ PageSize: DWORD;
+begin
+ GetSystemInfo(SystemInfo);
+ PageSize := SystemInfo.dwPageSize;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that MSDN recommends to use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724340(v=vs.85).aspx" target="_blank"&gt;GetNativeSystemInfo&lt;/a&gt; function when running in a 32 bit app on an x64 OS (and you can use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms684139(v=vs.85).aspx" target="_blank"&gt;IsWow64Process&lt;/a&gt; function to determine that).&lt;/p&gt;</description></item></channel></rss>

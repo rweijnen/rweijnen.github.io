@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Microsoft Store on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/microsoft-store/</link><description>Recent content in Microsoft Store on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 16 Oct 2019 15:30:57 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/microsoft-store/index.xml" rel="self" type="application/rss+xml"/><item><title>No internet access from Edge and other Microsoft apps</title><link>https://remkoweijnen.nl/blog/2019/10/16/no-internet-access-from-edge-and-other-microsoft-apps/</link><pubDate>Wed, 16 Oct 2019 15:30:57 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2019/10/16/no-internet-access-from-edge-and-other-microsoft-apps/</guid><description>&lt;p&gt;I had a strange issue today: I couldn't open any webpage in the Edge browser on my Windows 10 machine:&lt;/p&gt;
+&lt;figure class="wp-block-image"&gt;&lt;img width="678" height="525" loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2019/10/image.webp" alt="Edge browser with error message &amp;quot;Can't reach this page&amp;quot;" class="wp-image-4336"/&gt;&lt;figcaption&gt;Edge browser: "Can't reach this page"&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;div class="wp-block-image"&gt;&lt;figure class="alignleft"&gt;&lt;img width="112" height="68" loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2019/10/image-1.webp" alt="Network icon showing Internet access" class="wp-image-4337"/&gt;&lt;/figure&gt;&lt;/div&gt;
+&lt;p&gt;The network icon was showing that there was Internet access and a quick check on the command prompt showed that the connection (including name resolution appeared to work fine):&lt;/p&gt;
+&lt;figure class="wp-block-image"&gt;&lt;img width="640" height="381" loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2019/10/image-2.webp" alt="Command prompt showing that ping to www.google.com works fine.
+&lt;p&gt;ping &lt;a href="https://www.google.com"&gt;www.google.com&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Pinging &lt;a href="https://www.google.com"&gt;www.google.com&lt;/a&gt; [172.217.168.196] with 32 bytes of data:&lt;br&gt;
+Reply from 172.217.168.196: bytes=32 time=15ms TTL=55&lt;br&gt;
+Reply from 172.217.168.196: bytes=32 time=14ms TTL=55&lt;/p&gt;
+&lt;p&gt;Ping statistics for 172.217.168.196:&lt;br&gt;
+Packets: Sent = 2, Received = 2, Lost = 0 (0% loss),&lt;br&gt;
+Approximate round trip times in milli-seconds:&lt;br&gt;
+Minimum = 14ms, Maximum = 15ms, Average = 14ms&amp;quot; class=&amp;ldquo;wp-image-4338&amp;rdquo;/&amp;gt;&lt;figcaption&gt;ping to &lt;a href="https://www.google.com"&gt;www.google.com&lt;/a&gt;&lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;Other browsers such as Firefox (my default browser) and Chrome also worked fine but some other Microsoft applications also didn't work such as the Microsoft Store:&lt;/p&gt;</description></item></channel></rss>

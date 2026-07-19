@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Groups on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/groups/</link><description>Recent content in Groups on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 15 Mar 2012 15:51:23 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/groups/index.xml" rel="self" type="application/rss+xml"/><item><title>Create Active Directory Group with PowerShell</title><link>https://remkoweijnen.nl/blog/2012/03/15/create-active-directory-group-with-powershell/</link><pubDate>Thu, 15 Mar 2012 15:51:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/03/15/create-active-directory-group-with-powershell/</guid><description>&lt;p&gt;If you want to Create an Active Directory group with PowerShell there are a few things you need to be aware of:&lt;/p&gt; &lt;p&gt;First of all there is no direct way to create new objects in Active Directory. You always need to bind to the Domain or an Organizational Unit and call the Create method.&lt;/p&gt; &lt;p&gt;Example:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,IyBCaW5kIHRvIE9VCiRvdSA9IFtBRFNJXSJMREFQOi8vT1U9T1U9R3JvdXBzLERDPUNvbnRvc28sREM9Q09NIgoKIyBDcmVhdGUgdGhlIEdyb3VwCiRncm91cCA9ICRvdS5DaGlsZHJlbi5BZGQoIkNOPVRlc3RHcm91cCIsICJHcm91cCIpCiRncm91cC5Db21taXRDaGFuZ2VzKCk="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;# Bind to OU
+$ou = [ADSI]&amp;#34;LDAP://OU=OU=Groups,DC=Contoso,DC=COM&amp;#34;
+
+# Create the Group
+$group = $ou.Children.Add(&amp;#34;CN=TestGroup&amp;#34;, &amp;#34;Group&amp;#34;)
+$group.CommitChanges()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;However the group is not yet complete:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/image22.webp" class="glightbox" data-type="image" data-gallery="post-2554"&gt;&lt;img loading="lazy" decoding="async" style="display: inline" title="TestGroup Properties" alt="Group name (pre-Windows 2000)" src="https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/image_thumb22.webp" width="404" height="184" /&gt;&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

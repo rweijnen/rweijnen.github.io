@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Internal Members on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/internal-members/</link><description>Recent content in Internal Members on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 22 Aug 2012 09:42:06 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/internal-members/index.xml" rel="self" type="application/rss+xml"/><item><title>Calling a function inside another assembly in .NET</title><link>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</link><pubDate>Wed, 22 Aug 2012 09:42:06 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</guid><description>&lt;p&gt;&lt;img style="display: inline; float: right" alt="Red Gate .NET Reflector" align="right" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/920a4b121ffc2422.jpg" width="32" height="32" /&gt;I wanted to call a hash function from a .net executable from my code. My first step was to inspect the executable with &lt;a href="http://www.reflector.net/"&gt;Reflector&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;The Hash function was in a namespace called Core:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;namespace Core &lt;span class="codelang"&gt;&amp;middot; c#&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="namespace-core.cs" href="data:text/plain;charset=utf-8;base64,bmFtZXNwYWNlIFRoZUV4ZS5Db3JlCnsKICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBBc3NlbWJseUluZm8KICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCn0KCmludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCnsKICAgIC8vIE1ldGhvZHMKICAgIHB1YmxpYyBzdGF0aWMgc3RyaW5nIEhhc2godGhpcyBzdHJpbmcgb3JpZ2luYWwsIHN0cmluZyBwYXNzd29yZCk7CiAgICAvLyBNb3JlIG1ldGhvZHMuLi4KfQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-csharp"&gt;&lt;code class="language-csharp"&gt;namespace TheExe.Core
+{
+ internal static class AssemblyInfo
+ internal static class StringExtensionMethods
+}
+
+internal static class StringExtensionMethods
+{
+ // Methods
+ public static string Hash(this string original, string password);
+ // More methods...
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that the Core namespace is marked as internal so it was not meant to be callable outside of the executable. It's still possible to call it using Reflection:&lt;/p&gt;</description></item></channel></rss>

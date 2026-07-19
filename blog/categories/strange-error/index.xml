@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Strange Error on Remko's Blog</title><link>https://remkoweijnen.nl/blog/categories/strange-error/</link><description>Recent content in Strange Error on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 27 Feb 2023 10:00:00 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/categories/strange-error/index.xml" rel="self" type="application/rss+xml"/><item><title>Quip hangs with waiting cursor</title><link>https://remkoweijnen.nl/blog/2023/02/27/quip-hangs-with-waiting-cursor/</link><pubDate>Mon, 27 Feb 2023 10:00:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2023/02/27/quip-hangs-with-waiting-cursor/</guid><description>&lt;p&gt;It's been a little while since I had a "nice" application problem to blog about. It's weird but I actually enjoy looking into those issues, well probably means I'm weird which is probably right.&lt;/p&gt;&lt;p&gt;I use a Virtual Desktop as my primary work desktop since my day 1 at work (and all the day 1's after).&lt;/p&gt;</description></item><item><title>Querying a user token under 64 bit version of 2003/XP</title><link>https://remkoweijnen.nl/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/</link><pubDate>Sat, 29 Jan 2011 22:17:52 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/</guid><description>&lt;p&gt;If you want to obtain a user&amp;rsquo;s token in a Terminal Server or Citrix session (eg to launch a process in a session) you can call the &lt;a href="http://msdn.microsoft.com/en-us/library/aa383840(v=vs.85).aspx"&gt;WTSQueryUserToken&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On the x64 versions of Windows XP and Server 2003 this function fails however and returns &lt;strong&gt;ERROR_INSUFFICIENT_BUFFER&lt;/strong&gt; (&amp;quot;&lt;em&gt;The data area passed to a system call is too small&lt;/em&gt;.&amp;quot;) when called from a 32 bit process.&lt;/p&gt;
+&lt;p&gt;Internally WTSQueryUserToken calls the undocumented function &lt;a href="http://msdn.microsoft.com/en-us/library/aa383827(v=vs.85).aspx"&gt;WinstationQueryInformationW&lt;/a&gt; with the &lt;strong&gt;WinStationUserToken&lt;/strong&gt; class (14) and passing a &lt;a href="http://msdn.microsoft.com/en-us/library/cc248658(PROT.10).aspx"&gt;WINSTATIONUSERTOKEN&lt;/a&gt; struct, filled with caller ProcessId and ThreadId.&lt;/p&gt;
+&lt;p&gt;But on x64 Windows the size of this structure is 24 bytes, while on 32 bit Windows the size of the structure is 12 bytes!&lt;/p&gt;</description></item><item><title>Enumerating Session Processes with NtQuerySystemInformation</title><link>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</link><pubDate>Thu, 20 Jan 2011 15:34:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</guid><description>&lt;p&gt;As you may know, you can enumerate processes of a specific Terminal Server or Citrix session using the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724509(VS.85).aspx"&gt;NtQuerySystemInformation&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On x86 system the code below works fine:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgU3RhdHVzIDogTlRTVEFUVVM7CiAgUmV0TGVuZ3RoIDogRFdPUkQ7CiAgU2Vzc2lvbkluZm8gOiAgU1lTVEVNX1NFU1NJT05fUFJPQ0VTU19JTkZPUk1BVElPTjsKICBDdXJyZW50UHJvY2VzcyA6IFBTeXN0ZW1Qcm9jZXNzZXM7CmJlZ2luCgogIFNlc3Npb25JbmZvLlNlc3Npb25JZCA6PSBTZXNzaW9uSWQ7CiAgU2Vzc2lvbkluZm8uQnVmZmVyIDo9IG5pbDsKICBTZXNzaW9uSW5mby5TaXplT2ZCdWYgOj0gMDsKCiAgU3RhdHVzIDo9IE50UXVlcnlTeXN0ZW1JbmZvcm1hdGlvbihTeXN0ZW1TZXNzaW9uUHJvY2Vzc2VzSW5mb3JtYXRpb24sIEBTZXNzaW9uSW5mbywgU2l6ZU9mKFNlc3Npb25JbmZvKSwgQFJldExlbmd0aCk7CiAgd2hpbGUgKFN0YXR1cyA9IFNUQVRVU19JTkZPX0xFTkdUSF9NSVNNQVRDSCkgZG8KICBiZWdpbgogICAgU2Vzc2lvbkluZm8uU2l6ZU9mQnVmIDo9IFJldExlbmd0aDsKICAgIFNlc3Npb25JbmZvLkJ1ZmZlciA6PSBHZXRNZW1vcnkoUmV0TGVuZ3RoKTsKICAgIHRyeQogICAgICBTdGF0dXMgOj0gTnRRdWVyeVN5c3RlbUluZm9ybWF0aW9uKFN5c3RlbVNlc3Npb25Qcm9jZXNzZXNJbmZvcm1hdGlvbiwgQFNlc3Npb25JbmZvLCBTaXplT2YoU2Vzc2lvbkluZm8pLCBAUmV0TGVuZ3RoKTsKICAgICAgaWYgTlRfU1VDQ0VTUyhTdGF0dXMpIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBDdXJyZW50UHJvY2VzcyA6PSBTZXNzaW9uSW5mby5CdWZmZXI7CiAgICAgICAgd2hpbGUgVHJ1ZSBkbwogICAgICAgIGJlZ2luCiAgICAgICAgICAvLyBZb3VyIGNvZGUgaGVyZQoKICAgICAgICAgIGlmIChDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGEgPSAwKSB0aGVuCiAgICAgICAgICAgIEJyZWFrOwoKICAgICAgICAgIENhcmRpbmFsKEN1cnJlbnRQcm9jZXNzKSA6PSBDYXJkaW5hbChDdXJyZW50UHJvY2VzcykgKyBDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGE7CiAgICAgICAgZW5kOwoKICAgICAgICBFeGl0OwogICAgICBlbmQ7CiAgICBmaW5hbGx5CiAgICAgIEZyZWVNZW1vcnkoU2Vzc2lvbkluZm8uQnVmZmVyKTsKICAgIGVuZDsKICBlbmQ7CgogIFNldExhc3RFcnJvcihSdGxOdFN0YXR1c1RvRG9zRXJyb3IoU3RhdHVzKSk7CiAgUmFpc2VMYXN0T1NFcnJvcjsKZW5kOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ Status : NTSTATUS;
+ RetLength : DWORD;
+ SessionInfo : SYSTEM_SESSION_PROCESS_INFORMATION;
+ CurrentProcess : PSystemProcesses;
+begin
+
+ SessionInfo.SessionId := SessionId;
+ SessionInfo.Buffer := nil;
+ SessionInfo.SizeOfBuf := 0;
+
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ while (Status = STATUS_INFO_LENGTH_MISMATCH) do
+ begin
+ SessionInfo.SizeOfBuf := RetLength;
+ SessionInfo.Buffer := GetMemory(RetLength);
+ try
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ if NT_SUCCESS(Status) then
+ begin
+ CurrentProcess := SessionInfo.Buffer;
+ while True do
+ begin
+ // Your code here
+
+ if (CurrentProcess^.NextEntryDelta = 0) then
+ Break;
+
+ Cardinal(CurrentProcess) := Cardinal(CurrentProcess) &amp;#43; CurrentProcess^.NextEntryDelta;
+ end;
+
+ Exit;
+ end;
+ finally
+ FreeMemory(SessionInfo.Buffer);
+ end;
+ end;
+
+ SetLastError(RtlNtStatusToDosError(Status));
+ RaiseLastOSError;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;While this works fine on Windows XP and 2003 x86, it fails to work correctly on the x64 versions of Windows XP and 2003 (or maybe even higher).&lt;/p&gt;
+&lt;p&gt;The problem is that RetLength is always SizeOf(SYSTEM_SESSION_PROCESS_INFORMATION) and thus we are in an endless loop!&lt;/p&gt;</description></item><item><title>Packaging an ActiveX Component: Easy?</title><link>https://remkoweijnen.nl/blog/2010/12/20/packaging-an-activex-component/</link><pubDate>Mon, 20 Dec 2010 20:19:18 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/20/packaging-an-activex-component/</guid><description>&lt;p&gt;Today I needed to package an applications that I was told was very simple. If I hear something like that my first thought is always &amp;ldquo;hmmm&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;So I prepared a machine to build the package and followed the instructions which were to go to a specific URL and download the package (probably an ActiveX control from there).&lt;/p&gt;
+&lt;p&gt;I opened the URL and immediately got an error message:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/lciderror.webp" alt="The specified LICD is not available" width="413" height="290" /&gt;
+&lt;p&gt;The error message 0x80004005 is not very helpfull since it stands for E_FAIL (winerror.h).&lt;/p&gt;</description></item></channel></rss>

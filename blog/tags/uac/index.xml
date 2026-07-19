@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>UAC on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/uac/</link><description>Recent content in UAC on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 11 Aug 2011 11:30:47 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/uac/index.xml" rel="self" type="application/rss+xml"/><item><title>GetTokenInformation with TokenLinkedToken returns error 1312</title><link>https://remkoweijnen.nl/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/</link><pubDate>Thu, 11 Aug 2011 11:30:47 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/</guid><description>&lt;p&gt;The &lt;a href="http://msdn.microsoft.com/en-us/library/aa446671(v=vs.85).aspx" target="_blank"&gt;GetTokenInformation&lt;/a&gt; function can be used with the TokenLinkedToken Information Class on Windows Vista and higher to the linked (Elevated) token.&lt;/p&gt;
+&lt;p&gt;This is useful when User Account Control is enabled and you want to launch an elevated process e.g. from a service.&lt;/p&gt;</description></item><item><title>Programmatically Check if User Account Control is Enabled</title><link>https://remkoweijnen.nl/blog/2011/08/11/programmatically-check-if-user-account-control-is-enabled/</link><pubDate>Thu, 11 Aug 2011 11:27:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/08/11/programmatically-check-if-user-account-control-is-enabled/</guid><description>&lt;p&gt;&lt;img style="margin: 0px 10px 0px 0px; display: inline; float: left" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/ac92b77a899e8666.png" width="28" height="34" /&gt;Snippet below can be used to programmatically determine if User Account Control is enabled:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dXNlcwogIEp3YVdpbmJhc2UsIEp3YVdpbk50OwoKZnVuY3Rpb24gSXNVQUNFbmFibGVkOiBCb29sZWFuOwp2YXIKICBoVG9rZW46IFRIYW5kbGU7CiAgdGV0OiBUT0tFTl9FTEVWQVRJT05fVFlQRTsKICBkd1NpemU6IERXT1JEOwpiZWdpbgogIFdpbjMyQ2hlY2soT3BlblByb2Nlc3NUb2tlbihHZXRDdXJyZW50UHJvY2VzcywgVE9LRU5fUVVFUlksIGhUb2tlbikpOwogIC8vIFRva2VuRWxldmF0aW9uVHlwZSBjbGFzcyBvbmx5IGF2YWlsYWJsZSBvbiBWaXN0YSsKICBXaW4zMkNoZWNrKEdldFRva2VuSW5mb3JtYXRpb24oaFRva2VuLCBUb2tlbkVsZXZhdGlvblR5cGUsIEB0ZXQsIFNpemVPZih0ZXQpLCBkd1NpemUpKTsKCiAgUmVzdWx0IDo9IHRldCA8PiBUb2tlbkVsZXZhdGlvblR5cGVEZWZhdWx0OwplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;uses
+ JwaWinbase, JwaWinNt;
+
+function IsUACEnabled: Boolean;
+var
+ hToken: THandle;
+ tet: TOKEN_ELEVATION_TYPE;
+ dwSize: DWORD;
+begin
+ Win32Check(OpenProcessToken(GetCurrentProcess, TOKEN_QUERY, hToken));
+ // TokenElevationType class only available on Vista&amp;#43;
+ Win32Check(GetTokenInformation(hToken, TokenElevationType, @tet, SizeOf(tet), dwSize));
+
+ Result := tet &amp;lt;&amp;gt; TokenElevationTypeDefault;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;1 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="https://remkoweijnen.nl/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/" rel="nofollow ugc"&gt;GetTokenInformation with TokenLinkedToken returns error 1312&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2011-08-11"&gt;Aug 11, 2011&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;[...] specified logon session does not exist. It may already have been terminated.&amp;#8221;So you should check if User Account Control is enabled in such cases (or make this error non critical).share: Bookmark on Delicious Digg this post [...]&lt;/p&gt;</description></item><item><title>Compatibility Issue with RAD Studio XE</title><link>https://remkoweijnen.nl/blog/2010/09/02/compatibility-issue-with-rad-studio-xe/</link><pubDate>Thu, 02 Sep 2010 19:50:42 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/09/02/compatibility-issue-with-rad-studio-xe/</guid><description>&lt;p&gt;After launching the newly installed RAD Studio XE for the first time it tried to install something. This failed because I didn't run it elevated which makes Windows 7 fire the Program Compatibility Assistant:&lt;/p&gt;
+&lt;p&gt;&lt;img loading="lazy" decoding="async" alt="RadStudioXECompat" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/09/radstudioxecompat.webp" width="409" height="342" /&gt;&lt;/p&gt;
+&lt;p&gt;It would be better for Embarcadero to detect if we run elevated and only run the installer when we are (or request elevation).&lt;/p&gt;</description></item></channel></rss>

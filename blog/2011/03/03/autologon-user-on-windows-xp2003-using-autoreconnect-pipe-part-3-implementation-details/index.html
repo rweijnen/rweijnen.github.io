@@ -1,0 +1,669 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details) &#183; Remko's Blog</title><meta name=description content="Full code walkthrough for Windows XP/2003 autologon: building tokens with LsaLogonUser or NtCreateToken and sending WLX_SAS_TYPE_AUTHENTICATED to Winlogon via the pipe."><link rel=canonical href=https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)"><meta property="og:description" content="Full code walkthrough for Windows XP/2003 autologon: building tokens with LsaLogonUser or NtCreateToken and sending WLX_SAS_TYPE_AUTHENTICATED to Winlogon via the pipe."><meta property="og:url" content="https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/"><meta property="og:image" content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Remko's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)"><meta name=twitter:description content="Full code walkthrough for Windows XP/2003 autologon: building tokens with LsaLogonUser or NtCreateToken and sending WLX_SAS_TYPE_AUTHENTICATED to Winlogon via the pipe."><meta name=twitter:image content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="article:published_time" content="2011-03-03T13:00:46Z"><meta property="article:modified_time" content="2011-03-03T13:00:46Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Danila Galimov"},"dateModified":"2011-03-03T13:00:46Z","datePublished":"2011-03-03T13:00:46Z","description":"Full code walkthrough for Windows XP/2003 autologon: building tokens with LsaLogonUser or NtCreateToken and sending WLX_SAS_TYPE_AUTHENTICATED to Winlogon via the pipe.","headline":"Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)","mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Delphi</span><span data-pagefind-filter=category>Programming</span><span data-pagefind-filter=category>Remote Desktop Services</span><span data-pagefind-filter=category>Windows 2003</span><span data-pagefind-filter=category>Windows Internals</span><span data-pagefind-filter=category>Windows XP</span>
+<span data-pagefind-meta=category>Delphi</span>
+<span data-pagefind-filter=tag>LsaLogonUser</span><span data-pagefind-filter=tag>NtCreateToken</span><span data-pagefind-filter=tag>Winlogon</span><span data-pagefind-filter=tag>Autologon</span><span data-pagefind-filter=tag>Access Token</span><span data-pagefind-filter=tag>Delphi</span><span data-pagefind-filter=tag>SAS</span>
+<span data-pagefind-filter=year>2011</span>
+<span data-pagefind-meta=date>2011-03-03</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/delphi/>delphi</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)</h1><div class=byline><span class=avatar style=width:26px;height:26px;border-radius:7px;font-size:11px>DG</span><span>Danila Galimov</span><span class=dot>&#183;</span>
+<time datetime=2011-03-03>Mar 3, 2011</time>
+<span class=dot>&#183;</span><span>8 min read</span></div><div class=post-content data-pagefind-body><p>In the previous parts (<a href=/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/>part 1</a> <a href=/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/>part 2</a>) i&rsquo;ve described the theoretical part and implementation problems. So, now we can write the code:</p><ol><li>In case we login the user, we just call <a href="http://msdn.microsoft.com/en-us/library/aa378292(v=vs.85).aspx">LsaLogonUser</a> to get the token:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gQ29weVN0cmluZyhjb25zdCBTb3VyY2UgOiBXaWRlU3RyaW5nOyBjb25zdCBCdWZmZXIgOiBQb2ludGVyOyB2YXIgQ3VycmVudFBvc2l0aW9uIDogUG9pbnRlcjsgTGVuZ3RoSW5CeXRlczogQ2FyZGluYWwgPSAkRkZGRkZGRkYpIDogUG9pbnRlcjsKYmVnaW4KICBpZiAoU291cmNlIDw+ICcnICkgdGhlbgogIGJlZ2luCiAgICBDYXJkaW5hbChSZXN1bHQpIDo9IENhcmRpbmFsKEN1cnJlbnRQb3NpdGlvbikgLSBDYXJkaW5hbChCdWZmZXIpOwogICAgaWYgKExlbmd0aEluQnl0ZXMgPSAkRkZGRkZGRkYpIHRoZW4KICAgICAgTGVuZ3RoSW5CeXRlcyA6PSAoTGVuZ3RoKFNvdXJjZSkgKyAxKSAqIFNpemVPZihTb3VyY2VbMV0pOwoKICAgIENvcHlNZW1vcnkoQ3VycmVudFBvc2l0aW9uLCBQV2lkZUNoYXIoU291cmNlKSwgTGVuZ3RoSW5CeXRlcyk7CiAgICBDYXJkaW5hbChDdXJyZW50UG9zaXRpb24pIDo9IENhcmRpbmFsKEN1cnJlbnRQb3NpdGlvbikgKyBMZW5ndGhJbkJ5dGVzOwogIGVuZAogIGVsc2UKICAgIFJlc3VsdCA6PSBuaWw7CmVuZDsKCnByb2NlZHVyZSBDb3B5VW5pY29kZVN0cmluZyhjb25zdCBUYXJnZXQgOiBQVW5pY29kZVN0cmluZzsgY29uc3QgU291cmNlIDogUFVuaWNvZGVTdHJpbmc7IGNvbnN0IEJ1ZmZlciA6IFBvaW50ZXI7IHZhciBDdXJyZW50UG9zaXRpb24gOiBQb2ludGVyKTsKYmVnaW4KICBUYXJnZXReIDo9IFNvdXJjZV47CiAgVGFyZ2V0Xi5CdWZmZXIgOj0gQ29weVN0cmluZyhUYXJnZXReLkJ1ZmZlciwgQnVmZmVyLCBDdXJyZW50UG9zaXRpb24sIFRhcmdldF4uTWF4aW11bUxlbmd0aCk7CmVuZDsKCnByb2NlZHVyZSBDcmVhdGVMc2FMb2dvblBhY2thZ2VCdWZmZXIoY29uc3QgVXNlck5hbWUsIERvbWFpbiwgUGFzc3dvcmQgOiBXaWRlU3RyaW5nOwogIG91dCBSZXN1bHQgOiBQTVNWMV8wX0lOVEVSQUNUSVZFX0xPR09OOyBvdXQgUmVzdWx0TGVuZ3RoIDogQ2FyZGluYWwpOwp2YXIKICBMb2dvbkN1cnJlbnRQb2ludGVyIDogUG9pbnRlcjsKYmVnaW4KICBSZXN1bHRMZW5ndGggOj0gU2l6ZU9mKFJlc3VsdF4pICsgKExlbmd0aChVc2VyTmFtZSkgKyBMZW5ndGgoRG9tYWluKSArIExlbmd0aChQYXNzd29yZCkgKyAzKSAqIFNpemVPZihVc2VyTmFtZVsxXSk7CiAgUmVzdWx0IDo9IEdldE1lbW9yeShSZXN1bHRMZW5ndGgpOwogIHRyeQogICAgWmVyb01lbW9yeShSZXN1bHQsIFJlc3VsdExlbmd0aCk7CgogICAgQ2FyZGluYWwoTG9nb25DdXJyZW50UG9pbnRlcikgOj0gQ2FyZGluYWwoUmVzdWx0KSArIFNpemVPZihSZXN1bHReKTsKCiAgICBSZXN1bHReLk1lc3NhZ2VUeXBlIDo9IE1zVjFfMEludGVyYWN0aXZlTG9nb247CgogICAgUnRsSW5pdFVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uVXNlck5hbWUsIFBXaWRlQ2hhcihVc2VyTmFtZSkpOwogICAgQ29weVVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uVXNlck5hbWUsIEBSZXN1bHReLlVzZXJOYW1lLCBuaWwsIExvZ29uQ3VycmVudFBvaW50ZXIpOwoKICAgIFJ0bEluaXRVbmljb2RlU3RyaW5nKEBSZXN1bHReLkxvZ29uRG9tYWluTmFtZSwgUFdpZGVDaGFyKERvbWFpbikpOwogICAgQ29weVVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uTG9nb25Eb21haW5OYW1lLCBAUmVzdWx0Xi5Mb2dvbkRvbWFpbk5hbWUsIG5pbCwgTG9nb25DdXJyZW50UG9pbnRlcik7CgogICAgUnRsSW5pdFVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uUGFzc3dvcmQsIFBXaWRlQ2hhcihQYXNzd29yZCkpOwogICAgQ29weVVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uUGFzc3dvcmQsIEBSZXN1bHReLlBhc3N3b3JkLCBuaWwsIExvZ29uQ3VycmVudFBvaW50ZXIpOwogIGV4Y2VwdAogICAgRnJlZU1lbW9yeShSZXN1bHQpOwogICAgUmFpc2U7CiAgZW5kOwplbmQ7Cgpwcm9jZWR1cmUgTG9naW5Vc2VyOwp2YXIKICBMc2FIYW5kbGUgOiBUSGFuZGxlOwogIExzYU5hbWUgOiBMU0FfU1RSSU5HOwogIFBhY2thZ2VOYW1lIDogTFNBX1NUUklORzsKICBBdXRoZW50aWNhdGlvblBhY2thZ2UgOiBVTE9ORzsKICBMb2dvblBhY2thZ2VCdWZmZXIgOiBQTVNWMV8wX0lOVEVSQUNUSVZFX0xPR09OIDsKICBMb2dvblBhY2thZ2VCdWZmZXJMZW5ndGggOiBDYXJkaW5hbDsKICBUb2tlblNvdXJjZSA6IEp3YVdpbmRvd3MuVFRva2VuU291cmNlOwogIFN1YlN0YXR1cyA6IEludGVnZXI7CiAgU2VjdXJpdHlNb2RlIDogTFNBX09QRVJBVElPTkFMX01PREU7CmJlZ2luCiAgUnRsSW5pdFVuaWNvZGVTdHJpbmcoQExzYU5hbWUsICdBdXRvTG9nb25YUCBsb2dpbicpOwogIE50Q2hlY2soTHNhUmVnaXN0ZXJMb2dvblByb2Nlc3MoTHNhTmFtZSwgTHNhSGFuZGxlLCBAU2VjdXJpdHlNb2RlKSk7CiAgdHJ5CiAgICBSdGxJbml0U3RyaW5nKEBQYWNrYWdlTmFtZSwgUENTWihQQ2hhcihNU1YxXzBfUEFDS0FHRV9OQU1FKSkpOwogICAgTHNhTG9va3VwQXV0aGVudGljYXRpb25QYWNrYWdlKExzYUhhbmRsZSwgUGFja2FnZU5hbWUsIEF1dGhlbnRpY2F0aW9uUGFja2FnZSk7CgogICAgSndhV2luZG93cy5BbGxvY2F0ZUxvY2FsbHlVbmlxdWVJZChUb2tlblNvdXJjZS5Tb3VyY2VJZGVudGlmaWVyKTsKICAgIFRva2VuU291cmNlLlNvdXJjZU5hbWUgOj0gJ0FVVE9MR09OJzsKCiAgICBDcmVhdGVMc2FMb2dvblBhY2thZ2VCdWZmZXIoVXNlck5hbWUsIERvbWFpbiwgUGFzc3dvcmQsIExvZ29uUGFja2FnZUJ1ZmZlciwgTG9nb25QYWNrYWdlQnVmZmVyTGVuZ3RoKTsKICAgIHRyeQogICAgICBOdENoZWNrKAogICAgICAgIExzYUxvZ29uVXNlcigKICAgICAgICAgIExzYUhhbmRsZSwKICAgICAgICAgIExzYU5hbWUsCiAgICAgICAgICBJbnRlcmFjdGl2ZSwKICAgICAgICAgIEF1dGhlbnRpY2F0aW9uUGFja2FnZSwKICAgICAgICAgIExvZ29uUGFja2FnZUJ1ZmZlciwKICAgICAgICAgIExvZ29uUGFja2FnZUJ1ZmZlckxlbmd0aCwKICAgICAgICAgIFRva2VuR3JvdXBzLAogICAgICAgICAgQFRva2VuU291cmNlLAogICAgICAgICAgUG9pbnRlcihQcm9maWxlKSwKICAgICAgICAgIFByb2ZpbGVMZW5ndGgsCiAgICAgICAgICBKd2FXaW5kb3dzLkxVSUQoUmVzdWx0Xi5Mb2dvbklkKSwKICAgICAgICAgIFJlc3VsdF4uVXNlclRva2VuLAogICAgICAgICAgSndhV2luZG93cy5RVU9UQV9MSU1JVFMoUmVzdWx0Xi5RdW90YXMpLAogICAgICAgICAgU3ViU3RhdHVzCiAgICAgICAgKSk7CiAgICBmaW5hbGx5CiAgICAgIEZyZWVMc2FMb2dvblBhY2thZ2VCdWZmZXIoTG9nb25QYWNrYWdlQnVmZmVyKTsKICAgIGVuZDsKICBmaW5hbGx5CiAgICBMc2FEZXJlZ2lzdGVyTG9nb25Qcm9jZXNzKExzYUhhbmRsZSk7CiAgZW5kOwplbmQ7">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function CopyString(const Source : WideString; const Buffer : Pointer; var CurrentPosition : Pointer; LengthInBytes: Cardinal = $FFFFFFFF) : Pointer;
+begin
+  if (Source &lt;&gt; &#39;&#39; ) then
+  begin
+    Cardinal(Result) := Cardinal(CurrentPosition) - Cardinal(Buffer);
+    if (LengthInBytes = $FFFFFFFF) then
+      LengthInBytes := (Length(Source) &#43; 1) * SizeOf(Source[1]);
+
+    CopyMemory(CurrentPosition, PWideChar(Source), LengthInBytes);
+    Cardinal(CurrentPosition) := Cardinal(CurrentPosition) &#43; LengthInBytes;
+  end
+  else
+    Result := nil;
+end;
+
+procedure CopyUnicodeString(const Target : PUnicodeString; const Source : PUnicodeString; const Buffer : Pointer; var CurrentPosition : Pointer);
+begin
+  Target^ := Source^;
+  Target^.Buffer := CopyString(Target^.Buffer, Buffer, CurrentPosition, Target^.MaximumLength);
+end;
+
+procedure CreateLsaLogonPackageBuffer(const UserName, Domain, Password : WideString;
+  out Result : PMSV1_0_INTERACTIVE_LOGON; out ResultLength : Cardinal);
+var
+  LogonCurrentPointer : Pointer;
+begin
+  ResultLength := SizeOf(Result^) &#43; (Length(UserName) &#43; Length(Domain) &#43; Length(Password) &#43; 3) * SizeOf(UserName[1]);
+  Result := GetMemory(ResultLength);
+  try
+    ZeroMemory(Result, ResultLength);
+
+    Cardinal(LogonCurrentPointer) := Cardinal(Result) &#43; SizeOf(Result^);
+
+    Result^.MessageType := MsV1_0InteractiveLogon;
+
+    RtlInitUnicodeString(@Result^.UserName, PWideChar(UserName));
+    CopyUnicodeString(@Result^.UserName, @Result^.UserName, nil, LogonCurrentPointer);
+
+    RtlInitUnicodeString(@Result^.LogonDomainName, PWideChar(Domain));
+    CopyUnicodeString(@Result^.LogonDomainName, @Result^.LogonDomainName, nil, LogonCurrentPointer);
+
+    RtlInitUnicodeString(@Result^.Password, PWideChar(Password));
+    CopyUnicodeString(@Result^.Password, @Result^.Password, nil, LogonCurrentPointer);
+  except
+    FreeMemory(Result);
+    Raise;
+  end;
+end;
+
+procedure LoginUser;
+var
+  LsaHandle : THandle;
+  LsaName : LSA_STRING;
+  PackageName : LSA_STRING;
+  AuthenticationPackage : ULONG;
+  LogonPackageBuffer : PMSV1_0_INTERACTIVE_LOGON ;
+  LogonPackageBufferLength : Cardinal;
+  TokenSource : JwaWindows.TTokenSource;
+  SubStatus : Integer;
+  SecurityMode : LSA_OPERATIONAL_MODE;
+begin
+  RtlInitUnicodeString(@LsaName, &#39;AutoLogonXP login&#39;);
+  NtCheck(LsaRegisterLogonProcess(LsaName, LsaHandle, @SecurityMode));
+  try
+    RtlInitString(@PackageName, PCSZ(PChar(MSV1_0_PACKAGE_NAME)));
+    LsaLookupAuthenticationPackage(LsaHandle, PackageName, AuthenticationPackage);
+
+    JwaWindows.AllocateLocallyUniqueId(TokenSource.SourceIdentifier);
+    TokenSource.SourceName := &#39;AUTOLGON&#39;;
+
+    CreateLsaLogonPackageBuffer(UserName, Domain, Password, LogonPackageBuffer, LogonPackageBufferLength);
+    try
+      NtCheck(
+        LsaLogonUser(
+          LsaHandle,
+          LsaName,
+          Interactive,
+          AuthenticationPackage,
+          LogonPackageBuffer,
+          LogonPackageBufferLength,
+          TokenGroups,
+          @TokenSource,
+          Pointer(Profile),
+          ProfileLength,
+          JwaWindows.LUID(Result^.LogonId),
+          Result^.UserToken,
+          JwaWindows.QUOTA_LIMITS(Result^.Quotas),
+          SubStatus
+        ));
+    finally
+      FreeLsaLogonPackageBuffer(LogonPackageBuffer);
+    end;
+  finally
+    LsaDeregisterLogonProcess(LsaHandle);
+  end;
+end;</code></pre></div></div><ol start=2><li>In case we need to create a token, we call <a href=http://undocumented.ntinternals.net/UserMode/Undocumented%20Functions/NT%20Objects/Token/NtCreateToken.html>NtCreateToken</a>. If there are no groups, we create a single group with the Primary SID in this group :</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,cHJvY2VkdXJlIENyZWF0ZVRva2VuOwp2YXIKICBFeHBpcmF0aW9uVGltZSA6IExBUkdFX0lOVEVHRVI7CiAgVXNlciA6IEp3YVdpbmRvd3MuVE9LRU5fVVNFUjsKICBUb2tlblNvdXJjZSA6IFRPS0VOX1NPVVJDRTsKICBQcmltYXJ5R3JvdXAgOiBKd2FXaW5kb3dzLlRPS0VOX1BSSU1BUllfR1JPVVA7CiAgRW1wdHlUb2tlbkdyb3VwcyA6IEp3YVdpbmRvd3MuVFRva2VuR3JvdXBzOwpiZWdpbgogIEV4cGlyYXRpb25UaW1lLlF1YWRQYXJ0IDo9IDA7CgogIFVzZXIuVXNlci5TaWQgOj0gUHJpbWFyeVNJRDsKICBVc2VyLlVzZXIuQXR0cmlidXRlcyA6PSAwOwoKICBUb2tlblNvdXJjZS5Tb3VyY2VOYW1lIDo9ICdBVVRPTEdPTic7CiAgV2luMzJDaGVjayhBbGxvY2F0ZUxvY2FsbHlVbmlxdWVJZChUb2tlblNvdXJjZS5Tb3VyY2VJZGVudGlmaWVyKSk7CgogIFJlc3VsdF4uTG9nb25JZCA6PSBTWVNURU1fTFVJRDsKCiAgUHJpbWFyeUdyb3VwLlByaW1hcnlHcm91cCA6PSBQcmltYXJ5U0lEOwoKICBpZiAobmlsID0gVG9rZW5Hcm91cHMpIHRoZW4KICBiZWdpbgogICAgRW1wdHlUb2tlbkdyb3Vwcy5Hcm91cENvdW50IDo9IDE7CgogICAgRW1wdHlUb2tlbkdyb3Vwcy5Hcm91cHNbMF0uU2lkIDo9IFByaW1hcnlTSUQ7CiAgICBFbXB0eVRva2VuR3JvdXBzLkdyb3Vwc1swXS5BdHRyaWJ1dGVzIDo9IFNFX0dST1VQX01BTkRBVE9SWSBvciBTRV9HUk9VUF9FTkFCTEVEIG9yIFNFX0dST1VQX0VOQUJMRURfQllfREVGQVVMVCBvciBTRV9HUk9VUF9MT0dPTl9JRDsKCiAgICBUb2tlbkdyb3VwcyA6PSBARW1wdHlUb2tlbkdyb3VwczsKICBlbmQ7CgogIEVuYWJsZVRva2VuKFNFX0NSRUFURV9UT0tFTl9OQU1FKTsKICBOdENoZWNrKAogICAgTnRDcmVhdGVUb2tlbigKICAgICAgQFJlc3VsdF4uVXNlclRva2VuLAogICAgICBUT0tFTl9BTExfQUNDRVNTLAogICAgICBuaWwsCiAgICAgIFRva2VuUHJpbWFyeSwKICAgICAgQFJlc3VsdF4uTG9nb25JZCwKICAgICAgQEV4cGlyYXRpb25UaW1lLAogICAgICBAVXNlciwKICAgICAgVG9rZW5Hcm91cHMsCiAgICAgIFByaXZzLAogICAgICBuaWwsCiAgICAgIEBQcmltYXJ5R3JvdXAsCiAgICAgIG5pbCwKICAgICAgQFRva2VuU291cmNlCiAgICApKTsKCiAgdHJ5CiAgICBQcm9maWxlIDo9IEFsbG9jRW1wdHlQcm9maWxlKFByb2ZpbGVMZW5ndGgpOwogIGV4Y2VwdAogICAgQ2xvc2VIYW5kbGUoUmVzdWx0Xi5Vc2VyVG9rZW4pOwogICAgUmFpc2U7CiAgZW5kOwoKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>procedure CreateToken;
+var
+  ExpirationTime : LARGE_INTEGER;
+  User : JwaWindows.TOKEN_USER;
+  TokenSource : TOKEN_SOURCE;
+  PrimaryGroup : JwaWindows.TOKEN_PRIMARY_GROUP;
+  EmptyTokenGroups : JwaWindows.TTokenGroups;
+begin
+  ExpirationTime.QuadPart := 0;
+
+  User.User.Sid := PrimarySID;
+  User.User.Attributes := 0;
+
+  TokenSource.SourceName := &#39;AUTOLGON&#39;;
+  Win32Check(AllocateLocallyUniqueId(TokenSource.SourceIdentifier));
+
+  Result^.LogonId := SYSTEM_LUID;
+
+  PrimaryGroup.PrimaryGroup := PrimarySID;
+
+  if (nil = TokenGroups) then
+  begin
+    EmptyTokenGroups.GroupCount := 1;
+
+    EmptyTokenGroups.Groups[0].Sid := PrimarySID;
+    EmptyTokenGroups.Groups[0].Attributes := SE_GROUP_MANDATORY or SE_GROUP_ENABLED or SE_GROUP_ENABLED_BY_DEFAULT or SE_GROUP_LOGON_ID;
+
+    TokenGroups := @EmptyTokenGroups;
+  end;
+
+  EnableToken(SE_CREATE_TOKEN_NAME);
+  NtCheck(
+    NtCreateToken(
+      @Result^.UserToken,
+      TOKEN_ALL_ACCESS,
+      nil,
+      TokenPrimary,
+      @Result^.LogonId,
+      @ExpirationTime,
+      @User,
+      TokenGroups,
+      Privs,
+      nil,
+      @PrimaryGroup,
+      nil,
+      @TokenSource
+    ));
+
+  try
+    Profile := AllocEmptyProfile(ProfileLength);
+  except
+    CloseHandle(Result^.UserToken);
+    Raise;
+  end;
+
+end;</code></pre></div></div><ol start=3><li>In case we want to use a &ldquo;current&rdquo; system token, we need to do some adjustments with it - we need to add the group with <em>SE_GROUP_LOGON_ID</em> flag to it:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gR2V0RnJvbVRva2VuKFRva2VuSGFuZGxlIDogVEhhbmRsZTsgSW5mbyA6IFRPS0VOX0lORk9STUFUSU9OX0NMQVNTKSA6IFBvaW50ZXI7CnZhcgogIFJlcyA6IERXT1JEOwpiZWdpbgogIFJlc3VsdCA6PSBuaWw7CiAgR2V0VG9rZW5JbmZvcm1hdGlvbihUb2tlbkhhbmRsZSwgaW5mbywgbmlsLCAwLCBSZXMpOwogIGlmIEdldExhc3RFcnJvciA9IEVSUk9SX0lOU1VGRklDSUVOVF9CVUZGRVIgdGhlbgogIGJlZ2luCiAgICAgUmVzdWx0IDo9IEdldE1lbW9yeShSZXMpOwogICAgIFdpbjMyQ2hlY2soR2V0VG9rZW5JbmZvcm1hdGlvbihUb2tlbkhhbmRsZSwgaW5mbywgUmVzdWx0LCBSZXMsIFJlcykpOwogIGVuZCBlbHNlCiAgICBSYWlzZUxhc3RPU0Vycm9yOwplbmQ7Cgpwcm9jZWR1cmUgQXNTeXN0ZW07CnZhcgogIFN5c3RlbVRva2VuIDogVEhhbmRsZTsKCiAgU3RhdGlzdGljcyA6IFBUb2tlblN0YXRpc3RpY3M7CiAgVXNlciA6IEp3YVdpbk5ULlBUb2tlblVzZXI7CiAgUHJpdmlsZWRnZXMgOiBKd2FXaW5kb3dzLlBUb2tlblByaXZpbGVnZXM7CiAgT3duZXIgOiBQVG9rZW5Pd25lcjsKICBHcm91cHMgOiBKd2FXaW5kb3dzLlBUb2tlbkdyb3VwczsKICBQcmltYXJ5R3JvdXAgOiBQVG9rZW5QcmltYXJ5R3JvdXA7CiAgRGVmYXVsdERhY2wgOiBQVG9rZW5EZWZhdWx0RGFjbDsKICBUb2tlblNyYyA6IFBUb2tlblNvdXJjZTsKCiAgVG9rZW5OZXdHcm91cHMgOiBKd2FXaW5kb3dzLlBUb2tlbkdyb3VwczsKICBJIDogSW50ZWdlcjsKYmVnaW4KICBXaW4zMkNoZWNrKE9wZW5Qcm9jZXNzVG9rZW4oR2V0Q3VycmVudFByb2Nlc3MsIFRPS0VOX0FMTF9BQ0NFU1MsIFN5c3RlbVRva2VuKSk7CgogIEVuYWJsZVRva2VuKFNFX0NSRUFURV9UT0tFTl9OQU1FKTsKCiAgU3RhdGlzdGljcyA6PSBuaWw7CiAgVXNlciA6PSBuaWw7CiAgUHJpdmlsZWRnZXMgOj0gbmlsOwogIE93bmVyIDo9IG5pbDsKICBQcmltYXJ5R3JvdXAgOj0gbmlsOwogIERlZmF1bHREYWNsIDo9IG5pbDsKICBUb2tlblNyYyA6PSBuaWw7CiAgR3JvdXBzIDo9IG5pbDsKICBUb2tlbk5ld0dyb3VwcyA6PSBuaWw7CgogIHRyeQogICAgU3RhdGlzdGljcyA6PSBHZXRGcm9tVG9rZW4oU3lzdGVtVG9rZW4sIFRva2VuU3RhdGlzdGljcyk7CiAgICBVc2VyIDo9IEdldEZyb21Ub2tlbihTeXN0ZW1Ub2tlbiwgVG9rZW5Vc2VyKTsKICAgIFByaXZpbGVkZ2VzIDo9IEdldEZyb21Ub2tlbihTeXN0ZW1Ub2tlbiwgVG9rZW5Qcml2aWxlZ2VzKTsKICAgIE93bmVyIDo9IEdldEZyb21Ub2tlbihTeXN0ZW1Ub2tlbiwgVG9rZW5Pd25lcik7CiAgICBQcmltYXJ5R3JvdXAgOj0gR2V0RnJvbVRva2VuKFN5c3RlbVRva2VuLCBUb2tlblByaW1hcnlHcm91cCk7CiAgICBEZWZhdWx0RGFjbCA6PSBHZXRGcm9tVG9rZW4oU3lzdGVtVG9rZW4sIFRva2VuRGVmYXVsdERhY2wpOwogICAgVG9rZW5TcmMgOj0gR2V0RnJvbVRva2VuKFN5c3RlbVRva2VuLCBUb2tlblNvdXJjZSk7CiAgICBHcm91cHMgOj0gR2V0RnJvbVRva2VuKFN5c3RlbVRva2VuLCBKd2FXaW5OVC5Ub2tlbkdyb3Vwcyk7CgogICAgVG9rZW5OZXdHcm91cHMgOj0gR2V0TWVtb3J5KFNpemVPZihUb2tlbk5ld0dyb3Vwc14pICsgU2l6ZU9mKFRva2VuTmV3R3JvdXBzXi5Hcm91cHMpICogR3JvdXBzXi5Hcm91cENvdW50KTsKCiAgICBUb2tlbk5ld0dyb3Vwc14uR3JvdXBDb3VudCA6PSBHcm91cHNeLkdyb3VwQ291bnQgKyAxOwoKICAgIGZvciBJIDo9IDAgdG8gR3JvdXBzXi5Hcm91cENvdW50IC0gMSBkbwogICAgICBUb2tlbk5ld0dyb3Vwc14uR3JvdXBzW0ldIDo9IEdyb3Vwc14uR3JvdXBzW0ldOwoKICAgIFRva2VuTmV3R3JvdXBzXi5Hcm91cHNbR3JvdXBzXi5Hcm91cENvdW50XS5TaWQgOj0gUG9pbnRlcihVc2VyXi5Vc2VyLlNpZCk7CiAgICBUb2tlbk5ld0dyb3Vwc14uR3JvdXBzW0dyb3Vwc14uR3JvdXBDb3VudF0uQXR0cmlidXRlcyA6PSBTRV9HUk9VUF9NQU5EQVRPUlkgb3IgU0VfR1JPVVBfRU5BQkxFRCBvciBTRV9HUk9VUF9FTkFCTEVEX0JZX0RFRkFVTFQgb3IgU0VfR1JPVVBfTE9HT05fSUQ7CgogICAgTnRDaGVjaygKICAgICAgTnRDcmVhdGVUb2tlbigKICAgICAgICBAUmVzdWx0Xi5Vc2VyVG9rZW4sCiAgICAgICAgVE9LRU5fQUxMX0FDQ0VTUywKICAgICAgICBuaWwsCiAgICAgICAgU3RhdGlzdGljc14uVG9rZW5UeXBlLAogICAgICAgIEBTdGF0aXN0aWNzXi5BdXRoZW50aWNhdGlvbklkLAogICAgICAgIEBTdGF0aXN0aWNzXi5FeHBpcmF0aW9uVGltZSwKICAgICAgICBVc2VyLAogICAgICAgIFRva2VuTmV3R3JvdXBzLAogICAgICAgIFByaXZpbGVkZ2VzLAogICAgICAgIE93bmVyLAogICAgICAgIFByaW1hcnlHcm91cCwKICAgICAgICBEZWZhdWx0RGFjbCwKICAgICAgICBUb2tlblNyYwogICAgICApKTsKCiAgZmluYWxseQogICAgaWYgKFN0YXRpc3RpY3MgPD4gbmlsKSB0aGVuCiAgICAgIEZyZWVNZW1vcnkoU3RhdGlzdGljcyk7CgogICAgaWYgKFVzZXIgPD4gbmlsKSB0aGVuCiAgICAgIEZyZWVNZW1vcnkoVXNlcik7CgogICAgaWYgKFByaXZpbGVkZ2VzIDw+IG5pbCkgdGhlbgogICAgICBGcmVlTWVtb3J5KFByaXZpbGVkZ2VzKTsKCiAgICBpZiAoT3duZXIgPD4gbmlsKSB0aGVuCiAgICAgIEZyZWVNZW1vcnkoT3duZXIpOwoKICAgIElmIChQcmltYXJ5R3JvdXAgPD4gbmlsKSB0aGVuCiAgICAgIEZyZWVNZW1vcnkoUHJpbWFyeUdyb3VwKTsKCiAgICBpZiAoRGVmYXVsdERhY2wgPD4gbmlsKSB0aGVuCiAgICAgIEZyZWVNZW1vcnkoRGVmYXVsdERhY2wpOwoKICAgIGlmIChUb2tlblNyYyA8PiBuaWwpIHRoZW4KICAgICAgRnJlZU1lbW9yeShUb2tlblNyYyk7CgogICAgaWYgKEdyb3VwcyA8PiBuaWwpIHRoZW4KICAgICAgRnJlZU1lbW9yeShHcm91cHMpOwoKICAgIGlmIChUb2tlbk5ld0dyb3VwcyA8PiBuaWwpIHRoZW4KICAgICAgRnJlZU1lbW9yeShUb2tlbk5ld0dyb3Vwcyk7CgogIGVuZDsKCiAgdHJ5CiAgICB0cnkKICAgICAgUHJvZmlsZSA6PSBBbGxvY0VtcHR5UHJvZmlsZShQcm9maWxlTGVuZ3RoKTsKICAgIGV4Y2VwdAogICAgICBDbG9zZUhhbmRsZShSZXN1bHReLlVzZXJUb2tlbik7CiAgICAgIFJhaXNlOwogICAgZW5kOwogIGZpbmFsbHkKICAgIENsb3NlSGFuZGxlKFN5c3RlbVRva2VuKTsKICBlbmQ7CmVuZDs=">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function GetFromToken(TokenHandle : THandle; Info : TOKEN_INFORMATION_CLASS) : Pointer;
+var
+  Res : DWORD;
+begin
+  Result := nil;
+  GetTokenInformation(TokenHandle, info, nil, 0, Res);
+  if GetLastError = ERROR_INSUFFICIENT_BUFFER then
+  begin
+     Result := GetMemory(Res);
+     Win32Check(GetTokenInformation(TokenHandle, info, Result, Res, Res));
+  end else
+    RaiseLastOSError;
+end;
+
+procedure AsSystem;
+var
+  SystemToken : THandle;
+
+  Statistics : PTokenStatistics;
+  User : JwaWinNT.PTokenUser;
+  Priviledges : JwaWindows.PTokenPrivileges;
+  Owner : PTokenOwner;
+  Groups : JwaWindows.PTokenGroups;
+  PrimaryGroup : PTokenPrimaryGroup;
+  DefaultDacl : PTokenDefaultDacl;
+  TokenSrc : PTokenSource;
+
+  TokenNewGroups : JwaWindows.PTokenGroups;
+  I : Integer;
+begin
+  Win32Check(OpenProcessToken(GetCurrentProcess, TOKEN_ALL_ACCESS, SystemToken));
+
+  EnableToken(SE_CREATE_TOKEN_NAME);
+
+  Statistics := nil;
+  User := nil;
+  Priviledges := nil;
+  Owner := nil;
+  PrimaryGroup := nil;
+  DefaultDacl := nil;
+  TokenSrc := nil;
+  Groups := nil;
+  TokenNewGroups := nil;
+
+  try
+    Statistics := GetFromToken(SystemToken, TokenStatistics);
+    User := GetFromToken(SystemToken, TokenUser);
+    Priviledges := GetFromToken(SystemToken, TokenPrivileges);
+    Owner := GetFromToken(SystemToken, TokenOwner);
+    PrimaryGroup := GetFromToken(SystemToken, TokenPrimaryGroup);
+    DefaultDacl := GetFromToken(SystemToken, TokenDefaultDacl);
+    TokenSrc := GetFromToken(SystemToken, TokenSource);
+    Groups := GetFromToken(SystemToken, JwaWinNT.TokenGroups);
+
+    TokenNewGroups := GetMemory(SizeOf(TokenNewGroups^) &#43; SizeOf(TokenNewGroups^.Groups) * Groups^.GroupCount);
+
+    TokenNewGroups^.GroupCount := Groups^.GroupCount &#43; 1;
+
+    for I := 0 to Groups^.GroupCount - 1 do
+      TokenNewGroups^.Groups[I] := Groups^.Groups[I];
+
+    TokenNewGroups^.Groups[Groups^.GroupCount].Sid := Pointer(User^.User.Sid);
+    TokenNewGroups^.Groups[Groups^.GroupCount].Attributes := SE_GROUP_MANDATORY or SE_GROUP_ENABLED or SE_GROUP_ENABLED_BY_DEFAULT or SE_GROUP_LOGON_ID;
+
+    NtCheck(
+      NtCreateToken(
+        @Result^.UserToken,
+        TOKEN_ALL_ACCESS,
+        nil,
+        Statistics^.TokenType,
+        @Statistics^.AuthenticationId,
+        @Statistics^.ExpirationTime,
+        User,
+        TokenNewGroups,
+        Priviledges,
+        Owner,
+        PrimaryGroup,
+        DefaultDacl,
+        TokenSrc
+      ));
+
+  finally
+    if (Statistics &lt;&gt; nil) then
+      FreeMemory(Statistics);
+
+    if (User &lt;&gt; nil) then
+      FreeMemory(User);
+
+    if (Priviledges &lt;&gt; nil) then
+      FreeMemory(Priviledges);
+
+    if (Owner &lt;&gt; nil) then
+      FreeMemory(Owner);
+
+    If (PrimaryGroup &lt;&gt; nil) then
+      FreeMemory(PrimaryGroup);
+
+    if (DefaultDacl &lt;&gt; nil) then
+      FreeMemory(DefaultDacl);
+
+    if (TokenSrc &lt;&gt; nil) then
+      FreeMemory(TokenSrc);
+
+    if (Groups &lt;&gt; nil) then
+      FreeMemory(Groups);
+
+    if (TokenNewGroups &lt;&gt; nil) then
+      FreeMemory(TokenNewGroups);
+
+  end;
+
+  try
+    try
+      Profile := AllocEmptyProfile(ProfileLength);
+    except
+      CloseHandle(Result^.UserToken);
+      Raise;
+    end;
+  finally
+    CloseHandle(SystemToken);
+  end;
+end;</code></pre></div></div><ol start=4><li>Now we can create a buffer:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gQ3JlYXRlQXV0b0xvZ29uQnVmZmVyMzIoCiAgY29uc3QgVXNlck5hbWUsIERvbWFpbiwgUGFzc3dvcmQgOiBXaWRlU3RyaW5nOwogIFdvcmtpbmdNb2RlIDogVFdvcmtpbmdNb2RlOwogIGNvbnN0IFByaW1hcnlTSUQgOiBKd2FXaW5kb3dzLlBTSUQ7ICBUb2tlbkdyb3VwcyA6IEpXYVdpbmRvd3MuUFRva2VuR3JvdXBzOwogIGNvbnN0IFByaXZzIDogSndhV2luZG93cy5QVG9rZW5Qcml2aWxlZ2VzCiAgKSA6IFBBdXRvTG9nb25CdWZmZXIzMjsKdmFyCiAgUHJvZmlsZSA6IFBNU1YxXzBfSU5URVJBQ1RJVkVfUFJPRklMRTsKICBQcm9maWxlTGVuZ3RoIDogRFdPUkQ7CgogIEN1cnJlbnRQb3NpdGlvbiA6IFBvaW50ZXI7CiAgYkRvRnJlZVRva2VuSGFuZGxlIDogQm9vbGVhbjsKCmJlZ2luCiAgUmVzdWx0IDo9IEdldE1lbW9yeShTaXplT2YoUmVzdWx0XikpOwogIHRyeQogICAgWmVyb01lbW9yeShSZXN1bHQsIFNpemVPZihSZXN1bHReKSk7CgogICAgY2FzZSBXb3JraW5nTW9kZSBvZgogICAgICB3bU5vcm1hbExvZ2luIDogTG9naW5Vc2VyOwogICAgICB3bUNyZWF0ZVRva2VuIDogQ3JlYXRlVG9rZW47CiAgICAgIHdtQXNTeXN0ZW0gICAgOiBBc1N5c3RlbTsKICAgIGVuZDsKCiAgLy8gIFByaW50VG9rZW5TSURzKFJlc3VsdF4uVXNlclRva2VuKTsKCiAgICBiRG9GcmVlVG9rZW5IYW5kbGUgOj0gVHJ1ZTsKICAgIHRyeQoKICAgICAgaWYgUHJvZmlsZV4uTWVzc2FnZVR5cGUgPD4gTXNWMV8wSW50ZXJhY3RpdmVQcm9maWxlIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBXcml0ZWxuKCdQcm9maWxlIG1lc3NhZ2UgdHlwZSBpcyBub3QgIE1zVjFfMEludGVyYWN0aXZlUHJvZmlsZSwgYnV0IGlzICcsIE9yZChQcm9maWxlXi5NZXNzYWdlVHlwZSkpOwogICAgICAgIEFib3J0OwogICAgICBlbmQ7CgogICAgICBSZXN1bHReLlNvdXJjZVByb2Nlc3NJZCA6PSBHZXRDdXJyZW50UHJvY2Vzc0lkOwoKICAgICAgQ3VycmVudFBvc2l0aW9uIDo9IEBSZXN1bHReLkR5bmFtaWNEYXRhWzBdOwoKICAgICAgaWYgSXMyMDAzIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBSZXN1bHReLkNyZWRlbnRpYWxzLldJTjJLX01PREUuVXNlck5hbWUgOj0gQ29weVN0cmluZyhVc2VyTmFtZSwgUmVzdWx0LCBDdXJyZW50UG9zaXRpb24pOwogICAgICAgIFJlc3VsdF4uQ3JlZGVudGlhbHMuV0lOMktfTU9ERS5Eb21haW4gOj0gQ29weVN0cmluZyhEb21haW4sIFJlc3VsdCwgQ3VycmVudFBvc2l0aW9uKTsKICAgICAgICBSZXN1bHReLkNyZWRlbnRpYWxzLldJTjJLX01PREUuRG9tYWluTGVuZ3RoIDo9IExlbmd0aChEb21haW4pOwogICAgICAgIFJlc3VsdF4uQ3JlZGVudGlhbHMuV0lOMktfTU9ERS5Qcm9maWxlTGVuZ3RoIDo9IFByb2ZpbGVMZW5ndGg7CiAgICAgIGVuZCBlbHNlCiAgICAgIGJlZ2luCiAgICAgICAgUmVzdWx0Xi5DcmVkZW50aWFscy5XSU5YUF9NT0RFLlVzZXJOYW1lIDo9IENvcHlTdHJpbmcoVXNlck5hbWUsIFJlc3VsdCwgQ3VycmVudFBvc2l0aW9uKTsKICAgICAgICBSZXN1bHReLkNyZWRlbnRpYWxzLldJTlhQX01PREUuRG9tYWluIDo9IENvcHlTdHJpbmcoRG9tYWluLCBSZXN1bHQsIEN1cnJlbnRQb3NpdGlvbik7CiAgICAgICAgUmVzdWx0Xi5DcmVkZW50aWFscy5XSU5YUF9NT0RFLlByb2ZpbGVMZW5ndGggOj0gUHJvZmlsZUxlbmd0aDsKICAgICAgZW5kOwoKICAgICAgUmVzdWx0Xi5NZXNzYWdlVHlwZSA6PSBPcmQoTXNWMV8wSW50ZXJhY3RpdmVQcm9maWxlKTsKCiAgICAgIFJlc3VsdF4uTG9nb25Db3VudCA6PSBQcm9maWxlXi5Mb2dvbkNvdW50OwogICAgICBSZXN1bHReLkJhZFBhc3N3b3JkQ291bnQgOj0gUHJvZmlsZV4uQmFkUGFzc3dvcmRDb3VudDsKCiAgICAgIFJlc3VsdF4uUHJvZmlsZUxvZ29uVGltZSA6PSBQcm9maWxlXi5Mb2dvblRpbWU7CiAgICAgIFJlc3VsdF4uTG9nb2ZmVGltZSA6PSBQcm9maWxlXi5Mb2dvZmZUaW1lOwogICAgICBSZXN1bHReLktpY2tPZmZUaW1lIDo9IFByb2ZpbGVeLktpY2tPZmZUaW1lOwogICAgICBSZXN1bHReLlBhc3N3b3JkTGFzdFNldCA6PSBQcm9maWxlXi5QYXNzd29yZExhc3RTZXQ7CiAgICAgIFJlc3VsdF4uUGFzc3dvcmRDYW5DaGFuZ2UgOj0gUHJvZmlsZV4uUGFzc3dvcmRDYW5DaGFuZ2U7CiAgICAgIFJlc3VsdF4uUGFzc3dvcmRNdXN0Q2hhbmdlIDo9IFByb2ZpbGVeLlBhc3N3b3JkTXVzdENoYW5nZTsKCiAgICAgIENvcHlVbmljb2RlU3RyaW5nKEBSZXN1bHReLkxvZ29uU2NyaXB0LCBAUHJvZmlsZV4uTG9nb25TY3JpcHQsIFJlc3VsdCwgQ3VycmVudFBvc2l0aW9uKTsKICAgICAgQ29weVVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uSG9tZURpcmVjdG9yeSwgQFByb2ZpbGVeLkhvbWVEaXJlY3RvcnksIFJlc3VsdCwgQ3VycmVudFBvc2l0aW9uKTsKICAgICAgQ29weVVuaWNvZGVTdHJpbmcoQFJlc3VsdF4uRnVsbE5hbWUsIEBQcm9maWxlXi5GdWxsTmFtZSwgUmVzdWx0LCBDdXJyZW50UG9zaXRpb24pOwogICAgICBDb3B5VW5pY29kZVN0cmluZyhAUmVzdWx0Xi5Qcm9maWxlUGF0aCwgQFByb2ZpbGVeLlByb2ZpbGVQYXRoLCBSZXN1bHQsIEN1cnJlbnRQb3NpdGlvbik7CiAgICAgIENvcHlVbmljb2RlU3RyaW5nKEBSZXN1bHReLkhvbWVEaXJlY3RvcnlEcml2ZSwgQFByb2ZpbGVeLkhvbWVEaXJlY3RvcnlEcml2ZSwgUmVzdWx0LCBDdXJyZW50UG9zaXRpb24pOwogICAgICBDb3B5VW5pY29kZVN0cmluZyhAUmVzdWx0Xi5Mb2dvblNlcnZlciwgQFByb2ZpbGVeLkxvZ29uU2VydmVyLCBSZXN1bHQsIEN1cnJlbnRQb3NpdGlvbik7CgogICAgICBSZXN1bHReLlVzZXJGbGFncyA6PSBQcm9maWxlXi5Vc2VyRmxhZ3M7CgogICAgICBSZXN1bHReLkxvZ29uVGltZSA6PSBHZXRDdXJyZW50VGltZSgpOwoKICAgICAgUmVzdWx0Xi5TbWFydENhcmRMb2dvbiA6PSBGYWxzZTsKCiAgICAgIFJlc3VsdF4uVG90YWxMZW5ndGguTGVuZ3RoIDo9IENhcmRpbmFsKEN1cnJlbnRQb3NpdGlvbikgLSBDYXJkaW5hbChSZXN1bHQpOwoKICAgICAgYkRvRnJlZVRva2VuSGFuZGxlIDo9IEZhbHNlOwogICAgZmluYWxseQogICAgICBpZiAoYkRvRnJlZVRva2VuSGFuZGxlKSB0aGVuCiAgICAgICAgQ2xvc2VIYW5kbGUoUmVzdWx0Xi5Vc2VyVG9rZW4pOwoKICAgICAgTHNhRnJlZVJldHVybkJ1ZmZlcihQcm9maWxlKTsKICAgIGVuZDsKICBleGNlcHQKICAgIEZyZWVNZW1vcnkoUmVzdWx0KTsKICAgIFJhaXNlOwogIGVuZDsKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function CreateAutoLogonBuffer32(
+  const UserName, Domain, Password : WideString;
+  WorkingMode : TWorkingMode;
+  const PrimarySID : JwaWindows.PSID;  TokenGroups : JWaWindows.PTokenGroups;
+  const Privs : JwaWindows.PTokenPrivileges
+  ) : PAutoLogonBuffer32;
+var
+  Profile : PMSV1_0_INTERACTIVE_PROFILE;
+  ProfileLength : DWORD;
+
+  CurrentPosition : Pointer;
+  bDoFreeTokenHandle : Boolean;
+
+begin
+  Result := GetMemory(SizeOf(Result^));
+  try
+    ZeroMemory(Result, SizeOf(Result^));
+
+    case WorkingMode of
+      wmNormalLogin : LoginUser;
+      wmCreateToken : CreateToken;
+      wmAsSystem    : AsSystem;
+    end;
+
+  //  PrintTokenSIDs(Result^.UserToken);
+
+    bDoFreeTokenHandle := True;
+    try
+
+      if Profile^.MessageType &lt;&gt; MsV1_0InteractiveProfile then
+      begin
+        Writeln(&#39;Profile message type is not  MsV1_0InteractiveProfile, but is &#39;, Ord(Profile^.MessageType));
+        Abort;
+      end;
+
+      Result^.SourceProcessId := GetCurrentProcessId;
+
+      CurrentPosition := @Result^.DynamicData[0];
+
+      if Is2003 then
+      begin
+        Result^.Credentials.WIN2K_MODE.UserName := CopyString(UserName, Result, CurrentPosition);
+        Result^.Credentials.WIN2K_MODE.Domain := CopyString(Domain, Result, CurrentPosition);
+        Result^.Credentials.WIN2K_MODE.DomainLength := Length(Domain);
+        Result^.Credentials.WIN2K_MODE.ProfileLength := ProfileLength;
+      end else
+      begin
+        Result^.Credentials.WINXP_MODE.UserName := CopyString(UserName, Result, CurrentPosition);
+        Result^.Credentials.WINXP_MODE.Domain := CopyString(Domain, Result, CurrentPosition);
+        Result^.Credentials.WINXP_MODE.ProfileLength := ProfileLength;
+      end;
+
+      Result^.MessageType := Ord(MsV1_0InteractiveProfile);
+
+      Result^.LogonCount := Profile^.LogonCount;
+      Result^.BadPasswordCount := Profile^.BadPasswordCount;
+
+      Result^.ProfileLogonTime := Profile^.LogonTime;
+      Result^.LogoffTime := Profile^.LogoffTime;
+      Result^.KickOffTime := Profile^.KickOffTime;
+      Result^.PasswordLastSet := Profile^.PasswordLastSet;
+      Result^.PasswordCanChange := Profile^.PasswordCanChange;
+      Result^.PasswordMustChange := Profile^.PasswordMustChange;
+
+      CopyUnicodeString(@Result^.LogonScript, @Profile^.LogonScript, Result, CurrentPosition);
+      CopyUnicodeString(@Result^.HomeDirectory, @Profile^.HomeDirectory, Result, CurrentPosition);
+      CopyUnicodeString(@Result^.FullName, @Profile^.FullName, Result, CurrentPosition);
+      CopyUnicodeString(@Result^.ProfilePath, @Profile^.ProfilePath, Result, CurrentPosition);
+      CopyUnicodeString(@Result^.HomeDirectoryDrive, @Profile^.HomeDirectoryDrive, Result, CurrentPosition);
+      CopyUnicodeString(@Result^.LogonServer, @Profile^.LogonServer, Result, CurrentPosition);
+
+      Result^.UserFlags := Profile^.UserFlags;
+
+      Result^.LogonTime := GetCurrentTime();
+
+      Result^.SmartCardLogon := False;
+
+      Result^.TotalLength.Length := Cardinal(CurrentPosition) - Cardinal(Result);
+
+      bDoFreeTokenHandle := False;
+    finally
+      if (bDoFreeTokenHandle) then
+        CloseHandle(Result^.UserToken);
+
+      LsaFreeReturnBuffer(Profile);
+    end;
+  except
+    FreeMemory(Result);
+    Raise;
+  end;
+end;</code></pre></div></div><ol start=5><li>In case of x64 systems we need to copy the whole structure into 64 bit structure:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,dHlwZQogIFBXU1RSXzY0ID0gcmVjb3JkCiAgICBCdWZmZXIgOiBQV1NUUjsKICAgIEFsaWdubWVudCA6IERXT1JEOwogIGVuZDsKCiAgVEhBTkRMRV82NCA9IHJlY29yZAogICAgSGFuZGxlIDogVEhhbmRsZTsKICAgIEFsaWdubWVudCA6IERXT1JEOwogIGVuZDsKCiAgUFVOSUNPREVfU1RSSU5HXzY0ID0gXlVOSUNPREVfU1RSSU5HXzY0OwogIFVOSUNPREVfU1RSSU5HXzY0ID0gcmVjb3JkCiAgICBMZW5ndGg6IFVTSE9SVDsKICAgIE1heGltdW1MZW5ndGg6IFVTSE9SVDsKICAgIEFsaWdubWVudCA6IERXT1JEOwogICAgQnVmZmVyOiBQV1NUUl82NDsKICBlbmQ7CgogIFVMT05HXzY0ID0gcmVjb3JkCiAgICBWYWx1ZSA6IERXT1JEOwogICAgQWxpZ25tZW50IDogRFdPUkQ7CiAgZW5kOwoKICBRVU9UQV9MSU1JVFNfNjQgPSByZWNvcmQKICAgIFBhZ2VkUG9vbExpbWl0OiBVTE9OR182NDsKICAgIE5vblBhZ2VkUG9vbExpbWl0OiBVTE9OR182NDsKICAgIE1pbmltdW1Xb3JraW5nU2V0U2l6ZTogVUxPTkdfNjQ7CiAgICBNYXhpbXVtV29ya2luZ1NldFNpemU6IFVMT05HXzY0OwogICAgUGFnZWZpbGVMaW1pdDogVUxPTkdfNjQ7CiAgICBUaW1lTGltaXQ6IExBUkdFX0lOVEVHRVI7CiAgZW5kOwoKICBQQXV0b0xvZ29uQnVmZmVyNjQgPSBeVEF1dG9Mb2dvbkJ1ZmZlcjY0OwogIFRBdXRvTG9nb25CdWZmZXI2NCA9IHJlY29yZAogICAgVG90YWxMZW5ndGggICAgIDogVExlbmd0aEJ1ZmZlcjsKICAgIFNvdXJjZVByb2Nlc3NJZCA6IERXT1JEOwogICAgVXNlclRva2VuICAgICAgIDogVEhBTkRMRV82NDsKICAgIExvZ29uSWQgICAgICAgICA6IExVSUQ7CgogICAgUXVvdGFzICAgICAgICAgIDogUVVPVEFfTElNSVRTXzY0OwoKICAgIENyZWRlbnRpYWxzIDogcmVjb3JkCiAgICAgIGNhc2UgQm9vbGVhbiBvZgogICAgICAgIFRydWUgOiAoV0lOWFBfTU9ERSA6IHJlY29yZAogICAgICAgICAgICAgICAgIFVzZXJOYW1lICAgICAgICA6IFBXU1RSXzY0OwogICAgICAgICAgICAgICAgIERvbWFpbiAgICAgICAgICA6IFBXU1RSXzY0OwoKICAgICAgICAgICAgICAgICBQcm9maWxlTGVuZ3RoICAgOiBVTE9ORzsKICAgICAgICAgICAgICAgICBVbmtub3duMSAgICAgICAgOiBEV09SRDsKICAgICAgICAgICAgICAgZW5kKTsKICAgICAgICBGYWxzZSA6IChXSU4yS19NT0RFIDogcmVjb3JkCiAgICAgICAgICAgICAgICAgVXNlck5hbWUgICAgICAgIDogUFdTVFJfNjQ7CiAgICAgICAgICAgICAgICAgRG9tYWluTGVuZ3RoICAgIDogVUxPTkdfNjQ7CiAgICAgICAgICAgICAgICAgRG9tYWluICAgICAgICAgIDogUFdTVFJfNjQ7CiAgICAgICAgICAgICAgICAgUHJvZmlsZUxlbmd0aCAgIDogVUxPTkdfNjQ7CiAgICAgICAgICAgICAgZW5kKTsKICAgIGVuZDsKCiAgICBNZXNzYWdlVHlwZSAgICAgOiBEV09SRDsKICAgIExvZ29uQ291bnQgICAgICA6IFVTSE9SVDsKICAgIEJhZFBhc3N3b3JkQ291bnQ6IFVTSE9SVDsKCiAgICBQcm9maWxlTG9nb25UaW1lOiBMQVJHRV9JTlRFR0VSOwogICAgTG9nb2ZmVGltZSAgICAgIDogTEFSR0VfSU5URUdFUjsKICAgIEtpY2tPZmZUaW1lICAgICA6IExBUkdFX0lOVEVHRVI7CiAgICBQYXNzd29yZExhc3RTZXQgOiBMQVJHRV9JTlRFR0VSOwogICAgUGFzc3dvcmRDYW5DaGFuZ2U6IExBUkdFX0lOVEVHRVI7CiAgICBQYXNzd29yZE11c3RDaGFuZ2U6IExBUkdFX0lOVEVHRVI7CgogICAgTG9nb25TY3JpcHQgICAgIDogVU5JQ09ERV9TVFJJTkdfNjQ7CiAgICBIb21lRGlyZWN0b3J5ICAgOiBVTklDT0RFX1NUUklOR182NDsKICAgIEZ1bGxOYW1lICAgICAgICA6IFVOSUNPREVfU1RSSU5HXzY0OwogICAgUHJvZmlsZVBhdGggICAgIDogVU5JQ09ERV9TVFJJTkdfNjQ7CiAgICBIb21lRGlyZWN0b3J5RHJpdmUgOiBVTklDT0RFX1NUUklOR182NDsKICAgIExvZ29uU2VydmVyICAgICA6IFVOSUNPREVfU1RSSU5HXzY0OwoKICAgIFVzZXJGbGFncyAgICAgICA6IFVMT05HXzY0OwogICAgTG9nb25UaW1lICAgICAgIDogTEFSR0VfSU5URUdFUjsKICAgIFNtYXJ0Q2FyZExvZ29uICA6IEJPT0w7CiAgICBQcml2YXRlRGF0YUxlbiAgOiBVTE9ORzsKICAgIFByaXZhdGVEYXRhICAgICA6IFBvaW50ZXI7CiAgICBVbmtub3duMiAgICAgICAgOiBEV09SRDsKCiAgICBEeW5hbWljRGF0YSAgICAgOiBhcnJheSBbMC4uNzk4MV0gb2YgQllURTsKICBlbmQ7CgpmdW5jdGlvbiBDcmVhdGVBdXRvTG9nb25CdWZmZXI2NChjb25zdCBTb3VyY2UgOiBQQXV0b0xvZ29uQnVmZmVyMzIpIDogUEF1dG9Mb2dvbkJ1ZmZlcjY0Owp2YXIKICBEeW5hbWljQnVmZmVyRGVsdGEgOiBJbnRlZ2VyOwpiZWdpbgogIFJlc3VsdCA6PSBHZXRNZW1vcnkoU2l6ZU9mKFJlc3VsdF4pKTsKCiAgdHJ5CiAgICBaZXJvTWVtb3J5KFJlc3VsdCwgU2l6ZU9mKFJlc3VsdF4pKTsKCiAgICBEeW5hbWljQnVmZmVyRGVsdGEgOj0gKChDYXJkaW5hbChAUmVzdWx0Xi5EeW5hbWljRGF0YSkgLSBDYXJkaW5hbChSZXN1bHQpIC0gKENhcmRpbmFsKEBTb3VyY2VeLkR5bmFtaWNEYXRhKSAtIENhcmRpbmFsKFNvdXJjZSkpKSk7CiAgICBSZXN1bHReLlRvdGFsTGVuZ3RoLkxlbmd0aCA6PSBTb3VyY2VeLlRvdGFsTGVuZ3RoLkxlbmd0aCArIENhcmRpbmFsKER5bmFtaWNCdWZmZXJEZWx0YSk7CgogICAgUmVzdWx0Xi5Tb3VyY2VQcm9jZXNzSWQgOj0gU291cmNlXi5Tb3VyY2VQcm9jZXNzSWQ7CgogICAgUmVzdWx0Xi5Vc2VyVG9rZW4uSGFuZGxlIDo9IFNvdXJjZV4uVXNlclRva2VuOwogICAgUmVzdWx0Xi5Mb2dvbklkIDo9IFNvdXJjZV4uTG9nb25JZDsKCiAgICBSZXN1bHReLlF1b3Rhcy5QYWdlZFBvb2xMaW1pdC5WYWx1ZSAgICAgICAgIDo9IFNvdXJjZV4uUXVvdGFzLlBhZ2VkUG9vbExpbWl0OwogICAgUmVzdWx0Xi5RdW90YXMuTm9uUGFnZWRQb29sTGltaXQuVmFsdWUgICAgICA6PSBTb3VyY2VeLlF1b3Rhcy5Ob25QYWdlZFBvb2xMaW1pdDsKICAgIFJlc3VsdF4uUXVvdGFzLk1pbmltdW1Xb3JraW5nU2V0U2l6ZS5WYWx1ZSAgOj0gU291cmNlXi5RdW90YXMuTWluaW11bVdvcmtpbmdTZXRTaXplOwogICAgUmVzdWx0Xi5RdW90YXMuTWF4aW11bVdvcmtpbmdTZXRTaXplLlZhbHVlICA6PSBTb3VyY2VeLlF1b3Rhcy5NYXhpbXVtV29ya2luZ1NldFNpemU7CiAgICBSZXN1bHReLlF1b3Rhcy5QYWdlZmlsZUxpbWl0LlZhbHVlICAgICAgICAgIDo9IFNvdXJjZV4uUXVvdGFzLlBhZ2VmaWxlTGltaXQ7CiAgICBSZXN1bHReLlF1b3Rhcy5UaW1lTGltaXQgICAgICAgICAgICAgICAgICAgIDo9IFNvdXJjZV4uUXVvdGFzLlRpbWVMaW1pdDsKCiAgICAvLyBJbiB0aGVvcnkgd2UgbmVlZCB0byBkbyBhIGNoZWNrIGlmIGl0J3Mgd2luZG93cyAyMDAzL3hwIHg2NCwgYnV0IGFjdHVhbGx5IHRoZXJlIGlzIG5vIHB1YmxpYyB2ZXJzaW9uIG9mIFhQICg1LjEpIHg2NCwgc28KICAgIC8vIHdlIGNhbiBqdXN0IHNraXAgaXQuCiAgICBSZXN1bHReLkNyZWRlbnRpYWxzLldJTjJLX01PREUuVXNlck5hbWUuQnVmZmVyICAgIDo9IEFkanVzdEJ1ZmZlcihTb3VyY2VeLkNyZWRlbnRpYWxzLldJTjJLX01PREUuVXNlck5hbWUsIER5bmFtaWNCdWZmZXJEZWx0YSk7CiAgICBSZXN1bHReLkNyZWRlbnRpYWxzLldJTjJLX01PREUuRG9tYWluTGVuZ3RoLlZhbHVlIDo9IFNvdXJjZV4uQ3JlZGVudGlhbHMuV0lOMktfTU9ERS5Eb21haW5MZW5ndGg7CiAgICBSZXN1bHReLkNyZWRlbnRpYWxzLldJTjJLX01PREUuRG9tYWluLkJ1ZmZlciAgICAgIDo9IEFkanVzdEJ1ZmZlcihTb3VyY2VeLkNyZWRlbnRpYWxzLldJTjJLX01PREUuRG9tYWluLCBEeW5hbWljQnVmZmVyRGVsdGEpOwogICAgUmVzdWx0Xi5DcmVkZW50aWFscy5XSU4yS19NT0RFLlByb2ZpbGVMZW5ndGguVmFsdWU6PSBTb3VyY2VeLkNyZWRlbnRpYWxzLldJTjJLX01PREUuUHJvZmlsZUxlbmd0aDsKCiAgICBSZXN1bHReLk1lc3NhZ2VUeXBlICAgICAgIDo9IFNvdXJjZV4uTWVzc2FnZVR5cGU7CiAgICBSZXN1bHReLkxvZ29uQ291bnQgICAgICAgIDo9IFNvdXJjZV4uTG9nb25Db3VudDsKICAgIFJlc3VsdF4uQmFkUGFzc3dvcmRDb3VudCAgOj0gU291cmNlXi5CYWRQYXNzd29yZENvdW50OwoKICAgIFJlc3VsdF4uUHJvZmlsZUxvZ29uVGltZSAgIDo9IFNvdXJjZV4uUHJvZmlsZUxvZ29uVGltZTsKICAgIFJlc3VsdF4uTG9nb2ZmVGltZSAgICAgICAgIDo9IFNvdXJjZV4uTG9nb2ZmVGltZTsKICAgIFJlc3VsdF4uS2lja09mZlRpbWUgICAgICAgIDo9IFNvdXJjZV4uS2lja09mZlRpbWU7CiAgICBSZXN1bHReLlBhc3N3b3JkTGFzdFNldCAgICA6PSBTb3VyY2VeLlBhc3N3b3JkTGFzdFNldDsKICAgIFJlc3VsdF4uUGFzc3dvcmRDYW5DaGFuZ2UgIDo9IFNvdXJjZV4uUGFzc3dvcmRDYW5DaGFuZ2U7CiAgICBSZXN1bHReLlBhc3N3b3JkTXVzdENoYW5nZSA6PSBTb3VyY2VeLlBhc3N3b3JkTXVzdENoYW5nZTsKCiAgICBSZXN1bHReLkxvZ29uU2NyaXB0ICAgICAgIDo9IEFkanVzdFVuaWNvZGVTdHJpbmcoU291cmNlXi5Mb2dvblNjcmlwdCwgRHluYW1pY0J1ZmZlckRlbHRhKTsKICAgIFJlc3VsdF4uSG9tZURpcmVjdG9yeSAgICAgOj0gQWRqdXN0VW5pY29kZVN0cmluZyhTb3VyY2VeLkhvbWVEaXJlY3RvcnksIER5bmFtaWNCdWZmZXJEZWx0YSk7CiAgICBSZXN1bHReLkZ1bGxOYW1lICAgICAgICAgIDo9IEFkanVzdFVuaWNvZGVTdHJpbmcoU291cmNlXi5GdWxsTmFtZSwgRHluYW1pY0J1ZmZlckRlbHRhKTsKICAgIFJlc3VsdF4uUHJvZmlsZVBhdGggICAgICAgOj0gQWRqdXN0VW5pY29kZVN0cmluZyhTb3VyY2VeLlByb2ZpbGVQYXRoLCBEeW5hbWljQnVmZmVyRGVsdGEpOwogICAgUmVzdWx0Xi5Ib21lRGlyZWN0b3J5RHJpdmU6PSBBZGp1c3RVbmljb2RlU3RyaW5nKFNvdXJjZV4uSG9tZURpcmVjdG9yeURyaXZlLCBEeW5hbWljQnVmZmVyRGVsdGEpOwogICAgUmVzdWx0Xi5Mb2dvblNlcnZlciAgICAgICA6PSBBZGp1c3RVbmljb2RlU3RyaW5nKFNvdXJjZV4uTG9nb25TZXJ2ZXIsIER5bmFtaWNCdWZmZXJEZWx0YSk7CgogICAgUmVzdWx0Xi5Vc2VyRmxhZ3MuVmFsdWUgICA6PSBTb3VyY2VeLlVzZXJGbGFnczsKICAgIFJlc3VsdF4uTG9nb25UaW1lICAgICAgICAgOj0gU291cmNlXi5Mb2dvblRpbWU7CiAgICBSZXN1bHReLlNtYXJ0Q2FyZExvZ29uICAgIDo9IFNvdXJjZV4uU21hcnRDYXJkTG9nb247CiAgICBSZXN1bHReLlByaXZhdGVEYXRhTGVuICAgIDo9IFNvdXJjZV4uUHJpdmF0ZURhdGFMZW47CiAgICBSZXN1bHReLlByaXZhdGVEYXRhICAgICAgIDo9IEFkanVzdEJ1ZmZlcihTb3VyY2VeLlByaXZhdGVEYXRhLCBEeW5hbWljQnVmZmVyRGVsdGEpOwogICAgUmVzdWx0Xi5Vbmtub3duMiAgICAgICAgICA6PSBTb3VyY2VeLlVua25vd24yOwoKICAgIENvcHlNZW1vcnkoQFJlc3VsdF4uRHluYW1pY0RhdGEsIEBTb3VyY2VeLkR5bmFtaWNEYXRhLCBTb3VyY2VeLlRvdGFsTGVuZ3RoLkxlbmd0aCAtIChTaXplT2YoU291cmNlXikgIC0gU2l6ZU9mKFNvdXJjZV4uRHluYW1pY0RhdGEpKSk7CiAgZXhjZXB0CiAgICBGcmVlTWVtb3J5KFJlc3VsdCk7CiAgICBSYWlzZTsKICBlbmQ7CmVuZDsKCmZ1bmN0aW9uIENyZWF0ZUF1dG9Mb2dvbkJ1ZmZlcigKICBjb25zdCBVc2VyTmFtZSwgRG9tYWluLCBQYXNzd29yZCA6IFdpZGVTdHJpbmc7CiAgV29ya2luZ01vZGUgOiBUV29ya2luZ01vZGU7CiAgY29uc3QgUHJpbWFyeVNJRCA6IEp3YVdpbmRvd3MuUFNJRDsgIFRva2VuR3JvdXBzIDogSldhV2luZG93cy5QVG9rZW5Hcm91cHM7CiAgY29uc3QgUHJpdnMgOiBKd2FXaW5kb3dzLlBUb2tlblByaXZpbGVnZXMKICkgOiBQTGVuZ3RoQnVmZmVyOwpiZWdpbgogIFJlc3VsdCA6PSBAQ3JlYXRlQXV0b0xvZ29uQnVmZmVyMzIoVXNlck5hbWUsIERvbWFpbiwgUGFzc3dvcmQsIFdvcmtpbmdNb2RlLCBQcmltYXJ5U0lELCBUb2tlbkdyb3VwcywgUHJpdnMpXi5Ub3RhbExlbmd0aDsKICBpZiAoSXNXb3c2NCkgdGhlbgogIHRyeQogICAgUmVzdWx0IDo9IEBDcmVhdGVBdXRvTG9nb25CdWZmZXI2NChQQXV0b0xvZ29uQnVmZmVyMzIoUmVzdWx0KSleLlRvdGFsTGVuZ3RoOwogIGV4Y2VwdAogICAgRnJlZU1lbW9yeShSZXN1bHQpOwogICAgUmFpc2U7CiAgZW5kOwplbmQ7Cgpwcm9jZWR1cmUgRnJlZUF1dG9Mb2dvbkJ1ZmZlcih2YXIgQnVmZmVyIDogUExlbmd0aEJ1ZmZlcik7CmJlZ2luCiAgaWYgKEJ1ZmZlciA8PiBuaWwpIHRoZW4KICBiZWdpbgogICAgaWYgKElzV293NjQpIHRoZW4KICAgICAgQ2xvc2VIYW5kbGUoUEF1dG9Mb2dvbkJ1ZmZlcjY0KEJ1ZmZlcileLlVzZXJUb2tlbi5IYW5kbGUpCiAgICBlbHNlCiAgICAgIENsb3NlSGFuZGxlKFBBdXRvTG9nb25CdWZmZXIzMihCdWZmZXIpXi5Vc2VyVG9rZW4pOwoKICAgIEZyZWVNZW1vcnkoQnVmZmVyKTsKICAgIEJ1ZmZlciA6PSBuaWw7CiAgZW5kOwplbmQ7">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>type
+  PWSTR_64 = record
+    Buffer : PWSTR;
+    Alignment : DWORD;
+  end;
+
+  THANDLE_64 = record
+    Handle : THandle;
+    Alignment : DWORD;
+  end;
+
+  PUNICODE_STRING_64 = ^UNICODE_STRING_64;
+  UNICODE_STRING_64 = record
+    Length: USHORT;
+    MaximumLength: USHORT;
+    Alignment : DWORD;
+    Buffer: PWSTR_64;
+  end;
+
+  ULONG_64 = record
+    Value : DWORD;
+    Alignment : DWORD;
+  end;
+
+  QUOTA_LIMITS_64 = record
+    PagedPoolLimit: ULONG_64;
+    NonPagedPoolLimit: ULONG_64;
+    MinimumWorkingSetSize: ULONG_64;
+    MaximumWorkingSetSize: ULONG_64;
+    PagefileLimit: ULONG_64;
+    TimeLimit: LARGE_INTEGER;
+  end;
+
+  PAutoLogonBuffer64 = ^TAutoLogonBuffer64;
+  TAutoLogonBuffer64 = record
+    TotalLength     : TLengthBuffer;
+    SourceProcessId : DWORD;
+    UserToken       : THANDLE_64;
+    LogonId         : LUID;
+
+    Quotas          : QUOTA_LIMITS_64;
+
+    Credentials : record
+      case Boolean of
+        True : (WINXP_MODE : record
+                 UserName        : PWSTR_64;
+                 Domain          : PWSTR_64;
+
+                 ProfileLength   : ULONG;
+                 Unknown1        : DWORD;
+               end);
+        False : (WIN2K_MODE : record
+                 UserName        : PWSTR_64;
+                 DomainLength    : ULONG_64;
+                 Domain          : PWSTR_64;
+                 ProfileLength   : ULONG_64;
+              end);
+    end;
+
+    MessageType     : DWORD;
+    LogonCount      : USHORT;
+    BadPasswordCount: USHORT;
+
+    ProfileLogonTime: LARGE_INTEGER;
+    LogoffTime      : LARGE_INTEGER;
+    KickOffTime     : LARGE_INTEGER;
+    PasswordLastSet : LARGE_INTEGER;
+    PasswordCanChange: LARGE_INTEGER;
+    PasswordMustChange: LARGE_INTEGER;
+
+    LogonScript     : UNICODE_STRING_64;
+    HomeDirectory   : UNICODE_STRING_64;
+    FullName        : UNICODE_STRING_64;
+    ProfilePath     : UNICODE_STRING_64;
+    HomeDirectoryDrive : UNICODE_STRING_64;
+    LogonServer     : UNICODE_STRING_64;
+
+    UserFlags       : ULONG_64;
+    LogonTime       : LARGE_INTEGER;
+    SmartCardLogon  : BOOL;
+    PrivateDataLen  : ULONG;
+    PrivateData     : Pointer;
+    Unknown2        : DWORD;
+
+    DynamicData     : array [0..7981] of BYTE;
+  end;
+
+function CreateAutoLogonBuffer64(const Source : PAutoLogonBuffer32) : PAutoLogonBuffer64;
+var
+  DynamicBufferDelta : Integer;
+begin
+  Result := GetMemory(SizeOf(Result^));
+
+  try
+    ZeroMemory(Result, SizeOf(Result^));
+
+    DynamicBufferDelta := ((Cardinal(@Result^.DynamicData) - Cardinal(Result) - (Cardinal(@Source^.DynamicData) - Cardinal(Source))));
+    Result^.TotalLength.Length := Source^.TotalLength.Length &#43; Cardinal(DynamicBufferDelta);
+
+    Result^.SourceProcessId := Source^.SourceProcessId;
+
+    Result^.UserToken.Handle := Source^.UserToken;
+    Result^.LogonId := Source^.LogonId;
+
+    Result^.Quotas.PagedPoolLimit.Value         := Source^.Quotas.PagedPoolLimit;
+    Result^.Quotas.NonPagedPoolLimit.Value      := Source^.Quotas.NonPagedPoolLimit;
+    Result^.Quotas.MinimumWorkingSetSize.Value  := Source^.Quotas.MinimumWorkingSetSize;
+    Result^.Quotas.MaximumWorkingSetSize.Value  := Source^.Quotas.MaximumWorkingSetSize;
+    Result^.Quotas.PagefileLimit.Value          := Source^.Quotas.PagefileLimit;
+    Result^.Quotas.TimeLimit                    := Source^.Quotas.TimeLimit;
+
+    // In theory we need to do a check if it&#39;s windows 2003/xp x64, but actually there is no public version of XP (5.1) x64, so
+    // we can just skip it.
+    Result^.Credentials.WIN2K_MODE.UserName.Buffer    := AdjustBuffer(Source^.Credentials.WIN2K_MODE.UserName, DynamicBufferDelta);
+    Result^.Credentials.WIN2K_MODE.DomainLength.Value := Source^.Credentials.WIN2K_MODE.DomainLength;
+    Result^.Credentials.WIN2K_MODE.Domain.Buffer      := AdjustBuffer(Source^.Credentials.WIN2K_MODE.Domain, DynamicBufferDelta);
+    Result^.Credentials.WIN2K_MODE.ProfileLength.Value:= Source^.Credentials.WIN2K_MODE.ProfileLength;
+
+    Result^.MessageType       := Source^.MessageType;
+    Result^.LogonCount        := Source^.LogonCount;
+    Result^.BadPasswordCount  := Source^.BadPasswordCount;
+
+    Result^.ProfileLogonTime   := Source^.ProfileLogonTime;
+    Result^.LogoffTime         := Source^.LogoffTime;
+    Result^.KickOffTime        := Source^.KickOffTime;
+    Result^.PasswordLastSet    := Source^.PasswordLastSet;
+    Result^.PasswordCanChange  := Source^.PasswordCanChange;
+    Result^.PasswordMustChange := Source^.PasswordMustChange;
+
+    Result^.LogonScript       := AdjustUnicodeString(Source^.LogonScript, DynamicBufferDelta);
+    Result^.HomeDirectory     := AdjustUnicodeString(Source^.HomeDirectory, DynamicBufferDelta);
+    Result^.FullName          := AdjustUnicodeString(Source^.FullName, DynamicBufferDelta);
+    Result^.ProfilePath       := AdjustUnicodeString(Source^.ProfilePath, DynamicBufferDelta);
+    Result^.HomeDirectoryDrive:= AdjustUnicodeString(Source^.HomeDirectoryDrive, DynamicBufferDelta);
+    Result^.LogonServer       := AdjustUnicodeString(Source^.LogonServer, DynamicBufferDelta);
+
+    Result^.UserFlags.Value   := Source^.UserFlags;
+    Result^.LogonTime         := Source^.LogonTime;
+    Result^.SmartCardLogon    := Source^.SmartCardLogon;
+    Result^.PrivateDataLen    := Source^.PrivateDataLen;
+    Result^.PrivateData       := AdjustBuffer(Source^.PrivateData, DynamicBufferDelta);
+    Result^.Unknown2          := Source^.Unknown2;
+
+    CopyMemory(@Result^.DynamicData, @Source^.DynamicData, Source^.TotalLength.Length - (SizeOf(Source^)  - SizeOf(Source^.DynamicData)));
+  except
+    FreeMemory(Result);
+    Raise;
+  end;
+end;
+
+function CreateAutoLogonBuffer(
+  const UserName, Domain, Password : WideString;
+  WorkingMode : TWorkingMode;
+  const PrimarySID : JwaWindows.PSID;  TokenGroups : JWaWindows.PTokenGroups;
+  const Privs : JwaWindows.PTokenPrivileges
+ ) : PLengthBuffer;
+begin
+  Result := @CreateAutoLogonBuffer32(UserName, Domain, Password, WorkingMode, PrimarySID, TokenGroups, Privs)^.TotalLength;
+  if (IsWow64) then
+  try
+    Result := @CreateAutoLogonBuffer64(PAutoLogonBuffer32(Result))^.TotalLength;
+  except
+    FreeMemory(Result);
+    Raise;
+  end;
+end;
+
+procedure FreeAutoLogonBuffer(var Buffer : PLengthBuffer);
+begin
+  if (Buffer &lt;&gt; nil) then
+  begin
+    if (IsWow64) then
+      CloseHandle(PAutoLogonBuffer64(Buffer)^.UserToken.Handle)
+    else
+      CloseHandle(PAutoLogonBuffer32(Buffer)^.UserToken);
+
+    FreeMemory(Buffer);
+    Buffer := nil;
+  end;
+end;</code></pre></div></div><ol start=6><li>Now we need to open the pipe, send the <em>WLX_SAS_TYPE_AUTHENTICATED</em> SAS to <em>Winlogon</em> and write the data to the pipe:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gU2VuZENyZWRlbnRpYWxUaHJlYWRQcm9jKFBhcmFtZXRlcjogUExlbmd0aEJ1ZmZlcik6IEludGVnZXI7CnZhcgogIFBpcGVIYW5kbGUgOiBUSGFuZGxlOwpiZWdpbgogIFJlc3VsdCA6PSAwOwoKICB0cnkKICAgIFBpcGVIYW5kbGUgOj0gT3BlblBpcGU7CiAgICB0cnkKICAgICAgRG9Mb2dvbk5vdGlmeU1lc3NhZ2UoV1BBUkFNX0FVVEhFTlRJQ0FURUQsIDApOwogICAgICBQcm9jZXNzUGlwZShQaXBlSGFuZGxlLCBQYXJhbWV0ZXIpOwogICAgZmluYWxseQogICAgICBDbG9zZUhhbmRsZShQaXBlSGFuZGxlKTsKICAgIGVuZDsKICBleGNlcHQKICAgIG9uIEUgOiBFT1NFcnJvciBkbwogICAgICBSZXN1bHQgOj0gRU9zRXJyb3IoRSkuRXJyb3JDb2RlOwogICAgb24gRSA6IEV4Y2VwdGlvbiBkbwogICAgICBSZXN1bHQgOj0gRVJST1JfR0VOX0ZBSUxVUkU7CiAgZW5kOwoKICBFbmRUaHJlYWQoUmVzdWx0KTsKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function SendCredentialThreadProc(Parameter: PLengthBuffer): Integer;
+var
+  PipeHandle : THandle;
+begin
+  Result := 0;
+
+  try
+    PipeHandle := OpenPipe;
+    try
+      DoLogonNotifyMessage(WPARAM_AUTHENTICATED, 0);
+      ProcessPipe(PipeHandle, Parameter);
+    finally
+      CloseHandle(PipeHandle);
+    end;
+  except
+    on E : EOSError do
+      Result := EOsError(E).ErrorCode;
+    on E : Exception do
+      Result := ERROR_GEN_FAILURE;
+  end;
+
+  EndThread(Result);
+end;</code></pre></div></div><ol start=7><li>So, the main procedure will look like this:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,cHJvY2VkdXJlIERvTG9nb24oY29uc3QgVXNlck5hbWUsIERvbWFpbiwgUGFzc3dvcmQgOiBXaWRlU3RyaW5nOwogICAgV29ya2luZ01vZGUgOiBUV29ya2luZ01vZGU7CiAgICBjb25zdCBQcmltYXJ5U0lEU3RyIDogU3RyaW5nOyBjb25zdCBBZGRpdGlvbmFsU0lEUyA6IFRTdHJpbmdEeW5BcnJheTsKICAgIGNvbnN0IFByaXZpbGVkZ2VzTGlzdCA6IFRTdHJpbmdEeW5BcnJheTsKICAgIFRpbWVvdXQgOiBDYXJkaW5hbCk7CnZhcgogIEJ1ZmZlciA6IFBMZW5ndGhCdWZmZXI7CiAgVG9rZW5Hcm91cHMgOiBKV0FXaW5kb3dzLlBUb2tlbkdyb3VwczsKICBQcmltYXJ5U0lEIDogSldhV2luZG93cy5QU0lEOwogIFRocmVhZEhhbmRsZSA6IFRIYW5kbGU7CiAgTG9nb25UaHJlYWRIYW5kbGUgOiBUSGFuZGxlOwogIEZVU0NoZWNrZXIgOiBUUmVnaXN0cnlDaGVja2VyOwogIFByaXZpbGVkZ2VzIDogSndhV2luZG93cy5QVG9rZW5Qcml2aWxlZ2VzOwpiZWdpbgogIENoZWNrTG9nZ2VkT25Vc2VyOwogIENoZWNrU2NyZWVuU2F2ZXI7CiAgVHJ5VG9Db25uZWN0VG9QaXBlOwoKICBGVVNDaGVja2VyIDo9IFRSZWdpc3RyeUNoZWNrZXIuQ3JlYXRlKEZVU0tleSwgRmFsc2UpOwogIHRyeQogICAgUHJpbWFyeVNJRCA6PSBDcmVhdGVTSUQoUHJpbWFyeVNJRFN0cik7CiAgICB0cnkKICAgICAgVG9rZW5Hcm91cHMgOj0gR2V0QWRkaXRpb25hbFNJRFMoQWRkaXRpb25hbFNJRFMpOwogICAgICB0cnkKICAgICAgICBQcml2aWxlZGdlcyA6PSBDcmVhdGVQcml2aWxlZGdlcyhQcml2aWxlZGdlc0xpc3QpOwogICAgICAgIHRyeQogICAgICAgICAgQnVmZmVyIDo9IENyZWF0ZUF1dG9Mb2dvbkJ1ZmZlcihVc2VyTmFtZSwgRG9tYWluLCBQYXNzd29yZCwgV29ya2luZ01vZGUsIFByaW1hcnlTSUQsIFRva2VuR3JvdXBzLCBQcml2aWxlZGdlcyk7CiAgICAgICAgICB0cnkKICAgICAgICAgICAgTG9nb25UaHJlYWRIYW5kbGUgOj0gV2FpdEZvckxvZ29uQXN5bmM7CiAgICAgICAgICAgIHRyeQogICAgICAgICAgICAgIFRocmVhZEhhbmRsZSA6PSBTZW5kQ3JlZGVudGlhbHNBc3luYyhCdWZmZXIpOwogICAgICAgICAgICAgIHRyeQogICAgICAgICAgICAgICAgV2FpdEZvclRocmVhZHMoVGhyZWFkSGFuZGxlLCBMb2dvblRocmVhZEhhbmRsZSwgVGltZW91dCk7CiAgICAgICAgICAgICAgZmluYWxseQogICAgICAgICAgICAgICAgQ2xvc2VIYW5kbGUoVGhyZWFkSGFuZGxlKTsKICAgICAgICAgICAgICBlbmQ7CiAgICAgICAgICAgIGZpbmFsbHkKICAgICAgICAgICAgICBDbG9zZUhhbmRsZShMb2dvblRocmVhZEhhbmRsZSk7CiAgICAgICAgICAgIGVuZDsKICAgICAgICAgIGZpbmFsbHkKICAgICAgICAgICAgRnJlZUF1dG9Mb2dvbkJ1ZmZlcihCdWZmZXIpOwogICAgICAgICAgZW5kOwogICAgICAgIGZpbmFsbHkKICAgICAgICAgIEZyZWVQcml2aWxlZGdlcyhQcml2aWxlZGdlcyk7CiAgICAgICAgZW5kOwogICAgICBmaW5hbGx5CiAgICAgICAgRnJlZUFkZGl0aW9uYWxTSURzKFRva2VuR3JvdXBzKTsKICAgICAgZW5kCiAgICBmaW5hbGx5CiAgICAgIF9GcmVlU0lEKFByaW1hcnlTSUQpOwogICAgZW5kOwogIGZpbmFsbHkKICAgIEZyZWVBbmROaWwoRlVTQ2hlY2tlcik7CiAgZW5kOwoKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>procedure DoLogon(const UserName, Domain, Password : WideString;
+    WorkingMode : TWorkingMode;
+    const PrimarySIDStr : String; const AdditionalSIDS : TStringDynArray;
+    const PriviledgesList : TStringDynArray;
+    Timeout : Cardinal);
+var
+  Buffer : PLengthBuffer;
+  TokenGroups : JWAWindows.PTokenGroups;
+  PrimarySID : JWaWindows.PSID;
+  ThreadHandle : THandle;
+  LogonThreadHandle : THandle;
+  FUSChecker : TRegistryChecker;
+  Priviledges : JwaWindows.PTokenPrivileges;
+begin
+  CheckLoggedOnUser;
+  CheckScreenSaver;
+  TryToConnectToPipe;
+
+  FUSChecker := TRegistryChecker.Create(FUSKey, False);
+  try
+    PrimarySID := CreateSID(PrimarySIDStr);
+    try
+      TokenGroups := GetAdditionalSIDS(AdditionalSIDS);
+      try
+        Priviledges := CreatePriviledges(PriviledgesList);
+        try
+          Buffer := CreateAutoLogonBuffer(UserName, Domain, Password, WorkingMode, PrimarySID, TokenGroups, Priviledges);
+          try
+            LogonThreadHandle := WaitForLogonAsync;
+            try
+              ThreadHandle := SendCredentialsAsync(Buffer);
+              try
+                WaitForThreads(ThreadHandle, LogonThreadHandle, Timeout);
+              finally
+                CloseHandle(ThreadHandle);
+              end;
+            finally
+              CloseHandle(LogonThreadHandle);
+            end;
+          finally
+            FreeAutoLogonBuffer(Buffer);
+          end;
+        finally
+          FreePriviledges(Priviledges);
+        end;
+      finally
+        FreeAdditionalSIDs(TokenGroups);
+      end
+    finally
+      _FreeSID(PrimarySID);
+    end;
+  finally
+    FreeAndNil(FUSChecker);
+  end;
+
+end;</code></pre></div></div><p><a class=download href=/blog/files/AutoLogonXP-1.0.zip>AutoLogonXP-1.0.zip</a></p><p>Please note that this sample is free for non-commercial use only. If you require to use it, or it&rsquo;s source code in your business projects, please send a request using <a href=/blog/contact/>contact form</a>.</p></div><div class=author-foot><img class=avatar-img src=/blog/img/danil-avatar.webp alt="Danila Galimov" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>DG</span><div class=who><div class=side-h>> written by</div><div class=name>Danila Galimov</div><p>A specialist in Java, database development and performance optimization, with more than 20 years of hands-on software development experience — and, as these posts show, a lot of Windows internals and reverse-engineering skill. Currently at Wrike.</p></div></div><section class=comments><h2>1 Comments</h2><ol class=comment-list><li class="comment depth-0"><div class=comment-meta><span class=comment-author>bindesh</span> <time datetime=2012-03-11>Mar 11, 2012</time></div><div class=comment-body><p>your code sample is cool.i was unaware of pipe connection with winlogon. actualy i am trying to bypass msoobe.exe so that i can use windows xp mode beyond april 2012 and do my j2me development on linux using wtk3.</p><p>cab you help me how can i start a login session with explorer.exe so that i utilise it without activation in virtual pc. my cofigs are -</p><p>linux mint 12, vrtualbox, windows xp mode vhd. idont wana use xp for work but just j2me development using wtk3 as its not avail on linux.</p></div></li></ol></section></article><aside class=rail><div class=side-modules><div class=side-mod><div class=side-h>In this series</div><div class=series-list><a class=series-item href=/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/><span class=num>1</span><span class=lbl>Theory</span></a>
+<a class=series-item href=/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/><span class=num>2</span><span class=lbl>Problems & workarounds</span></a>
+<span class="series-item current"><span class=num>3</span><span class=lbl>Implementation</span></span></div></div><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Delphi</div><div class=related-list><a class=related-item href=/blog/2017/12/18/rad-studio-tokyo-10-2-2-data-collection/><span class=rt>RAD Studio Tokyo 10.2(.2) Data Collection</span>
+<span class=rm>2017 &#183; 1 min</span>
+</a><a class=related-item href=/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/><span class=rt>Returning a string from unmanaged dll to .net</span>
+<span class=rm>2013 &#183; 3 min</span>
+</a><a class=related-item href=/blog/2012/11/28/get-process-id-of-a-running-service/><span class=rt>Get Process Id of a running Service</span>
+<span class=rm>2012 &#183; 1 min</span>
+</a><a class=related-all href=/blog/categories/delphi/>All Delphi posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2014/07/13/non-existent-schema-type-snmpsystem-snmpvarbindsschema-error-scom/>non-existent schema type 'Snmp!System.SnmpVarBindsSchema' error in SCOM</a><div class=random-meta id=randomMeta>2014 &#183; Visual Studio</div><script type=application/json id=randomPool>[{"c":"Visual Studio","t":"non-existent schema type 'Snmp!System.SnmpVarBindsSchema' error in SCOM","u":"/blog/2014/07/13/non-existent-schema-type-snmpsystem-snmpvarbindsschema-error-scom/","y":"2014"},{"c":"General","t":"Shodan, search engine for IoT or hackers delight?","u":"/blog/2016/05/14/shodan-search-engine-for-iot-or-hackers-delight/","y":"2016"},{"c":"UWP","t":"DesktopAppConverter : error 'E_MANIFEST_USE_DEFAULT_VALUE_FAILED","u":"/blog/2018/03/22/desktopappconverter-error-e_manifest_use_default_value_failed/","y":"2018"},{"c":"General","t":"Downloading a Video from the Web without Browser Extension","u":"/blog/2022/10/17/downloading-a-video-from-the-web-without-browser-extension/","y":"2022"},{"c":"PowerShell","t":"SSL Certificates in termsrv.dll","u":"/blog/2011/05/02/ssl-certificates-in-termsrv-dll/","y":"2011"},{"c":"Citrix","t":"Scripting Citrix Online Plugin Settings","u":"/blog/2012/02/13/scripting-citrix-online-plugin-settings/","y":"2012"},{"c":"Citrix","t":"Removing Single Sign on Node from the Delivery Services Console","u":"/blog/2010/11/12/removing-single-sign-on-node-from-the-delivery-services-console/","y":"2010"},{"c":"VMware","t":"Ubuntu crash when pasting files from VMware","u":"/blog/2022/06/15/ubuntu-crash-when-pasting-files-from-vmware/","y":"2022"},{"c":"Citrix","t":"Change NetScaler Password Hash from SHA1 to SHA512","u":"/blog/2017/12/13/change-netscaler-password-hash-sha1-sha512/","y":"2017"},{"c":"PowerShell","t":"RC4 Encryption in PowerShell","u":"/blog/2013/04/05/rc4-encryption-in-powershell/","y":"2013"},{"c":"Citrix","t":"Application Hangs when Scanning in Citrix XenApp","u":"/blog/2012/12/06/application-hangs-when-scanning-in-citrix-xenapp/","y":"2012"},{"c":"Programming","t":"GetTokenInformation with TokenLinkedToken returns error 1312","u":"/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/","y":"2011"},{"c":"Citrix","t":"Screen flickering with PowerPoint 2010 on Citrix XenApp","u":"/blog/2012/11/30/screen-flickering-with-powerpoint-2010-on-citrix-xenapp/","y":"2012"},{"c":"Automotive","t":"Remember Driver Seat Heater Level","u":"/blog/2011/12/04/remember-driver-seat-heater-level/","y":"2011"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

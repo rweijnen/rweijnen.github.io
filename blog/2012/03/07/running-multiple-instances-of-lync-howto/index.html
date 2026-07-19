@@ -1,0 +1,278 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Running multiple instances of Lync (howto) &#183; Remko's Blog</title><meta name=description content="How the Lync 2010 client blocks second instances via a Global mutex and event in COcAppNoUI::InitializeMainInstance, and how to defeat it to run several copies."><link rel=canonical href=https://remkoweijnen.nl/blog/2012/03/07/running-multiple-instances-of-lync-howto/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Running multiple instances of Lync (howto)"><meta property="og:description" content="How the Lync 2010 client blocks second instances via a Global mutex and event in COcAppNoUI::InitializeMainInstance, and how to defeat it to run several copies."><meta property="og:url" content="https://remkoweijnen.nl/blog/2012/03/07/running-multiple-instances-of-lync-howto/"><meta property="og:image" content="https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/image5.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Running multiple instances of Lync (howto)"><meta name=twitter:description content="How the Lync 2010 client blocks second instances via a Global mutex and event in COcAppNoUI::InitializeMainInstance, and how to defeat it to run several copies."><meta name=twitter:image content="https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/image5.webp"><meta property="article:published_time" content="2012-03-07T22:55:37Z"><meta property="article:modified_time" content="2012-03-07T22:55:37Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Remko Weijnen"},"dateModified":"2012-03-07T22:55:37Z","datePublished":"2012-03-07T22:55:37Z","description":"How the Lync 2010 client blocks second instances via a Global mutex and event in COcAppNoUI::InitializeMainInstance, and how to defeat it to run several copies.","headline":"Running multiple instances of Lync (howto)","image":["https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/image5.webp"],"mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2012/03/07/running-multiple-instances-of-lync-howto/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2012/03/07/running-multiple-instances-of-lync-howto/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"><link rel=stylesheet href=/blog/css/glightbox.min.css></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Lync</span><span data-pagefind-filter=category>ThinApp</span>
+<span data-pagefind-meta=category>Lync</span>
+<span data-pagefind-filter=tag>Lync</span><span data-pagefind-filter=tag>Hack</span><span data-pagefind-filter=tag>ThinApp</span>
+<span data-pagefind-filter=year>2012</span>
+<span data-pagefind-meta=date>2012-03-07</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/lync/>lync</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Running multiple instances of Lync (howto)</h1><div class=byline><time datetime=2012-03-07>Mar 7, 2012</time>
+<span class=dot>&#183;</span><span>7 min read</span></div><div class=post-content data-pagefind-body><p><a href=/blog/wp-content/uploads/2012/03/image4.webp class=glightbox data-type=image data-gallery=post-2513><img loading=lazy decoding=async style="margin:0 0 0 5px;display:inline;float:right" title=image alt=image align=right src=/blog/wp-content/uploads/2012/03/image_thumb4.webp width=58 height=59></a>Yesterday I showed a <a href=/blog/2012/03/06/run-multiple-instances-of-lync-2010poc/ target=_blank>video</a> demonstrating it's possible to run multiple instances of the Microsoft Lync 2010 client simultaneously.</p><p>A little warning before we go on: the Lync Client was not designed to run with multiple instances. Or better said: it was designed specifically to prevent this, let's see how it does this:</p><p>On startup Lync calls an internal function called COcAppNoUI::InitializeMainInstance. In this function it creates a <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms684266(v=vs.85).aspx" target=_blank>Mutex</a> named "Office Communicator_" in the Global <a href=/blog/2009/01/27/accessing-kernel-objects-in-other-sessions/ target=_blank>namespace</a>. It also creates an <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms682655(v=vs.85).aspx" target=_blank>Event</a> in the Global namespace called "COMMUNICATOR-".</p><p>When a second instance of Lync is launched it checks if the Global Mutex exists and if it does it fires the Global Event. The Main instance has a thread that waits for this event using the <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms687025(v=vs.85).aspx" target=_blank>WaitForMultipleObjects</a> API.</p><p>Let's check this using Process Explorer, select the Lync process (communicator.exe) and display the process handles in the lower pane view:</p><p><a href=/blog/wp-content/uploads/2012/03/image5.webp class=glightbox data-type=image data-gallery=post-2513><img loading=lazy decoding=async style=display:inline title=image alt=image src=/blog/wp-content/uploads/2012/03/image_thumb5.webp width=415 height=130></a></p><p><a href=/blog/wp-content/uploads/2012/03/image6.webp class=glightbox data-type=image data-gallery=post-2513><img loading=lazy decoding=async style=display:inline title=image alt=image src=/blog/wp-content/uploads/2012/03/image_thumb6.webp width=415 height=130></a></p><p>If we close the handles to the Mutex and the Event (which is NOT recommended) we are able to launch a second instance of Lync.</p><p>But to get a fully working Lync Client we there a few more things we need to take care of:</p><p><strong>Shared Memory Section</strong><br>Lync creates a shared memory section named "MicrosoftOfficeCommunicatorSharedMemoryAccess". Since we do not know what kind of data is exchanged in this shared section we must ensure that each instance has it's own sections.</p><p><strong>Additional Mutexes</strong><br>Lync creates several additional Mutexes that need to be unique as well. Unfortunately the Mutex names are composed in a special way;</p><p>The first Mutex is named "&lt;guid> - SID" eg: "eed3bd3a-a1ad-4e99-987b-d7cb3fcfa7f0 - S-1-5-21-1792247254-158287795-3068212004-1000". The guid is obtained by calling the <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724435(v=vs.85).aspx" target=_blank>GetUserNameEx</a> API with the <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724268(v=vs.85).aspx" target=_blank>NameUniqueId</a> parameter. The SID is of course the SID of the logged-on user.</p><p>The second Mutex is named "Communicator.&lt;#>_&lt;SID>" eg: "Communicator.0_S-1-5-21-1792247254-158287795-3068212004-1000"</p><p><strong>Registry<br></strong>Lync stores it's user settings in HKCU\Software\Microsoft\Communicator. Every instance will need it's own settings or it will user (and overwrite) the settings of other users. This includes the sign-in address and the (encrypted) password.</p><p>Although I was able to run two instances of the Lync Client locally by closing the handles I decided the easiest solution was to use Application Virtualization. In this how-to I will use ThinApp.</p><p><strong>ThinApp<br></strong>To get the Lync Client to work with ThinApp we need to enable external out-of-process COM objects to run by adding the following line to the package.ini:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>ini</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.ini href="data:;charset=utf-8,%5BBuildOptions%5D%0AVirtualizeExternalOutOfProcessCOM=0">Download</a></span></div><div class=codebody><pre class=language-ini><code class=language-ini>[BuildOptions]
+VirtualizeExternalOutOfProcessCOM=0</code></pre></div></div><p>Next we need to make sure that we isolate the Mutexes and Events by adding the following line to the package.ini:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>ini</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.ini href="data:;charset=utf-8,%5BBuildOptions%5D%0AIsolatedSynchronizationObjects=*MicrosoftOfficeCommunicatorSharedMemoryAccess*;*COMMUNICATOR-*;*Office%20Communicator_*;*Communicator.*;*%20-%20S-1-5-21-*">Download</a></span></div><div class=codebody><pre class=language-ini><code class=language-ini>[BuildOptions]
+IsolatedSynchronizationObjects=*MicrosoftOfficeCommunicatorSharedMemoryAccess*;*COMMUNICATOR-*;*Office Communicator_*;*Communicator.*;* - S-1-5-21-*</code></pre></div></div><p>As you can see I used wildcards to match both Local and Global objects and to match the Guid and Sid.</p><strong>ThinApp fail<br></strong>ThinApp will now add the Sandbox Path to the object name, however for some reason it fails to do this for the "COMMUNICATOR-" event:<p><a href=/blog/wp-content/uploads/2012/03/image7.webp class=glightbox data-type=image data-gallery=post-2513><img loading=lazy decoding=async style=display:inline title=image alt=image src=/blog/wp-content/uploads/2012/03/image_thumb7.webp width=415 height=92></a></p><p>I tried several variation with wildcard but I didn't get this thing to work. I presume this happens because the event name is not hardcoded but assembled from a dynamic string.</p><p><strong>Delphi to the rescue</strong><p><br>To solve this final step I wrote a small commandline tool in Delphi that searches for the Communicator.exe process and closes the handles to the &ldquo;COMMUNICATOR-&rdquo; event. I will go into details about the Delphi code below as it&rsquo;s out of scope for this blog. If you have questions about the code please let me know.</p></p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,cHJvZ3JhbSBDbG9zZUV2ZW50OwoKeyRBUFBUWVBFIENPTlNPTEV9Cgp1c2VzCiAgSndhV2luQmFzZSwKICBKd2FXaW5OVCwKICBKd2FXaW5UeXBlLAogIEp3YU50U3RhdHVzLAogIEp3YU5hdGl2ZSwKICBKd2FXaW5zdGEsCiAgU3lzVXRpbHMsIFN0clV0aWxzOwoKeyRJRkRFRiBSRUxFQVNFfQogIC8vIExlYXZlIG91dCBSZWxvY2F0aW9uIFRhYmxlIGluIFJlbGVhc2UgdmVyc2lvbgogIHskU2V0UEVGbGFncyBJTUFHRV9GSUxFX1JFTE9DU19TVFJJUFBFRH0KeyRFTkRJRiBSRUxFQVNFfQp7JFNldFBFT3B0RmxhZ3MgSU1BR0VfRExMQ0hBUkFDVEVSSVNUSUNTX1RFUk1JTkFMX1NFUlZFUl9BV0FSRX0KCi8vIE5vIG5lZWQgZm9yIFJUVEkKeyRXRUFLTElOS1JUVEkgT059CiB7JFJUVEkgRVhQTElDSVQgTUVUSE9EUyhbXSkgUFJPUEVSVElFUyhbXSkgRklFTERTKFtdKX0KCmNvbnN0CiAgRXZlbnROYW1lID0gJ0NPTU1VTklDQVRPUi0nOwoKdmFyCiAgZHdQaWQ6IERXT1JEOwogIGhQcm9jZXNzOiBUSGFuZGxlOwoKeyRBTElHTiA4fQp7JE1JTkVOVU1TSVpFIDR9CnR5cGUKICBfU1lTVEVNX0hBTkRMRSA9IHJlY29yZAogICAgUHJvY2Vzc0lkOiBVTE9ORzsKICAgIE9iamVjdFR5cGVOdW1iZXI6IEJ5dGU7CiAgICBGbGFnczogQnl0ZTsKICAgIEhhbmRsZTogVVNIT1JUOwogICAgX09iamVjdDogUFZPSUQ7CiAgICBHcmFudGVkQWNjZXNzOiBBQ0NFU1NfTUFTSzsKICBlbmQ7CiAgU1lTVEVNX0hBTkRMRSA9IF9TWVNURU1fSEFORExFOwogIFBTWVNURU1fSEFORExFID0gXlNZU1RFTV9IQU5ETEU7CgogIF9TWVNURU1fSEFORExFX0lORk9STUFUSU9OID0gcmVjb3JkCiAgICBIYW5kbGVDb3VudDogVUxPTkc7CiAgICBIYW5kbGVzOiBhcnJheVswLi4wXSBvZiBTWVNURU1fSEFORExFOwogIGVuZDsKICBTWVNURU1fSEFORExFX0lORk9STUFUSU9OID0gX1NZU1RFTV9IQU5ETEVfSU5GT1JNQVRJT047CiAgUFNZU1RFTV9IQU5ETEVfSU5GT1JNQVRJT04gPSBeU1lTVEVNX0hBTkRMRV9JTkZPUk1BVElPTjsKCiAgX09CSkVDVF9OQU1FX0lORk9STUFUSU9OID0gcmVjb3JkCiAgICBMZW5ndGg6IFVTSE9SVDsKICAgIE1heGltdW1MZW5ndGg6IFVTSE9SVDsKICAgIFBhZDogRFdPUkQ7CiAgICBOYW1lOiBhcnJheVswLi5NQVhfUEFUSC0xXSBvZiBDaGFyOwogIGVuZDsKICBPQkpFQ1RfTkFNRV9JTkZPUk1BVElPTiA9IF9PQkpFQ1RfTkFNRV9JTkZPUk1BVElPTjsKICBQT0JKRUNUX05BTUVfSU5GT1JNQVRJT04gPSBeT0JKRUNUX05BTUVfSU5GT1JNQVRJT047CgpmdW5jdGlvbiBHZXRPYmplY3ROYW1lKGNvbnN0IGhPYmplY3Q6IFRIYW5kbGUpOiBTdHJpbmc7CnZhcgogIG9uaTogT0JKRUNUX05BTUVfSU5GT1JNQVRJT047CiAgY2JTaXplOiBEV09SRDsKICBudHM6IE5UU1RBVFVTOwpiZWdpbgogIFJlc3VsdCA6PSAnJzsKCiAgY2JTaXplIDo9IFNpemVPZihvbmkpIC0gKDIgKiBTaXplT2YoVVNIT1JUKSk7CiAgb25pLkxlbmd0aCA6PSAwOwogIG9uaS5NYXhpbXVtTGVuZ3RoIDo9IGNiU2l6ZTsKICBudHMgOj0gTnRRdWVyeU9iamVjdChoT2JqZWN0LCBPYmplY3ROYW1lSW5mb3JtYXRpb24sIEBvbmksIGNiU2l6ZSwgQGNiU2l6ZSk7CiAgaWYgbnRzID0gU1RBVFVTX1NVQ0NFU1MgdGhlbgogIGJlZ2luCiAgICBSZXN1bHQgOj0gb25pLk5hbWU7CiAgZW5kOwplbmQ7CgpmdW5jdGlvbiBHZXRDdXJyZW50U2Vzc2lvbklkOiBEV09SRDsKIGFzbQogICBtb3YgICAgIGVheCxmczpbJDAwMDAwMDE4XTsgICAvLyBHZXQgVEVCCiAgIG1vdiAgICAgZWF4LFtlYXgrJDMwXTsgICAgICAgIC8vIFBQRUIKICAgbW92ICAgICBlYXgsW2VheCskMWQ0XTsgICAgICAgLy8gUEVCLlNlc3Npb25JZAogZW5kOwoKZnVuY3Rpb24gR2V0UHJvY2Vzc0J5TmFtZShjb25zdCBQcm9jZXNzTmFtZTogc3RyaW5nKTogRFdPUkQ7CnZhcgogIFByb2NOYW1lOiBQQ2hhcjsKICBDb3VudDogSW50ZWdlcjsKICB0c2FwaTogUFRTX0FMTF9QUk9DRVNTRVNfSU5GT19BUlJBWTsKICBpOiBJbnRlZ2VyOwogIGR3U2Vzc2lvbklkOiBEV09SRDsKYmVnaW4KICBSZXN1bHQgOj0gMDsKICB0c2FwaSA6PSBuaWw7CgogIGlmIG5vdCBXaW5TdGF0aW9uR2V0QWxsUHJvY2Vzc2VzKFNFUlZFUk5BTUVfQ1VSUkVOVCwgMCwgQ291bnQsIHRzYXBpKSB0aGVuCiAgICBFeGl0OwoKICBQcm9jTmFtZSA6PSBQQ2hhcihQcm9jZXNzTmFtZSk7CiAgZHdTZXNzaW9uSWQgOj0gR2V0Q3VycmVudFNlc3Npb25JZDsKCiAgV3JpdGVMbihGb3JtYXQoJ0xvb2tpbmcgZm9yIFByb2Nlc3MgJXMgaW4gU2Vzc2lvbiAlZCcsCiAgICBbUHJvY2Vzc05hbWUsIGR3U2Vzc2lvbklkXSkpOwoKICBmb3IgaSA6PSAwIHRvIENvdW50IC0gMSBkbwogIGJlZ2luCiAgICB3aXRoIHRzYXBpXltpXSwgdHNhcGleW2ldLnBUc1Byb2Nlc3NJbmZvXiBkbwogICAgYmVnaW4KICAgICAgaWYgKGR3U2Vzc2lvbklkID0gU2Vzc2lvbklkKSBhbmQgKEltYWdlTmFtZS5CdWZmZXIgPD4gbmlsKSBhbmQKICAgICAgICAoU3RySUNvbXAoUHJvY05hbWUsIEltYWdlTmFtZS5CdWZmZXIpID0gMCkgdGhlbgogICAgICBiZWdpbgogICAgICAgIFJlc3VsdCA6PSBVbmlxdWVQcm9jZXNzSWQ7CiAgICAgICAgV3JpdGVMbihGb3JtYXQoJyVzIGhhcyBQaWQgJWQnLCBbUHJvY2Vzc05hbWUsIFJlc3VsdF0pKTsKICAgICAgICBCcmVhawogICAgICBlbmQ7CiAgICBlbmQ7CiAgZW5kOwoKICBpZiB0c2FwaSA8PiBuaWwgdGhlbgogICAgV2luU3RhdGlvbkZyZWVHQVBNZW1vcnkoMCwgdHNhcGksIENvdW50KTsKZW5kOwoKcHJvY2VkdXJlIEVudW1IYW5kbGVzOwp2YXIKICBzaGk6IFBTWVNURU1fSEFORExFX0lORk9STUFUSU9OOwogIGNiU2l6ZTogRFdPUkQ7CiAgY2JSZXQ6IERXT1JEOwogIG50czogTlRTVEFUVVM7CiAgaTogSW50ZWdlcjsKICBoRHVwSGFuZGxlOiBUSGFuZGxlOwogIGR3RXJyOiBEV09SRDsKICBPYmplY3ROYW1lOiBzdHJpbmc7CmJlZ2luCiAgV3JpdGVMbignRW51bWVyYXRpbmcgSGFuZGxlcycpOwogIGNiU2l6ZSA6PSAkNTAwMDsKICBHZXRNZW0oc2hpLCBjYlNpemUpOwogIHJlcGVhdAogICAgY2JTaXplIDo9IGNiU2l6ZSAqIDI7CiAgICBSZWFsbG9jTWVtKHNoaSwgY2JTaXplKTsKICAgIG50cyA6PSBOdFF1ZXJ5U3lzdGVtSW5mb3JtYXRpb24oU3lzdGVtSGFuZGxlSW5mb3JtYXRpb24sIHNoaSwgY2JTaXplLCBAY2JSZXQpOwogIHVudGlsIG50cyA8PiBTVEFUVVNfSU5GT19MRU5HVEhfTUlTTUFUQ0g7CgogIGlmIG50cyA9IFNUQVRVU19TVUNDRVNTIHRoZW4KICBiZWdpbgogICAgZm9yIGkgOj0gMCB0byBzaGleLkhhbmRsZUNvdW50IC0gMSBkbwogICAgYmVnaW4KICAgICAgaWYgc2hpXi5IYW5kbGVzW2ldLkdyYW50ZWRBY2Nlc3MgPD4gJDAwMTIwMTlmIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBpZiBzaGleLkhhbmRsZXNbaV0uUHJvY2Vzc0lkID0gZHdQaWQgdGhlbgogICAgICAgIGJlZ2luCiAgICAgICAgICBudHMgOj0gTnREdXBsaWNhdGVPYmplY3QoaFByb2Nlc3MsIHNoaV4uSGFuZGxlc1tpXS5IYW5kbGUsCiAgICAgICAgICAgIEdldEN1cnJlbnRQcm9jZXNzLCBAaER1cEhhbmRsZSwgMCwgMCwgMCk7CgogICAgICAgICAgaWYgbnRzID0gU1RBVFVTX1NVQ0NFU1MgdGhlbgogICAgICAgICAgYmVnaW4KICAgICAgICAgICAgT2JqZWN0TmFtZSA6PSBHZXRPYmplY3ROYW1lKGhEdXBIYW5kbGUpOwogICAgICAgICAgICBpZiAoT2JqZWN0TmFtZSA8PiAnJykgYW5kIFNhbWVUZXh0KFJpZ2h0U3RyKE9iamVjdE5hbWUsIExlbmd0aChFdmVudE5hbWUpKSwgRXZlbnROYW1lKSB0aGVuCiAgICAgICAgICAgIGJlZ2luCiAgICAgICAgICAgICAgV3JpdGVMbihGb3JtYXQoJ0hhbmRsZT0lZCBOYW1lPSVzJywgW3NoaV4uSGFuZGxlc1tpXS5IYW5kbGUsIE9iamVjdE5hbWVdKSk7CiAgICAgICAgICAgICAgQ2xvc2VIYW5kbGUoaER1cEhhbmRsZSk7CgogICAgICAgICAgICAgIG50cyA6PSBOdER1cGxpY2F0ZU9iamVjdChoUHJvY2Vzcywgc2hpXi5IYW5kbGVzW2ldLkhhbmRsZSwKICAgICAgICAgICAgICAgIEdldEN1cnJlbnRQcm9jZXNzLCBAaER1cEhhbmRsZSwgMCwgMCwgRFVQTElDQVRFX0NMT1NFX1NPVVJDRSk7CgogICAgICAgICAgICAgIGlmIG50cyA9IFNUQVRVU19TVUNDRVNTIHRoZW4KICAgICAgICAgICAgICBiZWdpbgogICAgICAgICAgICAgICAgV3JpdGVMbihGb3JtYXQoJ0R1cGxpY2F0ZWQgSGFuZGxlIHdpdGggRFVQTElDQVRFX0NMT1NFX1NPVVJDRSwgbmV3IEhhbmRsZT0lZCcsIFtoRHVwSGFuZGxlXSkpOwogICAgICAgICAgICAgIGVuZDsKICAgICAgICAgICAgZW5kOwoKICAgICAgICAgICAgaWYgaER1cEhhbmRsZSA+IDAgdGhlbgogICAgICAgICAgICAgIENsb3NlSGFuZGxlKGhEdXBIYW5kbGUpOwogICAgICAgICAgZW5kOwogICAgICAgIGVuZDsKICAgICAgZW5kOwogICAgZW5kOwogIGVuZAogIGVsc2UgYmVnaW4KICAgIGR3RXJyIDo9IFJ0bE50U3RhdHVzVG9Eb3NFcnJvcihudHMpOwogICAgV3JpdGVMbihGb3JtYXQoJ0ZhaWxlZCB0byByZWFkIGhhbmRsZXMsIE50UXVlcnlTeXN0ZW1JbmZvcm1hdGlvbiBmYWlsZWQgd2l0aCAlLjh4ID0+ICVkICglcyknLCBbbnRzLCBTeXNFcnJvck1lc3NhZ2UoZHdFcnIpXSkpOwogIGVuZDsKCiAgRnJlZU1lbShzaGkpOwplbmQ7CgoKcHJvY2VkdXJlIEFueUtleShjb25zdCBiRXhpdDogQm9vbGVhbiA9IEZhbHNlKTsKYmVnaW4KICAgIFdyaXRlTG4oJ0ZpbmlzaGVkJyk7CiAgICBXcml0ZUxuKCdQcmVzcyBhbnkga2V5IHRvIGNvbnRpbnVlJyk7CiAgICBSZWFkTG47CiAgICBpZiBiRXhpdCB0aGVuCiAgICAgIEV4aXQ7CmVuZDsKCmJlZ2luCiAgdHJ5CiAgICBXcml0ZUxuKCdDbG9zZUV2ZW50IDEuMCAoYykgUmVta28gV2Vpam5lbiAyMDEyJyk7CiAgICBXcml0ZUxuKCcoY2xvc2VzICJDT01NVU5JQ0FUT1ItIiBldmVudCBoYW5kbGUpJyk7CiAgICBXcml0ZUxuKCcnKTsKCiAgICBkd1BpZCA6PSBHZXRQcm9jZXNzQnlOYW1lKCdDb21tdW5pY2F0b3IuZXhlJyk7CiAgICBpZiBkd1BpZCA9IDAgdGhlbgogICAgYmVnaW4KICAgICAgV3JpdGVMbignUHJvY2VzcyB3YXMgbm90IGZvdW5kLCBleGl0aW5nLicpOwogICAgICBBbnlLZXkoVHJ1ZSk7CiAgICAgIEV4aXQ7CiAgICBlbmQ7CgogICAgV3JpdGVMbihGb3JtYXQoJ09wZW5pbmcgUHJvY2VzcyAlZCB3aXRoIFBST0NFU1NfRFVQX0hBTkRMRScsIFtkd1BpZF0pKTsKICAgIGhQcm9jZXNzIDo9IE9wZW5Qcm9jZXNzKFBST0NFU1NfRFVQX0hBTkRMRSwgRmFsc2UsIGR3UGlkKTsKCiAgICBpZiBoUHJvY2VzcyA9IDAgdGhlbgogICAgYmVnaW4KICAgICAgV3JpdGVMbihGb3JtYXQoJ09wZW5Qcm9jZXNzIGZhaWxlZCB3aXRoICVzJywgW1N5c0Vycm9yTWVzc2FnZShHZXRMYXN0RXJyb3IpXSkpOwogICAgICBBbnlLZXkoVHJ1ZSk7CiAgICBlbmQKICAgIGVsc2UgYmVnaW4KICAgICAgV3JpdGVMbihGb3JtYXQoJ1Byb2Nlc3MgSGFuZGxlIGlzICVkJywgW2hQcm9jZXNzXSkpOwogICAgZW5kOwoKICAgIEVudW1IYW5kbGVzOwoKICBleGNlcHQKICAgIG9uIEU6IEV4Y2VwdGlvbiBkbwogICAgICBXcml0ZWxuKEUuQ2xhc3NOYW1lLCAnOiAnLCBFLk1lc3NhZ2UpOwogIGVuZDsKZW5kLg==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>program CloseEvent;
+
+{$APPTYPE CONSOLE}
+
+uses
+  JwaWinBase,
+  JwaWinNT,
+  JwaWinType,
+  JwaNtStatus,
+  JwaNative,
+  JwaWinsta,
+  SysUtils, StrUtils;
+
+{$IFDEF RELEASE}
+  // Leave out Relocation Table in Release version
+  {$SetPEFlags IMAGE_FILE_RELOCS_STRIPPED}
+{$ENDIF RELEASE}
+{$SetPEOptFlags IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE}
+
+// No need for RTTI
+{$WEAKLINKRTTI ON}
+ {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+
+const
+  EventName = &#39;COMMUNICATOR-&#39;;
+
+var
+  dwPid: DWORD;
+  hProcess: THandle;
+
+{$ALIGN 8}
+{$MINENUMSIZE 4}
+type
+  _SYSTEM_HANDLE = record
+    ProcessId: ULONG;
+    ObjectTypeNumber: Byte;
+    Flags: Byte;
+    Handle: USHORT;
+    _Object: PVOID;
+    GrantedAccess: ACCESS_MASK;
+  end;
+  SYSTEM_HANDLE = _SYSTEM_HANDLE;
+  PSYSTEM_HANDLE = ^SYSTEM_HANDLE;
+
+  _SYSTEM_HANDLE_INFORMATION = record
+    HandleCount: ULONG;
+    Handles: array[0..0] of SYSTEM_HANDLE;
+  end;
+  SYSTEM_HANDLE_INFORMATION = _SYSTEM_HANDLE_INFORMATION;
+  PSYSTEM_HANDLE_INFORMATION = ^SYSTEM_HANDLE_INFORMATION;
+
+  _OBJECT_NAME_INFORMATION = record
+    Length: USHORT;
+    MaximumLength: USHORT;
+    Pad: DWORD;
+    Name: array[0..MAX_PATH-1] of Char;
+  end;
+  OBJECT_NAME_INFORMATION = _OBJECT_NAME_INFORMATION;
+  POBJECT_NAME_INFORMATION = ^OBJECT_NAME_INFORMATION;
+
+function GetObjectName(const hObject: THandle): String;
+var
+  oni: OBJECT_NAME_INFORMATION;
+  cbSize: DWORD;
+  nts: NTSTATUS;
+begin
+  Result := &#39;&#39;;
+
+  cbSize := SizeOf(oni) - (2 * SizeOf(USHORT));
+  oni.Length := 0;
+  oni.MaximumLength := cbSize;
+  nts := NtQueryObject(hObject, ObjectNameInformation, @oni, cbSize, @cbSize);
+  if nts = STATUS_SUCCESS then
+  begin
+    Result := oni.Name;
+  end;
+end;
+
+function GetCurrentSessionId: DWORD;
+ asm
+   mov     eax,fs:[$00000018];   // Get TEB
+   mov     eax,[eax&#43;$30];        // PPEB
+   mov     eax,[eax&#43;$1d4];       // PEB.SessionId
+ end;
+
+function GetProcessByName(const ProcessName: string): DWORD;
+var
+  ProcName: PChar;
+  Count: Integer;
+  tsapi: PTS_ALL_PROCESSES_INFO_ARRAY;
+  i: Integer;
+  dwSessionId: DWORD;
+begin
+  Result := 0;
+  tsapi := nil;
+
+  if not WinStationGetAllProcesses(SERVERNAME_CURRENT, 0, Count, tsapi) then
+    Exit;
+
+  ProcName := PChar(ProcessName);
+  dwSessionId := GetCurrentSessionId;
+
+  WriteLn(Format(&#39;Looking for Process %s in Session %d&#39;,
+    [ProcessName, dwSessionId]));
+
+  for i := 0 to Count - 1 do
+  begin
+    with tsapi^[i], tsapi^[i].pTsProcessInfo^ do
+    begin
+      if (dwSessionId = SessionId) and (ImageName.Buffer &lt;&gt; nil) and
+        (StrIComp(ProcName, ImageName.Buffer) = 0) then
+      begin
+        Result := UniqueProcessId;
+        WriteLn(Format(&#39;%s has Pid %d&#39;, [ProcessName, Result]));
+        Break
+      end;
+    end;
+  end;
+
+  if tsapi &lt;&gt; nil then
+    WinStationFreeGAPMemory(0, tsapi, Count);
+end;
+
+procedure EnumHandles;
+var
+  shi: PSYSTEM_HANDLE_INFORMATION;
+  cbSize: DWORD;
+  cbRet: DWORD;
+  nts: NTSTATUS;
+  i: Integer;
+  hDupHandle: THandle;
+  dwErr: DWORD;
+  ObjectName: string;
+begin
+  WriteLn(&#39;Enumerating Handles&#39;);
+  cbSize := $5000;
+  GetMem(shi, cbSize);
+  repeat
+    cbSize := cbSize * 2;
+    ReallocMem(shi, cbSize);
+    nts := NtQuerySystemInformation(SystemHandleInformation, shi, cbSize, @cbRet);
+  until nts &lt;&gt; STATUS_INFO_LENGTH_MISMATCH;
+
+  if nts = STATUS_SUCCESS then
+  begin
+    for i := 0 to shi^.HandleCount - 1 do
+    begin
+      if shi^.Handles[i].GrantedAccess &lt;&gt; $0012019f then
+      begin
+        if shi^.Handles[i].ProcessId = dwPid then
+        begin
+          nts := NtDuplicateObject(hProcess, shi^.Handles[i].Handle,
+            GetCurrentProcess, @hDupHandle, 0, 0, 0);
+
+          if nts = STATUS_SUCCESS then
+          begin
+            ObjectName := GetObjectName(hDupHandle);
+            if (ObjectName &lt;&gt; &#39;&#39;) and SameText(RightStr(ObjectName, Length(EventName)), EventName) then
+            begin
+              WriteLn(Format(&#39;Handle=%d Name=%s&#39;, [shi^.Handles[i].Handle, ObjectName]));
+              CloseHandle(hDupHandle);
+
+              nts := NtDuplicateObject(hProcess, shi^.Handles[i].Handle,
+                GetCurrentProcess, @hDupHandle, 0, 0, DUPLICATE_CLOSE_SOURCE);
+
+              if nts = STATUS_SUCCESS then
+              begin
+                WriteLn(Format(&#39;Duplicated Handle with DUPLICATE_CLOSE_SOURCE, new Handle=%d&#39;, [hDupHandle]));
+              end;
+            end;
+
+            if hDupHandle &gt; 0 then
+              CloseHandle(hDupHandle);
+          end;
+        end;
+      end;
+    end;
+  end
+  else begin
+    dwErr := RtlNtStatusToDosError(nts);
+    WriteLn(Format(&#39;Failed to read handles, NtQuerySystemInformation failed with %.8x =&gt; %d (%s)&#39;, [nts, SysErrorMessage(dwErr)]));
+  end;
+
+  FreeMem(shi);
+end;
+
+
+procedure AnyKey(const bExit: Boolean = False);
+begin
+    WriteLn(&#39;Finished&#39;);
+    WriteLn(&#39;Press any key to continue&#39;);
+    ReadLn;
+    if bExit then
+      Exit;
+end;
+
+begin
+  try
+    WriteLn(&#39;CloseEvent 1.0 (c) Remko Weijnen 2012&#39;);
+    WriteLn(&#39;(closes &#34;COMMUNICATOR-&#34; event handle)&#39;);
+    WriteLn(&#39;&#39;);
+
+    dwPid := GetProcessByName(&#39;Communicator.exe&#39;);
+    if dwPid = 0 then
+    begin
+      WriteLn(&#39;Process was not found, exiting.&#39;);
+      AnyKey(True);
+      Exit;
+    end;
+
+    WriteLn(Format(&#39;Opening Process %d with PROCESS_DUP_HANDLE&#39;, [dwPid]));
+    hProcess := OpenProcess(PROCESS_DUP_HANDLE, False, dwPid);
+
+    if hProcess = 0 then
+    begin
+      WriteLn(Format(&#39;OpenProcess failed with %s&#39;, [SysErrorMessage(GetLastError)]));
+      AnyKey(True);
+    end
+    else begin
+      WriteLn(Format(&#39;Process Handle is %d&#39;, [hProcess]));
+    end;
+
+    EnumHandles;
+
+  except
+    on E: Exception do
+      Writeln(E.ClassName, &#39;: &#39;, E.Message);
+  end;
+end.</code></pre></div></div><p>I then added a vb script to the ThinApp that calls the commandline tool:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>vb.net</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.vb href="data:;charset=utf-8;base64,RnVuY3Rpb24gT25GaXJzdFBhcmVudFN0YXJ0CglTZXQgV3NoU2hlbGwgPSBDcmVhdGVPYmplY3QoIldzY3JpcHQuU2hlbGwiKQoJc3RyQ21kTGluZSA9IENocigzNCkgJiBFeHBhbmRQYXRoKCIlUHJvZ3JhbUZpbGVzRGlyJVxNaWNyb3NvZnQgTHluY1xDbG9zZUV2ZW50LmV4ZSIpICYgQ2hyKDM0KQogICAgICAgIGlQaWQgPSBFeGVjdXRlVmlydHVhbFByb2Nlc3Moc3RyQ21kTGluZSkKCglJZiBpUGlkID4gMCBUaGVuCgkJV2FpdEZvclByb2Nlc3MgaVBpZCwgMAoJRW5kIElmCkVuZCBGdW5jdGlvbg==">Download</a></span></div><div class=codebody><pre class=language-vbnet><code class=language-vbnet>Function OnFirstParentStart
+	Set WshShell = CreateObject(&#34;Wscript.Shell&#34;)
+	strCmdLine = Chr(34) &amp; ExpandPath(&#34;%ProgramFilesDir%\Microsoft Lync\CloseEvent.exe&#34;) &amp; Chr(34)
+        iPid = ExecuteVirtualProcess(strCmdLine)
+
+	If iPid &gt; 0 Then
+		WaitForProcess iPid, 0
+	End If
+End Function</code></pre></div></div><p>It's not ideal but it works</p><p><strong>Registry<br></strong>ThinApp will virtualize the Registry in the Sandbox by default so we don't need to do anything there.</p><p>We can now run one instance of Lync natively and another instance ThinApped.</p><p>From my (limited) testing all functionalities seem to work including Instant Messaging and Lync Call but please do keep in mind that this method IS NOT SUPPORTED IN ANY WAY!</p><p><strong>Download</strong><p><br>I have added a download below for the package.ini I used, the KillMutex.vbs script and the CloseMutex commandline tool (including source).</p></p><p><a class=download href=/blog/files/DualLync.zip>DualLync.zip</a></p></div><div class=author-foot><img class=avatar-img src=/blog/img/remko-avatar.png alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>RW</span><div class=who><div class=side-h>> written by</div><div class=name>Remko Weijnen</div><p>I work on Windows internals, application delivery, security, reverse engineering, automation and AI — building tools, debugging strange behaviour and taking systems apart to understand how they work.</p><div class=links><a href=https://github.com/rweijnen rel=me>GitHub</a>
+<a href=https://www.linkedin.com/in/remkoweijnen/ rel=me>LinkedIn</a></div></div></div><section class=comments><h2>5 Comments</h2><ol class=comment-list><li class="comment depth-0"><div class=comment-meta><span class=comment-author>techiez</span> <time datetime=2013-02-15>Feb 15, 2013</time></div><div class=comment-body><p>Hi Remko,<br>Does this method work with Office 2007 too? or can it be tweaked to make it work with office2007 somehow?</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author>Dinos Konis</span> <time datetime=2013-04-23>Apr 23, 2013</time></div><div class=comment-body><p>Dear Remko</p><p>So how do you execute the components in DualLync?</p><p>CloseEvent<br>KillMutex<br>Package</p><p>Regards</p><p>Dinos</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author>Ralf</span> <time datetime=2014-04-09>Apr 9, 2014</time></div><div class=comment-body><p>Hi, have someone test it with Lync 2013?</p><p>Is this workaround still needed?</p><p>Best regards<br>Ralf</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author>TheGrave</span> <time datetime=2017-03-02>Mar 2, 2017</time></div><div class=comment-body><p>That is one fantastic solution!</p><p>Unfortunately our company migrated to Skype for Business 2016. From what I see only lync.exe process is running, no communicator.exe. I guess it's too much work to patch the code to support newer clients?</p></div></li><li class="comment depth-1"><div class=comment-meta><span class=comment-author><a href=/blog/ rel="nofollow ugc">Remko Weijnen</a></span> <time datetime=2017-03-19>Mar 19, 2017</time></div><div class=comment-body><p>I am planning to have a look when I find some time...</p></div></li></ol></section></article><aside class=rail><div class=side-modules><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Lync</div><div class=related-list><a class=related-item href=/blog/2012/03/12/lync-client-password-recovery/><span class=rt>Lync Client Password Recovery</span>
+<span class=rm>2012 &#183; 3 min</span>
+</a><a class=related-all href=/blog/categories/lync/>All Lync posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2011/11/08/set-homefolder-permissions-with-powershell/>Set homefolder permissions with PowerShell</a><div class=random-meta id=randomMeta>2011 &#183; PowerShell</div><script type=application/json id=randomPool>[{"c":"PowerShell","t":"Set homefolder permissions with PowerShell","u":"/blog/2011/11/08/set-homefolder-permissions-with-powershell/","y":"2011"},{"c":"General","t":"The case of the Annotations Toolbar","u":"/blog/2011/01/17/the-case-of-the-annotations-toolbar/","y":"2011"},{"c":"Java","t":"Oracle Client install fails with NullPointerException","u":"/blog/2011/09/06/oracle-client-install-fails-with-nullpointerexception/","y":"2011"},{"c":"PowerShell","t":"Take ownership of a registry key in PowerShell","u":"/blog/2012/01/16/take-ownership-of-a-registry-key-in-powershell/","y":"2012"},{"c":"Citrix","t":"The case of the missing audio","u":"/blog/2013/01/25/the-case-of-the-missing-audio/","y":"2013"},{"c":"Apple","t":"Virtualized Mac OS X Freezes","u":"/blog/2011/07/01/virtualized-mac-os-x-freezes/","y":"2011"},{"c":"Altiris","t":"Writing Environment  Variables to the Registry from a Script","u":"/blog/2010/12/13/writing-environment-variables-to-the-registry-from-a-script/","y":"2010"},{"c":"Programming","t":"Encrypting RDP Passwords in VB.NET","u":"/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/","y":"2008"},{"c":"General","t":"Move WSUS content folder","u":"/blog/2011/02/02/move-wsus-content-folder/","y":"2011"},{"c":"Windows 8","t":"Undocumented commandline switches for Windows 8 CP","u":"/blog/2012/02/29/undocumented-commandline-switches-for-windows-8-cp/","y":"2012"},{"c":"iPhone","t":"Timestamp column in iOS SQLite database","u":"/blog/2013/04/14/timestamp-column-in-ios-sqlite-database/","y":"2013"},{"c":"Lync","t":"Running multiple instances of Lync (howto)","u":"/blog/2012/03/07/running-multiple-instances-of-lync-howto/","y":"2012"},{"c":"Embedded","t":"Analysing binaries with Binwalk","u":"/blog/2011/10/12/analysing-binaries-with-binwalk/","y":"2011"},{"c":"Citrix","t":"TSAdminEx Beta release","u":"/blog/2009/02/20/tsadminex-beta-release/","y":"2009"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script src=/blog/js/glightbox.min.js></script><script>window.GLightbox&&GLightbox({selector:".glightbox",loop:!0})</script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

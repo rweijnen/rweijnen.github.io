@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AuthenticationLevelOverride on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/authenticationleveloverride/</link><description>Recent content in AuthenticationLevelOverride on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 09 Nov 2007 21:39:50 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/authenticationleveloverride/index.xml" rel="self" type="application/rss+xml"/><item><title>Terminal Server Client annoyances</title><link>https://remkoweijnen.nl/blog/2007/11/09/terminal-server-client-annoyances/</link><pubDate>Fri, 09 Nov 2007 21:39:50 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/09/terminal-server-client-annoyances/</guid><description>&lt;p&gt;If you want to get rid of this message: &lt;/p&gt;
+&lt;p&gt;Remote Desktop cannot verify the identity of the computer you want to connect to.  This problem can occur if:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The remote computer is running a version of Windows that is earlier than Windows Vista.&lt;/li&gt;
+&lt;li&gt;The remote computer is configured to support only the RDP security layer.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Contact your network administrator or the owner of the remote computer for assistance.&lt;/p&gt;</description></item></channel></rss>

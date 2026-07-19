@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Session Management on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/session-management/</link><description>Recent content in Session Management on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 09 Nov 2007 22:42:58 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/session-management/index.xml" rel="self" type="application/rss+xml"/><item><title>More undocumented Terminal Server API's</title><link>https://remkoweijnen.nl/blog/2007/11/09/more-undocumented-terminal-server-apis/</link><pubDate>Fri, 09 Nov 2007 22:42:58 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/09/more-undocumented-terminal-server-apis/</guid><description>&lt;p&gt;I added some more undocumented API&amp;rsquo;s to my Jwawinsta unit, the unit is now becoming a collection of the undocumented API&amp;rsquo;s in winsta.dll.&lt;/p&gt;
+&lt;p&gt;These are the functions I added:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;WinStationDisconnect&lt;/li&gt;
+	&lt;li&gt;WinStationGetProcessSid&lt;/li&gt;
+	&lt;li&gt;CachedGetUserFromSid (exported by utildll.dll)&lt;/li&gt;
+&lt;/ul&gt;
+I also added some more parts of the undocumented structure returned by WinStationQueryInformationW, it now contains:
+&lt;ul&gt;
+	&lt;li&gt;Session State&lt;/li&gt;
+	&lt;li&gt;WinStationName&lt;/li&gt;
+	&lt;li&gt;SessionId&lt;/li&gt;
+	&lt;li&gt;ConnectTime&lt;/li&gt;
+	&lt;li&gt;DisconnectTime&lt;/li&gt;
+	&lt;li&gt;LastInputTime&lt;/li&gt;
+	&lt;li&gt;LogonTime&lt;/li&gt;
+	&lt;li&gt;OutgoingFrames&lt;/li&gt;
+	&lt;li&gt;OutgoingBytes&lt;/li&gt;
+	&lt;li&gt;OutgoingCompressedBytes&lt;/li&gt;
+	&lt;li&gt;IncomingCompressedBytes&lt;/li&gt;
+	&lt;li&gt;IncomingFrames&lt;/li&gt;
+	&lt;li&gt;IncomingBytes&lt;/li&gt;
+	&lt;li&gt;Domain&lt;/li&gt;
+	&lt;li&gt;Username&lt;/li&gt;
+	&lt;li&gt;CurrentTime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;2 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;Chris&lt;/span&gt; &lt;time datetime="2007-12-03"&gt;Dec 3, 2007&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;I would like know how it is possible to access WindowStation and Desktops from a service.&lt;br&gt;
+CreateDesktop and similar only works for the current session of the process.&lt;br&gt;
+I know there exists NTQueryObject and similar but they are hard to understand and only query kernel objects.&lt;br&gt;
+However creating a desktop from a service into another session is a mystery.&lt;/p&gt;</description></item></channel></rss>

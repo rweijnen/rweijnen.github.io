@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AHCI on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/ahci/</link><description>Recent content in AHCI on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 18 Jun 2011 21:38:19 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/ahci/index.xml" rel="self" type="application/rss+xml"/><item><title>Switch SATA Operation Mode</title><link>https://remkoweijnen.nl/blog/2011/06/18/switch-sata-operation-mode/</link><pubDate>Sat, 18 Jun 2011 21:38:19 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/06/18/switch-sata-operation-mode/</guid><description>&lt;p&gt;Modern systems usually offer different SATA Operation Modes such as ATA, AHCI or IRRT.&lt;/p&gt;
+&lt;p&gt;The AHCI mode offers extra features such as hot swapping and &lt;a title="Wikipedia Native Command Queueing" href="http://en.wikipedia.org/wiki/Native_Command_Queuing" target="_blank"&gt;native command queuing&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Many vendors set the SATA Operation Mode to ATA by default because it&amp;rsquo;s the most compatible mode but there are a few reasons why you might want to change it:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;AHCI has a higher performance than ATA.&lt;/li&gt;
+	&lt;li&gt;AHCI is a requirement for the &lt;a title="Why You Need TRIM For Your SSD" href="http://www.bit-tech.net/hardware/storage/2010/02/04/windows-7-ssd-performance-and-trim/" target="_blank"&gt;TRIM command&lt;/a&gt;.&lt;/li&gt;
+	&lt;li&gt;AHCI is required for self encrypting hard drives&lt;/li&gt;
+&lt;/ul&gt;
+&lt;span style="color: #4c4c4c;"&gt;Please note that the IRRT (integrated raid) mode is supposed to support all functionality of AHCI but in my experience it doesn't. &lt;/span&gt;
+&lt;p&gt;&lt;span style="color: #4c4c4c;"&gt;So the question is: how do we switch the SATA Operation Mode from ATA or IRRT to AHCI?&lt;/span&gt;&lt;/p&gt;</description></item></channel></rss>

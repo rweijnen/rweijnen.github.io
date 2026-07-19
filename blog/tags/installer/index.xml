@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Installer on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/installer/</link><description>Recent content in Installer on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 07 Jan 2011 14:39:55 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/installer/index.xml" rel="self" type="application/rss+xml"/><item><title>Fixing Applications: The Next Step</title><link>https://remkoweijnen.nl/blog/2011/01/07/fixing-applications-the-next-step/</link><pubDate>Fri, 07 Jan 2011 14:39:55 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/07/fixing-applications-the-next-step/</guid><description>&lt;p&gt;Lately I wrote a few articles about fixing bad applications using Compatibility Shims. If you didn&amp;rsquo;t read them yet, here are the links: &lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;
+&lt;div&gt;&lt;a href="https://remkoweijnen.nl/blog/2010/12/28/using-the-correctfilepaths-shim-to-redirect-an-ini-file-to-a-writable-location/"&gt;Using the CorrectFilePaths shim to redirect an ini file to a writable location&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li&gt;
+&lt;div&gt;&lt;a href="https://remkoweijnen.nl/blog/2010/12/28/using-the-correctfilepaths-shim-with-visual-basic-applications/"&gt;Using the CorrectFilePaths Shim with Visual Basic Applications&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;
+	&lt;li&gt;
+&lt;div&gt;&lt;a href="https://remkoweijnen.nl/blog/2011/01/06/redirect-global-object-to-local-objects-aka-fix-that-bad-app/"&gt;Redirect Global Object to Local Objects (aka fix that bad app!)&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+I also described that you can install an Application Compatibility Database using the sdbinst command.
+&lt;p&gt;At first I just took a script task in my Altiris Server to deploy the database using sdbinst -q &amp;lt;dbname&amp;gt; but later on I got a better idea.&lt;/p&gt;</description></item></channel></rss>

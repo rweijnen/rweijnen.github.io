@@ -1,0 +1,211 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Working with bitfields in Delphi &#183; Remko's Blog</title><meta name=description content="Delphi has no bitfield type, so translate C bitfields using a BDS2006 record with getter/setter properties that expose the packed ULONG values as booleans."><link rel=canonical href=https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Working with bitfields in Delphi"><meta property="og:description" content="Delphi has no bitfield type, so translate C bitfields using a BDS2006 record with getter/setter properties that expose the packed ULONG values as booleans."><meta property="og:url" content="https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/"><meta property="og:image" content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Remko's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Working with bitfields in Delphi"><meta name=twitter:description content="Delphi has no bitfield type, so translate C bitfields using a BDS2006 record with getter/setter properties that expose the packed ULONG values as booleans."><meta name=twitter:image content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="article:published_time" content="2008-05-01T23:06:00Z"><meta property="article:modified_time" content="2008-05-01T23:06:00Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Remko Weijnen"},"dateModified":"2008-05-01T23:06:00Z","datePublished":"2008-05-01T23:06:00Z","description":"Delphi has no bitfield type, so translate C bitfields using a BDS2006 record with getter/setter properties that expose the packed ULONG values as booleans.","headline":"Working with bitfields in Delphi","mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Delphi</span><span data-pagefind-filter=category>Programming</span>
+<span data-pagefind-meta=category>Delphi</span>
+<span data-pagefind-filter=tag>Delphi</span><span data-pagefind-filter=tag>Bitfields</span><span data-pagefind-filter=tag>Records</span><span data-pagefind-filter=tag>C Header</span><span data-pagefind-filter=tag>Programming</span>
+<span data-pagefind-filter=year>2008</span>
+<span data-pagefind-meta=date>2008-05-01</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/delphi/>delphi</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Working with bitfields in Delphi</h1><div class=byline><time datetime=2008-05-01>May 1, 2008</time>
+<span class=dot>&#183;</span><span>7 min read</span></div><div class=post-content data-pagefind-body><p>Recently I needed to convert a C header file to Delphi which contained bitfields. Let&rsquo;s take a look at a sample structure that contains bitfields:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>c++</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.cpp href="data:;charset=utf-8;base64,dHlwZWRlZiBzdHJ1Y3QgX0JJVEZJRUxEU1RSVUNUVVJFIHsKICAgIERXT1JEIGR3VmFsdWUxOwogICAgVUxPTkcgQml0VmFsdWUxOiAxOwogICAgVUxPTkcgQml0VmFsdWUyOiAxOwogICAgVUxPTkcgQml0VmFsdWUzOiAxOwogICAgVUxPTkcgQml0VmFsdWU0OiAxOwp9IEJJVEZJRUxEU1RSVUNUVVJFLCAqIEJJVEZJRUxEU1RSVUNUVVJFOw==">Download</a></span></div><div class=codebody><pre class=language-cpp><code class=language-cpp>typedef struct _BITFIELDSTRUCTURE {
+    DWORD dwValue1;
+    ULONG BitValue1: 1;
+    ULONG BitValue2: 1;
+    ULONG BitValue3: 1;
+    ULONG BitValue4: 1;
+} BITFIELDSTRUCTURE, * BITFIELDSTRUCTURE;</code></pre></div></div><p>It means that there is a DWORD (Cardinal) dwValue1 followed by a bitfield with the size of a ULONG (32 bits). In this bitfield 4 values are defined (BitValue1..4) which are used as boolean&rsquo;s because the value can offcourse be 0 or 1. Since Delphi doesn&rsquo;t know a bitfield type the question is how to translate it. Usually it would mean that we simply treat the whole bitfield value as a ULONG and extract the required properties by applying a bitmask (shl/shr). Starting from BDS2006 we can define a record with propertes and use getters and setters. Using this technique we can present boolean values to the user:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,type%0A%20%20_BITFIELDSTRUCTURE%20=%20record%0A%20%20dwValue1:%20DWORD;%0A%20%20strict%20private%0A%20%20%20%20BitField:%20DWORD;%0A%20%20%20%20function%20GetBitValue1:%20Boolean;%0A%20%20%20%20function%20GetBitValue2:%20Boolean;%0A%20%20%20%20function%20GetBitValue3:%20Boolean;%0A%20%20%20%20function%20GetBitValue4:%20Boolean;%0A%20%20%20%20procedure%20SetBitValue1(const%20Value:%20Boolean);%0A%20%20%20%20procedure%20SetBitValue2(const%20Value:%20Boolean);%0A%20%20%20%20procedure%20SetBitValue3(const%20Value:%20Boolean);%0A%20%20%20%20procedure%20SetBitValue4(const%20Value:%20Boolean);%0A%20%20public%0A%20%20%20%20property%20BitValue1:%20Boolean%20read%20GetBitValue1%20write%20SetBitValue1;%0A%20%20%20%20property%20BitValue2:%20Boolean%20read%20GetBitValue2%20write%20SetBitValue2;%0A%20%20%20%20property%20BitValue3:%20Boolean%20read%20GetBitValue3%20write%20SetBitValue3;%0A%20%20%20%20property%20BitValue4:%20Boolean%20read%20GetBitValue4%20write%20SetBitValue4;%0A%20%20end;%0A%20%20TBitFieldStructure%20=%20_BITFIELDSTRUCTURE;%0A%20%20PBitFieldStructure%20=%20%5E_BITFIELDSTRUCTURE;">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>type
+  _BITFIELDSTRUCTURE = record
+  dwValue1: DWORD;
+  strict private
+    BitField: DWORD;
+    function GetBitValue1: Boolean;
+    function GetBitValue2: Boolean;
+    function GetBitValue3: Boolean;
+    function GetBitValue4: Boolean;
+    procedure SetBitValue1(const Value: Boolean);
+    procedure SetBitValue2(const Value: Boolean);
+    procedure SetBitValue3(const Value: Boolean);
+    procedure SetBitValue4(const Value: Boolean);
+  public
+    property BitValue1: Boolean read GetBitValue1 write SetBitValue1;
+    property BitValue2: Boolean read GetBitValue2 write SetBitValue2;
+    property BitValue3: Boolean read GetBitValue3 write SetBitValue3;
+    property BitValue4: Boolean read GetBitValue4 write SetBitValue4;
+  end;
+  TBitFieldStructure = _BITFIELDSTRUCTURE;
+  PBitFieldStructure = ^_BITFIELDSTRUCTURE;</code></pre></div></div><p>Code completion shows that the record has one DWORD Value and 4 Boolean Values which is just what we want!<br><img loading=lazy decoding=async width=266 src=/blog/wp-content/uploads/2008/05/codecompletion.webp alt=CodeCompletion height=173></p><p>Offcourse we need to implement the Getters and Setters:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,function%20_BITFIELDSTRUCTURE.GetBitValue1;%0Abegin%0A%20%20Result%20:=%20BitField%20and%201%20=%201;%0Aend;%0A%0Afunction%20_BITFIELDSTRUCTURE.GetBitValue2;%0Abegin%0A%20%20Result%20:=%20BitField%20and%202%20=%202;%0Aend;%0A%0Afunction%20_BITFIELDSTRUCTURE.GetBitValue3;%0Abegin%0A%20%20Result%20:=%20BitField%20and%204%20=%204;%0Aend;%0A%0Afunction%20_BITFIELDSTRUCTURE.GetBitValue4;%0Abegin%0A%20%20Result%20:=%20BitField%20and%208%20=%208;%0Aend;%0A%0Aprocedure%20_BITFIELDSTRUCTURE.SetBitValue1(const%20Value:%20Boolean);%0Abegin%0A%20%20if%20Value%20then%20BitField%20:=%20BitField%20or%201%20else%20BitField%20:=%20BitField%20and%20(not%201);%0Aend;%0A%0Aprocedure%20_BITFIELDSTRUCTURE.SetBitValue2(const%20Value:%20Boolean);%0Abegin%0A%20%20if%20Value%20then%20BitField%20:=%20BitField%20or%202%20else%20BitField%20:=%20BitField%20and%20(not%202);%0Aend;%0A%0Aprocedure%20_BITFIELDSTRUCTURE.SetBitValue3(const%20Value:%20Boolean);%0Abegin%0A%20%20if%20Value%20then%20BitField%20:=%20BitField%20or%204%20else%20BitField%20:=%20BitField%20and%20(not%204);%0Aend;%0A%0Aprocedure%20_BITFIELDSTRUCTURE.SetBitValue4(const%20Value:%20Boolean);%0Abegin%0A%20%20if%20Value%20then%20BitField%20:=%20BitField%20or%208%20else%20BitField%20:=%20BitField%20and%20(not%208);%0Aend;">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function _BITFIELDSTRUCTURE.GetBitValue1;
+begin
+  Result := BitField and 1 = 1;
+end;
+
+function _BITFIELDSTRUCTURE.GetBitValue2;
+begin
+  Result := BitField and 2 = 2;
+end;
+
+function _BITFIELDSTRUCTURE.GetBitValue3;
+begin
+  Result := BitField and 4 = 4;
+end;
+
+function _BITFIELDSTRUCTURE.GetBitValue4;
+begin
+  Result := BitField and 8 = 8;
+end;
+
+procedure _BITFIELDSTRUCTURE.SetBitValue1(const Value: Boolean);
+begin
+  if Value then BitField := BitField or 1 else BitField := BitField and (not 1);
+end;
+
+procedure _BITFIELDSTRUCTURE.SetBitValue2(const Value: Boolean);
+begin
+  if Value then BitField := BitField or 2 else BitField := BitField and (not 2);
+end;
+
+procedure _BITFIELDSTRUCTURE.SetBitValue3(const Value: Boolean);
+begin
+  if Value then BitField := BitField or 4 else BitField := BitField and (not 4);
+end;
+
+procedure _BITFIELDSTRUCTURE.SetBitValue4(const Value: Boolean);
+begin
+  if Value then BitField := BitField or 8 else BitField := BitField and (not 8);
+end;</code></pre></div></div><p>We can even add a constructor to it, this can be used to e.g. initialize the record (in the example below we fill with zeroes). Note that only a constructor with at least one argument can be used:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,...%0A%20%20public%0A%20%20%20%20constructor%20Create(const%20dummy:%20word);%0A%20%20%20%20...%0A%0Aimplementation%0A%0Aconstructor%20_BITFIELDSTRUCTURE.Create;%20%20//%20Did%20you%20know%20that%20Delphi%20permits%20leaving%20out%20(const%20dummy:%20word)%20here?%0Abegin%0A%20%20ZeroMemory(@Self,%20SizeOf(Self));%0Aend;%0A%0A...%0A%0Aprocedure%20TForm1.Button1Click(Sender:%20TObject);%0Avar%0A%20%20BitFieldStructure:%20TBitFieldStructure;%0Abegin%0A%20%20BitFieldStructure%20:=%20TBitFieldStructure.Create(0);">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>...
+  public
+    constructor Create(const dummy: word);
+    ...
+
+implementation
+
+constructor _BITFIELDSTRUCTURE.Create;  // Did you know that Delphi permits leaving out (const dummy: word) here?
+begin
+  ZeroMemory(@Self, SizeOf(Self));
+end;
+
+...
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  BitFieldStructure: TBitFieldStructure;
+begin
+  BitFieldStructure := TBitFieldStructure.Create(0);</code></pre></div></div><p>So why not use a class instead of record? The answer is that a class is just a pointer we can never pass this to a function, procedure or api call that expects a record. But if we want to support older Delphi versions, like Delphi 6 or Delphi 7 and even Delphi 2005, which are still used a lot we need to find another solution. I came up with (ab)using sets to emulate bitfields, we can do this because a set is actually a set of bits (limited to 256 bits). The example structure could look like this if we use sets:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ICBfQklURklFTERTVFJVQ1QgPSByZWNvcmQKICBkd1ZhbHVlMTogRFdPUkQ7CiAgQml0RmllbGQ6IFNldCBPZiAoCiAgICBCaXRWYWx1ZTEsIEJpdFZhbHVlMiwgQml0VmFsdWUzLCBCaXRWYWx1ZTQKICApOwogIGVuZDsKICBUQml0RmllbGRTdHJ1Y3QgPSBfQklURklFTERTVFJVQ1Q7CiAgUEJpdEZpZWxkU3RydWN0ID0gXl9CSVRGSUVMRFNUUlVDVDs=">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>  _BITFIELDSTRUCT = record
+  dwValue1: DWORD;
+  BitField: Set Of (
+    BitValue1, BitValue2, BitValue3, BitValue4
+  );
+  end;
+  TBitFieldStruct = _BITFIELDSTRUCT;
+  PBitFieldStruct = ^_BITFIELDSTRUCT;</code></pre></div></div><p>We can use normal set operations to get and set bitvalues:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,procedure%20TForm1.Button2Click(Sender:%20TObject);%0Avar%0A%20%20bValue:%20Boolean;%0A%20%20BitFieldStruct:%20TBitFieldStruct;%0Abegin%0A%20%20bValue%20:=%20BitValue2%20in%20BitFieldStruct.BitField;%0A%20%20BitFieldStruct.BitField%20:=%20%5BBitValue1,%20BitValue3%5D;%0A%20%20BitFieldStruct.BitField%20:=%20BitFieldStruct.BitField%20-%20%5BBitValue3%5D;%0Aend;">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>procedure TForm1.Button2Click(Sender: TObject);
+var
+  bValue: Boolean;
+  BitFieldStruct: TBitFieldStruct;
+begin
+  bValue := BitValue2 in BitFieldStruct.BitField;
+  BitFieldStruct.BitField := [BitValue1, BitValue3];
+  BitFieldStruct.BitField := BitFieldStruct.BitField - [BitValue3];
+end;</code></pre></div></div><p>Settings like minimal enum size and record alignment are important because we need to asssure that te record size matches the C structure&rsquo;s size (especially when using structures with a lot of bitfields. I choose to do this with a litte trick, first I declare some constants:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,const%0A%20%20al32Bit=31;%0A%20%20al64bit=63;%0A%20%20al96bit=95;%0A%20%20al128bit=127;%0A%20%20al160bit=159;%0A%20%20al192bit=191;%0A%20%20al224bit=221;%0A%20%20al256bit=255;">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>const
+  al32Bit=31;
+  al64bit=63;
+  al96bit=95;
+  al128bit=127;
+  al160bit=159;
+  al192bit=191;
+  al224bit=221;
+  al256bit=255;</code></pre></div></div><p>We use these constants to force the correct size, in the example the bitfield was a ULONG which is 32 bits. We add the al32Bit constant to the bitfield:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ICBfQklURklFTERTVFJVQ1QgPSByZWNvcmQKICBkd1ZhbHVlMTogRFdPUkQ7CiAgQml0RmllbGQ6IFNldCBPZiAoCiAgICBCaXRWYWx1ZTEsIEJpdFZhbHVlMiwgQml0VmFsdWUzLCBCaXRWYWx1ZTQsIGFsMzJCaXQKICApOwogIGVuZDsKICBUQml0RmllbGRTdHJ1Y3QgPSBfQklURklFTERTVFJVQ1Q7CiAgUEJpdEZpZWxkU3RydWN0ID0gXl9CSVRGSUVMRFNUUlVDVDs=">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>  _BITFIELDSTRUCT = record
+  dwValue1: DWORD;
+  BitField: Set Of (
+    BitValue1, BitValue2, BitValue3, BitValue4, al32Bit
+  );
+  end;
+  TBitFieldStruct = _BITFIELDSTRUCT;
+  PBitFieldStruct = ^_BITFIELDSTRUCT;</code></pre></div></div><p>So I thought I had it figured out&mldr; until I came to this line in the C header file:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>c++</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.cpp href="data:;charset=utf-8;base64,VUxPTkcgICBTb21lVmFsdWUgIDogMTsKVUxPTkcgICBPdGhlclZhbHVlIDogMTsKVUxPTkcgICBDb2xvckRlcHRoIDogMzs=">Download</a></span></div><div class=codebody><pre class=language-cpp><code class=language-cpp>ULONG   SomeValue  : 1;
+ULONG   OtherValue : 1;
+ULONG   ColorDepth : 3;</code></pre></div></div><p>So we have a bitfield consisting off multiple bits! This gave me some headaches but I finally came up with the following approach</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,%20%20BitField:%20Set%20Of%20(%0A%20%20%20%20SomeValue,%20OtherValue,%20ColorDepth1,%20ColorDepth2,%20ColorDepth3,%20al32Bit%0A%20%20);">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>  BitField: Set Of (
+    SomeValue, OtherValue, ColorDepth1, ColorDepth2, ColorDepth3, al32Bit
+  );</code></pre></div></div><p>We need a helper function to retreive the numeric value of ColorDepth:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gVmFsdWVGcm9tQml0U2V0KHZhciBBQml0U2V0OyBjb25zdCBTdGFydEJpdDogQnl0ZTsKICBjb25zdCBDb3VudDogQnl0ZSk6IEludDY0Owp2YXIKICBNYXhCaXRTZXQ6IFRNYXhCaXRTZXQ7CiAgaSwgQml0VmFsdWU6IEludGVnZXI7CmJlZ2luCiAgLy8gVGhlIHJlc3VsdCBjYW4gY29udGFpbiBtYXguIDY0IGJpdCB2YWx1ZSwgUmFpc2UgaWYgQ291bnQgPiA2NAogIGlmIENvdW50ID4gNjQgdGhlbiBSYWlzZSBFSW50T3ZlcmZsb3cuQ3JlYXRlKCdDb3VudCBjYW5ub3QgZXhjZWVkIDY0Jyk7CgogIC8vIEEgRGVscGhpIFNldCBjb250YWlucyBhdCBtb3N0IDI1NiBiaXRzLiBTbyB3ZSByYWlzZSBFeGNlcHRpb24gaXMgd2UgZXhjZWVkCiAgaWYgU3RhcnRCaXQgKyBDb3VudCA+IDI1NSB0aGVuIFJhaXNlCiAgICBFSW50T3ZlcmZsb3cuQ3JlYXRlKCdTdGFydGJpdCArIENvdW50IGNhbm5vdCBleGNlZWQgbWF4aW11bSBzZXQgc2l6ZSAoMjU1KScpOwoKICBSZXN1bHQgOj0gMDsKICBCaXRWYWx1ZSA6PSAxOwoKICAvLyBBIERlbHBoaSBTZXQgT2YgY2FuIGhvbGQgYSBtYXhpbXVtIG9mIDI1NiBiaXRzLCBzaW5jZSB3ZSBkbyBub3Qga25vdwogIC8vIHdoaWNoIHNpemUgd2FzIHBhc3NlZCB0byB1cyB3ZSBjYXN0IHRvIDI1NiBiaXRzLgogIE1heEJpdFNldCA6PSBUTWF4Qml0U2V0KEFCaXRTZXQpOwogIC8vIExvb3AgdGhyb3VnaCB0aGUgcmVxdWVzdGVkIGJpdHMgZnJvbSBlbmQgdG8gc3RhcnQgKExpdHRsZSBFbmRpYW4pCiAgZm9yIGkgOj0gU3RhcnRCaXQrQ291bnQtMSBkb3dudG8gU3RhcnRCaXQgZG8KICBiZWdpbgoKICAgIC8vIGlzIHRoZSBiaXQgc2V0PwogICAgaWYgaSBpbiBNYXhCaXRTZXQgdGhlbgogICAgYmVnaW4KICAgICAgLy8gTXVsdGlwbHkgd2l0aCBCaXRWYWx1ZSBhbmQgYWRkIHRvIHJlc3VsdAogICAgICBSZXN1bHQgOj0gUmVzdWx0ICsgQml0VmFsdWU7CiAgICBlbmQ7CgogICAgLy8gTXVsdGlwbHkgQml0VmFsdWUgYnkgMgogICAgQml0VmFsdWUgOj0gQml0VmFsdWUgc2hsIDE7CiAgZW5kOwplbmQ7">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function ValueFromBitSet(var ABitSet; const StartBit: Byte;
+  const Count: Byte): Int64;
+var
+  MaxBitSet: TMaxBitSet;
+  i, BitValue: Integer;
+begin
+  // The result can contain max. 64 bit value, Raise if Count &gt; 64
+  if Count &gt; 64 then Raise EIntOverflow.Create(&#39;Count cannot exceed 64&#39;);
+
+  // A Delphi Set contains at most 256 bits. So we raise Exception is we exceed
+  if StartBit &#43; Count &gt; 255 then Raise
+    EIntOverflow.Create(&#39;Startbit &#43; Count cannot exceed maximum set size (255)&#39;);
+
+  Result := 0;
+  BitValue := 1;
+
+  // A Delphi Set Of can hold a maximum of 256 bits, since we do not know
+  // which size was passed to us we cast to 256 bits.
+  MaxBitSet := TMaxBitSet(ABitSet);
+  // Loop through the requested bits from end to start (Little Endian)
+  for i := StartBit&#43;Count-1 downto StartBit do
+  begin
+
+    // is the bit set?
+    if i in MaxBitSet then
+    begin
+      // Multiply with BitValue and add to result
+      Result := Result &#43; BitValue;
+    end;
+
+    // Multiply BitValue by 2
+    BitValue := BitValue shl 1;
+  end;
+end;</code></pre></div></div><p>The helper function is used like this:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8,Struct.BitFields%20:=%20%5BOtherValue,%20ColorDepth1,%20ColorDepth3%5D;%0AWriteLn(Format('Value=%25d',%20%5BValueFromBitSet(Struct.BitFields,%20Integer(ColorDepth1),%203)%5D));%0Aend.">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>Struct.BitFields := [OtherValue, ColorDepth1, ColorDepth3];
+WriteLn(Format(&#39;Value=%d&#39;, [ValueFromBitSet(Struct.BitFields, Integer(ColorDepth1), 3)]));
+end.</code></pre></div></div><p>Some limitations remain, although I don&rsquo;t think you are likely to encouter these:</p><ul><li>A Delphi Set can contain at most 256 values.</li><li>The ValueFromBitSet function returns an Int64, so values that do not fit in an Int64 cannot be returned.</li><li>Values in a Set need a unique name.</li></ul></div><div class=author-foot><img class=avatar-img src=/blog/img/remko-avatar.png alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>RW</span><div class=who><div class=side-h>> written by</div><div class=name>Remko Weijnen</div><p>I work on Windows internals, application delivery, security, reverse engineering, automation and AI — building tools, debugging strange behaviour and taking systems apart to understand how they work.</p><div class=links><a href=https://github.com/rweijnen rel=me>GitHub</a>
+<a href=https://www.linkedin.com/in/remkoweijnen/ rel=me>LinkedIn</a></div></div></div><section class=comments><h2>5 Comments</h2><ol class=comment-list><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href=/blog/ rel="nofollow ugc">Remko</a></span> <time datetime=2008-05-08>May 8, 2008</time></div><div class=comment-body><p>Seems like I left this part out:<br>type<br>TMaxBitSet = Set of Byte;<br>PMaxBitSet = ^TMaxBitSet;</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href=http://stackoverflow.com/questions/282019/how-to-simulate-bit-fields-in-delphi-records#282385 rel="nofollow ugc">Patrick van Logchem</a></span> <time datetime=2009-01-08>Jan 8, 2009</time></div><div class=comment-body><p>Hi Remko, nice article!</p><p>Using sets is certainly a good solution (it does result in quite optimal code-generation, especially when you only need to handle single-bit values.<br>However, I don't like the fact that using the values suddenly becomes a somewhat weird set-operation - I would rather approach them as properties.</p><p>For this (and support for bitfields with multiple bits in them), might I suggest you take a look at this :</p><p>http://stackoverflow.com/questions/282019/how-to-<br>simulate-bit-fields-in-delphi-records#282385</p><p>Cheers!</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href=/blog/ rel="nofollow ugc">Remko</a></span> <time datetime=2009-01-10>Jan 10, 2009</time></div><div class=comment-body><p>Patrick, I already looked at your solution in the NG (will reply there). Did you notice that I added a helper function for multiple bit fields: function ValueFromBitSet(var ABitSet; const StartBit: Byte;<br>const Count: Byte): Int64;</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href=/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/ rel="nofollow ugc">Sending WM_KEYDOWN or WM_KEYUP | RemkoWeijnen.nl</a></span> <time datetime=2009-03-30>Mar 30, 2009</time></div><div class=comment-body><p>[...] that I use a set to emulate a bitfield (as described here). Below a usage example: var &nbsp; lpr: TlParamRecord; begin &nbsp; lpr.lParam := 0; &nbsp; [...]</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href=http://Lookstoocomplicatedforme rel="nofollow ugc">Eli Fried</a></span> <time datetime=2011-01-10>Jan 10, 2011</time></div><div class=comment-body><p>I use bits in a much simpler way;<br>something like this;</p><p>Unit BitOper;<br>Uses......</p><p>type.....</p><p>Var<br>Value : LongWord;<br>Bits : Array [1..32] of Longword;<br>X : Byte;</p><p>Procedure Bits_Map; {Initialize the bit values}<br>Begin<br>For X := 1 To 32 Do<br>Begin<br>If X = 1 Then Value := 1 Else Value := Value Shl 1;<br>Bits[X] := Value;<br>End;<br>End;</p><p>Procedure SetBit (Var V : LongWord; N:Byte;Onoff:Boolean);<br>Begin<br>Case OnOff Of<br>True : V := V Or Bits[N];<br>False : V := V And (Not Bits[N]);<br>End;<br>End;</p><p>Function GetBit (Var V:LongWord;N:Byte) : Boolean;<br>Begin<br>Result := V And Bits[N] = Bits[N];<br>End;</p><p>End.</p><p>So Simple</p></div></li></ol></section></article><aside class=rail><div class=side-modules><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Delphi</div><div class=related-list><a class=related-item href=/blog/2017/12/18/rad-studio-tokyo-10-2-2-data-collection/><span class=rt>RAD Studio Tokyo 10.2(.2) Data Collection</span>
+<span class=rm>2017 &#183; 1 min</span>
+</a><a class=related-item href=/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/><span class=rt>Returning a string from unmanaged dll to .net</span>
+<span class=rm>2013 &#183; 3 min</span>
+</a><a class=related-item href=/blog/2012/11/28/get-process-id-of-a-running-service/><span class=rt>Get Process Id of a running Service</span>
+<span class=rm>2012 &#183; 1 min</span>
+</a><a class=related-all href=/blog/categories/delphi/>All Delphi posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2011/11/04/construct-aqs-date-range-with-powershell/>Construct AQS date range with PowerShell</a><div class=random-meta id=randomMeta>2011 &#183; PowerShell</div><script type=application/json id=randomPool>[{"c":"PowerShell","t":"Construct AQS date range with PowerShell","u":"/blog/2011/11/04/construct-aqs-date-range-with-powershell/","y":"2011"},{"c":"Programming","t":"A referral was returned from the server","u":"/blog/2007/10/19/a-referral-was-returned-from-the-server/","y":"2007"},{"c":"Altiris","t":"Why is my scheduled job not executed in Altiris?","u":"/blog/2010/11/23/why-is-my-scheduled-job-not-executed-in-altiris/","y":"2010"},{"c":"Altiris","t":"Where to download HP Rapid Deployment Pack","u":"/blog/2010/10/14/where-to-download-hp-rapid-deployment-pack/","y":"2010"},{"c":"General","t":"New Universal Patch Method","u":"/blog/2008/12/09/new-universal-patch-method/","y":"2008"},{"c":"Programming","t":"GetTokenInformation with TokenLinkedToken returns error 1312","u":"/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/","y":"2011"},{"c":"General","t":"Could not load file or assembly 'System.Configuration'","u":"/blog/2012/07/18/could-not-load-file-or-assembly-system-configuration/","y":"2012"},{"c":"Delphi","t":"Switching to the Services Session","u":"/blog/2012/02/24/switching-to-the-services-session/","y":"2012"},{"c":"Windows 8","t":"Windows 8 comes with free hardware/software inventory tool","u":"/blog/2012/03/01/windows-8-comes-with-free-hardwaresoftware-inventory-tool/","y":"2012"},{"c":"Windows 2003","t":"Windows 2003 Server Standard memory patch","u":"/blog/2011/03/27/windows-2003-server-standard-memory-patch/","y":"2011"},{"c":"General","t":"Move WSUS content folder","u":"/blog/2011/02/02/move-wsus-content-folder/","y":"2011"},{"c":"Citrix","t":"Edit Document requires a Windows SharePoint Services-compatible application","u":"/blog/2012/03/09/edit-document-requires-a-windows-sharepoint-services-compatible-application/","y":"2012"},{"c":"General","t":"Reset Root Password on Linux Virtual Appliance","u":"/blog/2012/03/27/reset-root-password-on-linux-virtual-appliance/","y":"2012"},{"c":"Active Directory","t":"Query Active Directory from Excel","u":"/blog/2007/11/01/query-active-directory-from-excel/","y":"2007"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

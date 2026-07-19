@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Reg on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/reg/</link><description>Recent content in Reg on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 13 Dec 2010 20:52:59 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/reg/index.xml" rel="self" type="application/rss+xml"/><item><title>Writing Environment Variables to the Registry from a Script</title><link>https://remkoweijnen.nl/blog/2010/12/13/writing-environment-variables-to-the-registry-from-a-script/</link><pubDate>Mon, 13 Dec 2010 20:52:59 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/13/writing-environment-variables-to-the-registry-from-a-script/</guid><description>&lt;p&gt;I usually change the text below the &amp;ldquo;This Computer&amp;rdquo; icon to reflect the current username and servername:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/useroncomputer.webp" alt="UserOnComputer" width="86" height="83" /&gt;
+&lt;p&gt;This is an ancient trick, just set the the &lt;em&gt;LocalizedString&lt;/em&gt; Value of the following key:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;batch&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".bat" href="data:text/plain;charset=utf-8;base64,SEtFWV9DTEFTU0VTX1JPT1RcQ0xTSURcezIwRDA0RkUwLTNBRUEtMTA2OS1BMkQ4LTA4MDAyQjMwMzA5RH0="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-batch"&gt;&lt;code class="language-batch"&gt;HKEY_CLASSES_ROOT\CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;to &amp;ldquo;%USERNAME% on %COMPUTERNAME%&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;It get&amp;rsquo;s a little more complicated if you want to set this from a script, because the environment variables are replaced with the actual value BEFORE they are entered in the Registry.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>RDP on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/rdp/</link><description>Recent content in RDP on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 28 Feb 2011 10:46:29 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/rdp/index.xml" rel="self" type="application/rss+xml"/><item><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 1 (theory)</title><link>https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/</link><pubDate>Mon, 28 Feb 2011 10:46:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/</guid><description>&lt;p&gt;Windows XP introduced the ability to use Fast User Switching (FUS from here on), which is implemented using &lt;em&gt;Terminal Services&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;But in some cases (i.e. when FUS is not enabled, or when you connect to the console in Windows 2003 server), the Winlogon process in an RDP session needs to transfer credentials to Session 0.&lt;/p&gt;
+&lt;p&gt;Although not documented in MSDN, the process of transferring credentials is described by Keith Brown in the June 2005 issue of MSDN magazine: &lt;a href="http://msdn.microsoft.com/en-us/magazine/cc163786.aspx"&gt;Customizing GINA, Part 2&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://msdn.microsoft.com/en-us/library/aa380577(v=vs.85).aspx"&gt;WlxQueryConsoleSwitchCredentials&lt;/a&gt; and &lt;a href="http://msdn.microsoft.com/en-us/library/aa380563(v=vs.85).aspx"&gt;WlxGetConsoleSwitchCredentials&lt;/a&gt; are used in the transfer with the semi-documented &lt;strong&gt;WLX_SAS_TYPE_AUTHENTICATED&lt;/strong&gt; SAS code constant.&lt;/p&gt;
+&lt;p&gt;Internally, &lt;em&gt;winlogon.exe&lt;/em&gt; uses a Named Pipe, &lt;strong&gt;\.\Pipe\TerminalServer\AutoReconnect, &lt;/strong&gt;to implement both of these functions.&lt;/p&gt;
+&lt;p&gt;The pipe format is described in this structure:&lt;/p&gt;</description></item><item><title>Copying files larger than 2GB in an RDP Session</title><link>https://remkoweijnen.nl/blog/2010/12/15/copying-files-larger-than-2gb-in-an-rdp-session/</link><pubDate>Wed, 15 Dec 2010 14:00:50 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/15/copying-files-larger-than-2gb-in-an-rdp-session/</guid><description>&lt;p&gt;Just had a good laugh while reading Microsoft &lt;a title="Copying files larger than 2 GB over a Remote Desktop Services or Terminal Services session by using Clipboard Redirection (copy and paste) fails silently" href="http://support.microsoft.com/kb/2258090" target="_blank"&gt;KB article 2258090&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;When you try to copy a file that is larger than 2 GB over a Remote Desktop Services or a Terminal Services session through Clipboard Redirection (copy and paste) by using the RDP client 6.0 or a later version, the file is not copied. And, you do not receive an error message.&lt;/p&gt;</description></item><item><title>Small LaunchRDP Update</title><link>https://remkoweijnen.nl/blog/2009/11/06/small-launchrdp-update/</link><pubDate>Fri, 06 Nov 2009 22:44:27 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/06/small-launchrdp-update/</guid><description>&lt;p&gt;For a long time now people have asked for a version of &lt;a href="https://remkoweijnen.nl/blog/2007/10/17/launch-rdp-from-commandline/"&gt;LaunchRDP&lt;/a&gt; that includes the Connection Bar. The original version was originally written for a very specific purpose and I never anticipated so many people would want to use it. But it seems that a lot of people like the Connection Bar (I hate it, especially with sessions in sessions, so that&amp;rsquo;s why I am using &lt;a href="https://remkoweijnen.nl/blog/2008/11/02/rdp-session-with-local-taskbar-visible/"&gt;RDPWithLocalTaskbar&lt;/a&gt;).&lt;/p&gt;</description></item><item><title>Delegated Management Console</title><link>https://remkoweijnen.nl/blog/2009/06/12/delegated-management-console/</link><pubDate>Fri, 12 Jun 2009 21:40:20 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/06/12/delegated-management-console/</guid><description>&lt;p&gt;In this topic I just want to show(case) you something I created in the past. It is a management console that enables delegated management in a Terminal Server or Citrix environment.&lt;/p&gt;
+&lt;p&gt;The console is launched by a small executable that check credentials (based on group membership) and then launches an RDP session with the actual console in it. The logic behind it is that the RDP session runs with an account with delegated permissions in Active Directory and the actual user account that logs in here doesn&amp;rsquo;t have any permissions at all.&lt;/p&gt;
+&lt;p&gt;This is the login screen:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2009/06/login.webp" class="glightbox" data-type="image" data-gallery="post-368"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2009/06/login-small.webp" alt="login" height="200" width="215" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;ve passed the login screen you enter the Main Console which consists of a Treeview on the left with possible options and a work area on the right:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2009/06/mainscreen.webp" alt="mainscreen" height="301" width="430" /&gt;</description></item><item><title>RDP Session with Local Taskbar visible</title><link>https://remkoweijnen.nl/blog/2008/11/02/rdp-session-with-local-taskbar-visible/</link><pubDate>Sun, 02 Nov 2008 08:16:42 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/11/02/rdp-session-with-local-taskbar-visible/</guid><description>&lt;p&gt;I usually have lots of Terminal Server sessions open when I&amp;rsquo;m working, both direct sessions but also &amp;ldquo;sessions in sessions&amp;rdquo;. In order to keep overview on my desktop I prefer to make the session size as big as possible without being full screen (so keep my local taskbar visible).&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" width="404" src="https://remkoweijnen.nl/blog/wp-content/uploads/2008/11/localtaskbar2.webp" alt="LocalTaskBar2" height="242" /&gt;
+&lt;p&gt;If I run a session in a session I do this again, this makes switching sessions very easy and you can always see which session you are in:&lt;/p&gt;</description></item><item><title>Encrypting RDP Passwords in VB.NET</title><link>https://remkoweijnen.nl/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/</link><pubDate>Fri, 02 May 2008 08:53:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/</guid><description>&lt;p&gt;Justin Shepard converted my code to &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;encrypt RPD passwords&lt;/a&gt; to VB.NET:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;vb.net&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".vb" href="data:text/plain;charset=utf-8;base64,Jz09PT09PVNPRgoKSW1wb3J0cyBTeXN0ZW0KSW1wb3J0cyBTeXN0ZW0uVGV4dApJbXBvcnRzIFN5c3RlbS5SdW50aW1lLkludGVyb3BTZXJ2aWNlcwpJbXBvcnRzIFN5c3RlbS5Db21wb25lbnRNb2RlbApJbXBvcnRzIE1pY3Jvc29mdC5WaXN1YWxCYXNpYwoKUHVibGljIE1vZHVsZSBSZHBFbmNyeXB0CgogICAgUHVibGljIENsYXNzIERQQVBJCjxkbGxpbXBvcnQ&amp;#43;IF8KICAgICAgICBQcml2YXRlIFNoYXJlZCBGdW5jdGlvbiBDcnlwdFByb3RlY3REYXRhKCBfCiAgICAgICAgICAgIEJ5UmVmIHBQbGFpblRleHQgQXMgREFUQV9CTE9CLCBfCiAgICAgICAgICAgIEJ5VmFsIHN6RGVzY3JpcHRpb24gQXMgU3RyaW5nLCBfCiAgICAgICAgICAgIEJ5UmVmIHBFbnRyb3B5IEFzIERBVEFfQkxPQiwgXwogICAgICAgICAgICBCeVZhbCBwUmVzZXJ2ZWQgQXMgSW50UHRyLCBfCiAgICAgICAgICAgIEJ5UmVmIHBQcm9tcHQgQXMgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVCwgXwogICAgICAgICAgICBCeVZhbCBkd0ZsYWdzIEFzIEludGVnZXIsIF8KICAgICAgICAgICAgQnlSZWYgcENpcGhlclRleHQgQXMgREFUQV9CTE9CIF8KICAgICAgICApIEFzIEJvb2xlYW4KICAgICAgICBFbmQgRnVuY3Rpb24KCjxkbGxpbXBvcnQ&amp;#43;IF8KICAgICAgICBQcml2YXRlIFNoYXJlZCBGdW5jdGlvbiBDcnlwdFVucHJvdGVjdERhdGEoIF8KICAgICAgICAgICAgQnlSZWYgcENpcGhlclRleHQgQXMgREFUQV9CTE9CLCBfCiAgICAgICAgICAgIEJ5UmVmIHBzekRlc2NyaXB0aW9uIEFzIFN0cmluZywgXwogICAgICAgICAgICBCeVJlZiBwRW50cm9weSBBcyBEQVRBX0JMT0IsIF8KICAgICAgICAgICAgQnlWYWwgcFJlc2VydmVkIEFzIEludFB0ciwgXwogICAgICAgICAgICBCeVJlZiBwUHJvbXB0IEFzIENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QsIF8KICAgICAgICAgICAgQnlWYWwgZHdGbGFncyBBcyBJbnRlZ2VyLCBfCiAgICAgICAgICAgIEJ5UmVmIHBQbGFpblRleHQgQXMgREFUQV9CTE9CIF8KICAgICAgICApIEFzIEJvb2xlYW4KICAgICAgICBFbmQgRnVuY3Rpb24KCjxzdHJ1Y3RsYXlvdXQ&amp;#43;IF8KICAgICAgICBGcmllbmQgU3RydWN0dXJlIERBVEFfQkxPQgogICAgICAgICAgICBQdWJsaWMgY2JEYXRhIEFzIEludGVnZXIKICAgICAgICAgICAgUHVibGljIHBiRGF0YSBBcyBJbnRQdHIKICAgICAgICBFbmQgU3RydWN0dXJlCgo8c3RydWN0bGF5b3V0PiBfCiAgICAgICAgRnJpZW5kIFN0cnVjdHVyZSBDUllQVFBST1RFQ1RfUFJPTVBUU1RSVUNUCiAgICAgICAgICAgIFB1YmxpYyBjYlNpemUgQXMgSW50ZWdlcgogICAgICAgICAgICBQdWJsaWMgZHdQcm9tcHRGbGFncyBBcyBJbnRlZ2VyCiAgICAgICAgICAgIFB1YmxpYyBod25kQXBwIEFzIEludFB0cgogICAgICAgICAgICBQdWJsaWMgc3pQcm9tcHQgQXMgU3RyaW5nCiAgICAgICAgRW5kIFN0cnVjdHVyZQoKICAgICAgICBQcml2YXRlIENvbnN0IENSWVBUUFJPVEVDVF9VSV9GT1JCSURERU4gQXMgSW50ZWdlciA9IDEKICAgICAgICBQcml2YXRlIENvbnN0IENSWVBUUFJPVEVDVF9MT0NBTF9NQUNISU5FIEFzIEludGVnZXIgPSA0CgogICAgICAgIFByaXZhdGUgU2hhcmVkIFN1YiBJbml0UHJvbXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlSZWYgcHMgQXMgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVCBfCiAgICAgICAgKQogICAgICAgICAgICBwcy5jYlNpemUgPSBNYXJzaGFsLlNpemVPZihHZXRUeXBlKENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QpKQogICAgICAgICAgICBwcy5kd1Byb21wdEZsYWdzID0gMAogICAgICAgICAgICBwcy5od25kQXBwID0gSW50UHRyLlplcm8KICAgICAgICAgICAgcHMuc3pQcm9tcHQgPSBOb3RoaW5nCiAgICAgICAgRW5kIFN1YgoKICAgICAgICBQcml2YXRlIFNoYXJlZCBTdWIgSW5pdEJMT0IgXwogICAgICAgICggXwogICAgICAgICAgICBCeVZhbCBkYXRhIEFzIEJ5dGUoKSwgXwogICAgICAgICAgICBCeVJlZiBibG9iIEFzIERBVEFfQkxPQiBfCiAgICAgICAgKQogICAgICAgICAgICAnIFVzZSBlbXB0eSBhcnJheSBmb3IgbnVsbCBwYXJhbWV0ZXIuCiAgICAgICAgICAgIElmIGRhdGEgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBkYXRhID0gTmV3IEJ5dGUoMCkge30KICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICAnIEFsbG9jYXRlIG1lbW9yeSBmb3IgdGhlIEJMT0IgZGF0YS4KICAgICAgICAgICAgYmxvYi5wYkRhdGEgPSBNYXJzaGFsLkFsbG9jSEdsb2JhbChkYXRhLkxlbmd0aCkKCiAgICAgICAgICAgICcgTWFrZSBzdXJlIHRoYXQgbWVtb3J5IGFsbG9jYXRpb24gd2FzIHN1Y2Nlc3NmdWwuCiAgICAgICAgICAgIElmIGJsb2IucGJEYXRhLkVxdWFscyhJbnRQdHIuWmVybykgVGhlbgogICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbiggXwogICAgICAgICAgICAgICAgICAgICAgICAiVW5hYmxlIHRvIGFsbG9jYXRlIGRhdGEgYnVmZmVyIGZvciBCTE9CIHN0cnVjdHVyZS4iKQogICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICcgU3BlY2lmeSBudW1iZXIgb2YgYnl0ZXMgaW4gdGhlIEJMT0IuCiAgICAgICAgICAgIGJsb2IuY2JEYXRhID0gZGF0YS5MZW5ndGgKICAgICAgICAgICAgTWFyc2hhbC5Db3B5KGRhdGEsIDAsIGJsb2IucGJEYXRhLCBkYXRhLkxlbmd0aCkKICAgICAgICBFbmQgU3ViCgogICAgICAgIFB1YmxpYyBFbnVtIEtleVR5cGUKICAgICAgICAgICAgVXNlcktleSA9IDEKICAgICAgICAgICAgTWFjaGluZUtleQogICAgICAgIEVuZCBFbnVtCgogICAgICAgIFByaXZhdGUgU2hhcmVkIGRlZmF1bHRLZXlUeXBlIEFzIEtleVR5cGUgPSBLZXlUeXBlLlVzZXJLZXkKCiAgICAgICAgUHVibGljIFNoYXJlZCBGdW5jdGlvbiBFbmNyeXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlWYWwga2V5VHlwZSBBcyBLZXlUeXBlLCBfCiAgICAgICAgICAgIEJ5VmFsIHBsYWluVGV4dCBBcyBTdHJpbmcsIF8KICAgICAgICAgICAgQnlWYWwgZW50cm9weSBBcyBTdHJpbmcsIF8KICAgICAgICAgICAgQnlWYWwgZGVzY3JpcHRpb24gQXMgU3RyaW5nIF8KICAgICAgICApIEFzIFN0cmluZwogICAgICAgICAgICBJZiBwbGFpblRleHQgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBwbGFpblRleHQgPSBTdHJpbmcuRW1wdHkKICAgICAgICAgICAgRW5kIElmCiAgICAgICAgICAgIElmIGVudHJvcHkgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBlbnRyb3B5ID0gU3RyaW5nLkVtcHR5CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgRGltIHJlc3VsdCBBcyBCeXRlKCkKICAgICAgICAgICAgRGltIGVuY3J5cHRlZCBBcyBTdHJpbmcgPSAiIgogICAgICAgICAgICBEaW0gaSBBcyBJbnRlZ2VyCiAgICAgICAgICAgIHJlc3VsdCA9IEVuY3J5cHQoa2V5VHlwZSwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY29kaW5nLlVuaWNvZGUuR2V0Qnl0ZXMocGxhaW5UZXh0KSwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY29kaW5nLlVuaWNvZGUuR2V0Qnl0ZXMoZW50cm9weSksIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbikKICAgICAgICAgICAgRm9yIGkgPSAwIFRvIHJlc3VsdC5MZW5ndGggLSAxCiAgICAgICAgICAgICAgICBlbmNyeXB0ZWQgPSBlbmNyeXB0ZWQgJiBDb252ZXJ0LlRvU3RyaW5nKHJlc3VsdChpKSwgMTYpLlBhZExlZnQoMiwgIjAiKS5Ub1VwcGVyKCkKICAgICAgICAgICAgTmV4dAogICAgICAgICAgICBSZXR1cm4gZW5jcnlwdGVkLlRvU3RyaW5nKCkKICAgICAgICBFbmQgRnVuY3Rpb24KCiAgICAgICAgUHVibGljIFNoYXJlZCBGdW5jdGlvbiBFbmNyeXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlWYWwga2V5VHlwZSBBcyBLZXlUeXBlLCBfCiAgICAgICAgICAgIEJ5VmFsIHBsYWluVGV4dEJ5dGVzIEFzIEJ5dGUoKSwgXwogICAgICAgICAgICBCeVZhbCBlbnRyb3B5Qnl0ZXMgQXMgQnl0ZSgpLCBfCiAgICAgICAgICAgIEJ5VmFsIGRlc2NyaXB0aW9uIEFzIFN0cmluZyBfCiAgICAgICAgKSBBcyBCeXRlKCkKICAgICAgICAgICAgSWYgcGxhaW5UZXh0Qnl0ZXMgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBwbGFpblRleHRCeXRlcyA9IE5ldyBCeXRlKDApIHt9CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgSWYgZW50cm9weUJ5dGVzIElzIE5vdGhpbmcgVGhlbgogICAgICAgICAgICAgICAgZW50cm9weUJ5dGVzID0gTmV3IEJ5dGUoMCkge30KICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICBJZiBkZXNjcmlwdGlvbiBJcyBOb3RoaW5nIFRoZW4KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uID0gU3RyaW5nLkVtcHR5CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgRGltIHBsYWluVGV4dEJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgogICAgICAgICAgICBEaW0gY2lwaGVyVGV4dEJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgogICAgICAgICAgICBEaW0gZW50cm9weUJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgoKICAgICAgICAgICAgRGltIHByb21wdCBBcyAgXwogICAgICAgICAgICAgICAgICAgIENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QgPSBOZXcgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVAogICAgICAgICAgICBJbml0UHJvbXB0KHByb21wdCkKCiAgICAgICAgICAgIFRyeQogICAgICAgICAgICAgICAgVHJ5CiAgICAgICAgICAgICAgICAgICAgSW5pdEJMT0IocGxhaW5UZXh0Qnl0ZXMsIHBsYWluVGV4dEJsb2IpCiAgICAgICAgICAgICAgICBDYXRjaCBleCBBcyBFeGNlcHRpb24KICAgICAgICAgICAgICAgICAgICBUaHJvdyBOZXcgRXhjZXB0aW9uKCJDYW5ub3QgaW5pdGlhbGl6ZSBwbGFpbnRleHQgQkxPQi4iLCBleCkKICAgICAgICAgICAgICAgIEVuZCBUcnkKCiAgICAgICAgICAgICAgICBUcnkKICAgICAgICAgICAgICAgICAgICBJbml0QkxPQihlbnRyb3B5Qnl0ZXMsIGVudHJvcHlCbG9iKQogICAgICAgICAgICAgICAgQ2F0Y2ggZXggQXMgRXhjZXB0aW9uCiAgICAgICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiQ2Fubm90IGluaXRpYWxpemUgZW50cm9weSBCTE9CLiIsIGV4KQogICAgICAgICAgICAgICAgRW5kIFRyeQoKICAgICAgICAgICAgICAgIERpbSBmbGFncyBBcyBJbnRlZ2VyID0gQ1JZUFRQUk9URUNUX1VJX0ZPUkJJRERFTgoKICAgICAgICAgICAgICAgIElmIGtleVR5cGUgPSBrZXlUeXBlLk1hY2hpbmVLZXkgVGhlbgogICAgICAgICAgICAgICAgICAgIGZsYWdzID0gZmxhZ3MgT3IgKENSWVBUUFJPVEVDVF9MT0NBTF9NQUNISU5FKQogICAgICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICAgICAgRGltIHN1Y2Nlc3MgQXMgQm9vbGVhbiA9IENyeXB0UHJvdGVjdERhdGEoIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGxhaW5UZXh0QmxvYiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbnRyb3B5QmxvYiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJbnRQdHIuWmVybywgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcm9tcHQsIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmxhZ3MsIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2lwaGVyVGV4dEJsb2IpCgogICAgICAgICAgICAgICAgSWYgTm90IHN1Y2Nlc3MgVGhlbgogICAgICAgICAgICAgICAgICAgIERpbSBlcnJDb2RlIEFzIEludGVnZXIgPSBNYXJzaGFsLkdldExhc3RXaW4zMkVycm9yKCkKCiAgICAgICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiQ3J5cHRQcm90ZWN0RGF0YSBmYWlsZWQuIiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOZXcgV2luMzJFeGNlcHRpb24oZXJyQ29kZSkpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBEaW0gY2lwaGVyVGV4dEJ5dGVzKGNpcGhlclRleHRCbG9iLmNiRGF0YSkgQXMgQnl0ZQoKICAgICAgICAgICAgICAgIE1hcnNoYWwuQ29weShjaXBoZXJUZXh0QmxvYi5wYkRhdGEsIGNpcGhlclRleHRCeXRlcywgMCwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNpcGhlclRleHRCbG9iLmNiRGF0YSkKCiAgICAgICAgICAgICAgICBSZXR1cm4gY2lwaGVyVGV4dEJ5dGVzCiAgICAgICAgICAgIENhdGNoIGV4IEFzIEV4Y2VwdGlvbgogICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiRFBBUEkgd2FzIHVuYWJsZSB0byBlbmNyeXB0IGRhdGEuIiwgZXgpCiAgICAgICAgICAgIEZpbmFsbHkKICAgICAgICAgICAgICAgIElmIE5vdCAocGxhaW5UZXh0QmxvYi5wYkRhdGEuRXF1YWxzKEludFB0ci5aZXJvKSkgVGhlbgogICAgICAgICAgICAgICAgICAgIE1hcnNoYWwuRnJlZUhHbG9iYWwocGxhaW5UZXh0QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBJZiBOb3QgKGNpcGhlclRleHRCbG9iLnBiRGF0YS5FcXVhbHMoSW50UHRyLlplcm8pKSBUaGVuCiAgICAgICAgICAgICAgICAgICAgTWFyc2hhbC5GcmVlSEdsb2JhbChjaXBoZXJUZXh0QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBJZiBOb3QgKGVudHJvcHlCbG9iLnBiRGF0YS5FcXVhbHMoSW50UHRyLlplcm8pKSBUaGVuCiAgICAgICAgICAgICAgICAgICAgTWFyc2hhbC5GcmVlSEdsb2JhbChlbnRyb3B5QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKICAgICAgICAgICAgRW5kIFRyeQogICAgICAgIEVuZCBGdW5jdGlvbgoKICAgIEVuZCBDbGFzcwoKICAgIFN1YiBNYWluKEJ5VmFsIGFyZ3MgQXMgU3RyaW5nKCkpCiAgICAgICAgVHJ5CiAgICAgICAgICAgIERpbSB0ZXh0IEFzIFN0cmluZyA9IGFyZ3MoMCkKICAgICAgICAgICAgRGltIGVuY3J5cHRlZCBBcyBTdHJpbmcKCiAgICAgICAgICAgIGVuY3J5cHRlZCA9IERQQVBJLkVuY3J5cHQoRFBBUEkuS2V5VHlwZS5NYWNoaW5lS2V5LCB0ZXh0LCBOb3RoaW5nLCAicHN3IikKCiAgICAgICAgICAgIENvbnNvbGUuV3JpdGVMaW5lKCJ7MH0iICYgQ2hyKDEzKSAmIENocigxMCksIGVuY3J5cHRlZCkKCiAgICAgICAgQ2F0Y2ggZXggQXMgRXhjZXB0aW9uCiAgICAgICAgICAgIFdoaWxlIE5vdCAoZXggSXMgTm90aGluZykKICAgICAgICAgICAgICAgIENvbnNvbGUuV3JpdGVMaW5lKGV4Lk1lc3NhZ2UpCiAgICAgICAgICAgICAgICBleCA9IGV4LklubmVyRXhjZXB0aW9uCiAgICAgICAgICAgIEVuZCBXaGlsZQogICAgICAgIEVuZCBUcnkKICAgIEVuZCBTdWIKCkVuZCBNb2R1bGUKJz09PT09PUVPRg=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-vbnet"&gt;&lt;code class="language-vbnet"&gt;&amp;#39;======SOF
+
+Imports System
+Imports System.Text
+Imports System.Runtime.InteropServices
+Imports System.ComponentModel
+Imports Microsoft.VisualBasic
+
+Public Module RdpEncrypt
+
+ Public Class DPAPI
+&amp;lt;dllimport&amp;gt; _
+ Private Shared Function CryptProtectData( _
+ ByRef pPlainText As DATA_BLOB, _
+ ByVal szDescription As String, _
+ ByRef pEntropy As DATA_BLOB, _
+ ByVal pReserved As IntPtr, _
+ ByRef pPrompt As CRYPTPROTECT_PROMPTSTRUCT, _
+ ByVal dwFlags As Integer, _
+ ByRef pCipherText As DATA_BLOB _
+ ) As Boolean
+ End Function
+
+&amp;lt;dllimport&amp;gt; _
+ Private Shared Function CryptUnprotectData( _
+ ByRef pCipherText As DATA_BLOB, _
+ ByRef pszDescription As String, _
+ ByRef pEntropy As DATA_BLOB, _
+ ByVal pReserved As IntPtr, _
+ ByRef pPrompt As CRYPTPROTECT_PROMPTSTRUCT, _
+ ByVal dwFlags As Integer, _
+ ByRef pPlainText As DATA_BLOB _
+ ) As Boolean
+ End Function
+
+&amp;lt;structlayout&amp;gt; _
+ Friend Structure DATA_BLOB
+ Public cbData As Integer
+ Public pbData As IntPtr
+ End Structure
+
+&amp;lt;structlayout&amp;gt; _
+ Friend Structure CRYPTPROTECT_PROMPTSTRUCT
+ Public cbSize As Integer
+ Public dwPromptFlags As Integer
+ Public hwndApp As IntPtr
+ Public szPrompt As String
+ End Structure
+
+ Private Const CRYPTPROTECT_UI_FORBIDDEN As Integer = 1
+ Private Const CRYPTPROTECT_LOCAL_MACHINE As Integer = 4
+
+ Private Shared Sub InitPrompt _
+ ( _
+ ByRef ps As CRYPTPROTECT_PROMPTSTRUCT _
+ )
+ ps.cbSize = Marshal.SizeOf(GetType(CRYPTPROTECT_PROMPTSTRUCT))
+ ps.dwPromptFlags = 0
+ ps.hwndApp = IntPtr.Zero
+ ps.szPrompt = Nothing
+ End Sub
+
+ Private Shared Sub InitBLOB _
+ ( _
+ ByVal data As Byte(), _
+ ByRef blob As DATA_BLOB _
+ )
+ &amp;#39; Use empty array for null parameter.
+ If data Is Nothing Then
+ data = New Byte(0) {}
+ End If
+
+ &amp;#39; Allocate memory for the BLOB data.
+ blob.pbData = Marshal.AllocHGlobal(data.Length)
+
+ &amp;#39; Make sure that memory allocation was successful.
+ If blob.pbData.Equals(IntPtr.Zero) Then
+ Throw New Exception( _
+ &amp;#34;Unable to allocate data buffer for BLOB structure.&amp;#34;)
+ End If
+
+ &amp;#39; Specify number of bytes in the BLOB.
+ blob.cbData = data.Length
+ Marshal.Copy(data, 0, blob.pbData, data.Length)
+ End Sub
+
+ Public Enum KeyType
+ UserKey = 1
+ MachineKey
+ End Enum
+
+ Private Shared defaultKeyType As KeyType = KeyType.UserKey
+
+ Public Shared Function Encrypt _
+ ( _
+ ByVal keyType As KeyType, _
+ ByVal plainText As String, _
+ ByVal entropy As String, _
+ ByVal description As String _
+ ) As String
+ If plainText Is Nothing Then
+ plainText = String.Empty
+ End If
+ If entropy Is Nothing Then
+ entropy = String.Empty
+ End If
+
+ Dim result As Byte()
+ Dim encrypted As String = &amp;#34;&amp;#34;
+ Dim i As Integer
+ result = Encrypt(keyType, _
+ Encoding.Unicode.GetBytes(plainText), _
+ Encoding.Unicode.GetBytes(entropy), _
+ description)
+ For i = 0 To result.Length - 1
+ encrypted = encrypted &amp;amp; Convert.ToString(result(i), 16).PadLeft(2, &amp;#34;0&amp;#34;).ToUpper()
+ Next
+ Return encrypted.ToString()
+ End Function
+
+ Public Shared Function Encrypt _
+ ( _
+ ByVal keyType As KeyType, _
+ ByVal plainTextBytes As Byte(), _
+ ByVal entropyBytes As Byte(), _
+ ByVal description As String _
+ ) As Byte()
+ If plainTextBytes Is Nothing Then
+ plainTextBytes = New Byte(0) {}
+ End If
+
+ If entropyBytes Is Nothing Then
+ entropyBytes = New Byte(0) {}
+ End If
+
+ If description Is Nothing Then
+ description = String.Empty
+ End If
+
+ Dim plainTextBlob As DATA_BLOB = New DATA_BLOB
+ Dim cipherTextBlob As DATA_BLOB = New DATA_BLOB
+ Dim entropyBlob As DATA_BLOB = New DATA_BLOB
+
+ Dim prompt As _
+ CRYPTPROTECT_PROMPTSTRUCT = New CRYPTPROTECT_PROMPTSTRUCT
+ InitPrompt(prompt)
+
+ Try
+ Try
+ InitBLOB(plainTextBytes, plainTextBlob)
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;Cannot initialize plaintext BLOB.&amp;#34;, ex)
+ End Try
+
+ Try
+ InitBLOB(entropyBytes, entropyBlob)
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;Cannot initialize entropy BLOB.&amp;#34;, ex)
+ End Try
+
+ Dim flags As Integer = CRYPTPROTECT_UI_FORBIDDEN
+
+ If keyType = keyType.MachineKey Then
+ flags = flags Or (CRYPTPROTECT_LOCAL_MACHINE)
+ End If
+
+ Dim success As Boolean = CryptProtectData( _
+ plainTextBlob, _
+ description, _
+ entropyBlob, _
+ IntPtr.Zero, _
+ prompt, _
+ flags, _
+ cipherTextBlob)
+
+ If Not success Then
+ Dim errCode As Integer = Marshal.GetLastWin32Error()
+
+ Throw New Exception(&amp;#34;CryptProtectData failed.&amp;#34;, _
+ New Win32Exception(errCode))
+ End If
+
+ Dim cipherTextBytes(cipherTextBlob.cbData) As Byte
+
+ Marshal.Copy(cipherTextBlob.pbData, cipherTextBytes, 0, _
+ cipherTextBlob.cbData)
+
+ Return cipherTextBytes
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;DPAPI was unable to encrypt data.&amp;#34;, ex)
+ Finally
+ If Not (plainTextBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(plainTextBlob.pbData)
+ End If
+
+ If Not (cipherTextBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(cipherTextBlob.pbData)
+ End If
+
+ If Not (entropyBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(entropyBlob.pbData)
+ End If
+ End Try
+ End Function
+
+ End Class
+
+ Sub Main(ByVal args As String())
+ Try
+ Dim text As String = args(0)
+ Dim encrypted As String
+
+ encrypted = DPAPI.Encrypt(DPAPI.KeyType.MachineKey, text, Nothing, &amp;#34;psw&amp;#34;)
+
+ Console.WriteLine(&amp;#34;{0}&amp;#34; &amp;amp; Chr(13) &amp;amp; Chr(10), encrypted)
+
+ Catch ex As Exception
+ While Not (ex Is Nothing)
+ Console.WriteLine(ex.Message)
+ ex = ex.InnerException
+ End While
+ End Try
+ End Sub
+
+End Module
+&amp;#39;======EOF&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;2 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="http://Decript" rel="nofollow ugc"&gt;James&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2010-07-05"&gt;Jul 5, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;Hi friends, anyone know where I can find the code to decrypt in vb.net? Thanks for your help&lt;/p&gt;</description></item><item><title>How rdp passwords are encrypted 2</title><link>https://remkoweijnen.nl/blog/2008/03/02/how-rdp-passwords-are-encrypted-2/</link><pubDate>Sun, 02 Mar 2008 23:28:57 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/02/how-rdp-passwords-are-encrypted-2/</guid><description>&lt;p&gt;Several months ago I &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;wrote&lt;/a&gt; about encrypting and decrypting RDP passwords. I left one thing open: encrypting the password up to the full 1329 bytes as mstsc does.&lt;/p&gt;
+&lt;p&gt;Many people were curious about it so I hope the answer is not a disappointment because it&amp;rsquo;s actually really simple (but I took me a while to figure that out nonetheless). In what I figure is an attempt to hide the password length mstsc always fills up the password with zeroes until it has 512 bytes length.&lt;/p&gt;</description></item><item><title>Terminal Server Client annoyances</title><link>https://remkoweijnen.nl/blog/2007/11/09/terminal-server-client-annoyances/</link><pubDate>Fri, 09 Nov 2007 21:39:50 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/09/terminal-server-client-annoyances/</guid><description>&lt;p&gt;If you want to get rid of this message: &lt;/p&gt;
+&lt;p&gt;Remote Desktop cannot verify the identity of the computer you want to connect to.  This problem can occur if:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The remote computer is running a version of Windows that is earlier than Windows Vista.&lt;/li&gt;
+&lt;li&gt;The remote computer is configured to support only the RDP security layer.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Contact your network administrator or the owner of the remote computer for assistance.&lt;/p&gt;</description></item><item><title>Encrypt RDP password in Python</title><link>https://remkoweijnen.nl/blog/2007/11/05/encrypt-rdp-password-in-python/</link><pubDate>Mon, 05 Nov 2007 23:10:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/05/encrypt-rdp-password-in-python/</guid><description>&lt;p&gt;Dirk Schmitz send me his Python version of encrypting the RDP Password:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;python&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".py" href="data:text/plain;charset=utf-8;base64,aW1wb3J0IHdpbjMyY3J5cHQKaW1wb3J0IGJpbmFzY2lpCgpwd2RIYXNoID0gd2luMzJjcnlwdC5DcnlwdFByb3RlY3REYXRhKHUiTVlQQVNTV09SRCIsdSdwc3cnLE5vbmUsTm9uZSxOb25lLDApCnByaW50IGJpbmFzY2lpLmhleGxpZnkocHdkSGFzaCk="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-python"&gt;&lt;code class="language-python"&gt;import win32crypt
+import binascii
+
+pwdHash = win32crypt.CryptProtectData(u&amp;#34;MYPASSWORD&amp;#34;,u&amp;#39;psw&amp;#39;,None,None,None,0)
+print binascii.hexlify(pwdHash)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;br&gt;Read the original article here: &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;/2007/10/18/how-rdp-passwords-are-encrypted/&lt;/a&gt;&lt;/p&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;5 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;Arvid Requate&lt;/span&gt; &lt;time datetime="2010-11-14"&gt;Nov 14, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;Thank's, this really worked well, after a bit of fiddling (donation will be given asap). For Python 2.7 I had to remove the unicode conversion, otherwise the RDP server would not get the proper password. Interestingly your updated post about 512-byte padding and appending a '0'-character to obtain a 1329 'password 51'-hash did not work for me yet. Did you need the padding as a bugfix or did you suggest it merely as an imrovement to become fully compatible to the MS encoding format? (/2008/03/02/how-rdp-passwords-are-encrypted-2/).&lt;/p&gt;</description></item><item><title>RDP Clipboard Fix</title><link>https://remkoweijnen.nl/blog/2007/10/25/rdp-clipboard-fix/</link><pubDate>Thu, 25 Oct 2007 17:45:57 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/25/rdp-clipboard-fix/</guid><description>&lt;p&gt;Did you ever loose Clipboard functionality (copy/paste) while working with several Terminal Server sessions? I think everyone that works a lot with Terminal Server has experienced this from time to time.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s caused by badly behaving applications. Dimitry Vostokov wrote a tool to fix this issue for Citrix (RepairCBDChain.exe), he explains the issue very well on his blog:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Windows has a mechanism to notify applications about clipboard changes. An application interested in such notifications has to register itself in the so called clipboard chain. Windows inserts it on top of that chain and that application is responsible to propagate changes down the chain:&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/510869d22ca28f1e.jpg" class="glightbox" data-type="image" data-gallery="post-37"&gt;&lt;em&gt;&lt;img src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/026ce366765616ce.jpg" alt="rc1.JPG" height="80" /&gt;&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;If 3rd-party application forgets to forward notifications down then we have a broken clipboard chain and clipboard changes are not sent via ICA protocol:&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Read more at Dimitry&amp;rsquo;s Blog: &lt;a href="https://web.archive.org/web/20071019060125/http://citrite.org/blogs/dmitryv/2006/12/09/clipboard-issues-explained/"&gt;&lt;a href="http://citrite.org/blogs/dmitryv/2006/12/09/clipboard-issues-explained/"&gt;http://citrite.org/blogs/dmitryv/2006/12/09/clipboard-issues-explained/&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;So how can we fix this for Terminal Server then?&lt;/p&gt;</description></item><item><title>How rdp passwords are encrypted</title><link>https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/</link><pubDate>Thu, 18 Oct 2007 21:23:17 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/</guid><description>&lt;p&gt;&lt;img width="48" height="48" loading="lazy" decoding="async" align="right" src="https://remkoweijnen.nl/blog/wp-content/uploads/2007/10/mstsc1.webp" alt="mstsc icon" /&gt; Ever wondered how mstsc saves passwords? If you open an RDP file with a text editor like Notepad you can see the encrypted password. In this article I will show you how to encrypt and decrypt these passwords. Besides password recovery this enables you to create rpd files programmatically or perhaps update the password in many rdp files with a batch file.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2007/10/rdpscreenshot1.webp" title="RDP Screenshot"&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Launch RDP from commandline</title><link>https://remkoweijnen.nl/blog/2007/10/17/launch-rdp-from-commandline/</link><pubDate>Wed, 17 Oct 2007 22:47:53 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/17/launch-rdp-from-commandline/</guid><description>&lt;p&gt;&lt;img width="48" height="48" loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2007/10/cmd1.webp" alt="Command Prompt Icon" align="right" /&gt;A little while ago I wrote a little commandline tool that starts an RDP connection (with mstsc.exe) because mstsc doesn&amp;rsquo;t allow you to use the login credentials (username, password) as commandline arguments.&lt;/p&gt;
+&lt;p&gt;Arguments are:&lt;/p&gt;
+&lt;ol&gt;
+	&lt;li&gt;Servername (string)&lt;/li&gt;
+	&lt;li&gt;Port (integer, usually 3389)&lt;/li&gt;
+	&lt;li&gt;Username (string)&lt;/li&gt;
+	&lt;li&gt;Domain (string)&lt;/li&gt;
+	&lt;li&gt;Password (string)&lt;/li&gt;
+	&lt;li&gt;Console (integer, specify 0 for false and 1 for true)&lt;/li&gt;
+	&lt;li&gt;RedirectDrives (integer, specify 0 for false and 1 for true)&lt;/li&gt;
+	&lt;li&gt;RedirectPrinters (integer, specify 0 for false and 1 for true)&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>

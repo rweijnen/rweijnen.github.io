@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Deployment Server on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/deployment-server/</link><description>Recent content in Deployment Server on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 26 Oct 2010 16:47:15 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/deployment-server/index.xml" rel="self" type="application/rss+xml"/><item><title>The case of the failing Deployment Server Install</title><link>https://remkoweijnen.nl/blog/2010/10/26/694/</link><pubDate>Tue, 26 Oct 2010 16:47:15 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/26/694/</guid><description>&lt;p&gt;I was trying to install HP Insight Control server deployment (&lt;a href="https://remkoweijnen.nl/blog/2010/10/14/where-to-download-hp-rapid-deployment-pack/" target="_blank"&gt;previously called HP Rapid Deployment Pack&lt;/a&gt;) on Sql Server 2008 Express. I will just call it Deployment Server or DS from here.&lt;/p&gt;
+&lt;p&gt;I first installed SQL 2008 Express with Advanced Services and configured it to listen op Port 1433 as required by DS.&lt;/p&gt;
+&lt;p&gt;The installation of the first part (Deployment Server version 6.9.4) indicated a successfull install but the prereqisuites check of the Hotfix version 2.0 installer failed on the last step:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/NoAttachedConsoles.webp" class="glightbox" data-type="image" data-gallery="post-694"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/NoAttachedConsoles-small.webp" alt="No Attached Consoles HP Deployment Server" width="430" height="300" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This was strange because I didn&amp;rsquo;t yet startup the console, so I decided to start it and close it as this would perhaps allow me to continue.&lt;/p&gt;
+&lt;p&gt;The next screen was a clear indication something went wrong:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/ConsoleUnableToConnect.webp" alt="Altiris Deploymeny Server Unable to Connect" width="405" height="238" /&gt;
+&lt;p&gt;I presumed that the ODBC connection was missing so I went to Adminstrative Tools | Data Sources (ODBC). But the ODBC connection was present. I then fired up SQL Server Management Studio which showed me the eXpress database was missing.&lt;/p&gt;</description></item><item><title>Configuring IBM Raid controller with Altiris</title><link>https://remkoweijnen.nl/blog/2008/06/17/configuring-ibm-raid-controller-with-altiris/</link><pubDate>Tue, 17 Jun 2008 21:41:58 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/06/17/configuring-ibm-raid-controller-with-altiris/</guid><description>&lt;p&gt;Today I was deploying some IBM x3550 and x3650 servers with Altiris Deployment Server. IBM Delivers a toolkit for Altiris that contains amongst others jobs for configuring raid arrays.&lt;/p&gt;
+&lt;p&gt;To do this you need to create a raid policy file and deploy this. I created this policy file:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,W1BvbGljeS5SQUlELTFdCgpBcHBsaWVzVG8uMSA9IHQ6U2VydmVSQUlELThrLWwsZDo0CgpBcnJheV9Nb2RlID0gQ1VTVE9NCkFycmF5LkEgPSAxLDIKQXJyYXkuQiA9IDMsNAoKTG9naWNhbF9Nb2RlID0gQ1VTVE9NCkxvZ2ljYWwuMSA9IEE6RklMTDoxCkxvZ2ljYWwuMiA9IEI6RklMTDox"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;[Policy.RAID-1]
+
+AppliesTo.1 = t:ServeRAID-8k-l,d:4
+
+Array_Mode = CUSTOM
+Array.A = 1,2
+Array.B = 3,4
+
+Logical_Mode = CUSTOM
+Logical.1 = A:FILL:1
+Logical.2 = B:FILL:1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;As you can see the policy only applies to the type of array controller in my servers (t:ServeRAID-8k-l). This way we prevent applying the policy to other configurarions. I have a 4 disk configuration (d:4) and want to create to RAID 1 arrays (A &amp;amp; B). On each array one Logical drive with the maximum size (FILL parameter).&lt;/p&gt;</description></item></channel></rss>

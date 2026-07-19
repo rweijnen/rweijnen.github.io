@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JEDI on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/jedi/</link><description>Recent content in JEDI on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 10 Mar 2010 11:19:29 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/jedi/index.xml" rel="self" type="application/rss+xml"/><item><title>Random Active Directory Notes</title><link>https://remkoweijnen.nl/blog/2010/03/10/random-active-directory-notes/</link><pubDate>Wed, 10 Mar 2010 11:19:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/10/random-active-directory-notes/</guid><description>&lt;p&gt;I am working on an Customer Management Console that will present all adminstrative tasks that customers will need in their environment in a single console.&lt;/p&gt;
+&lt;p&gt;It will handle Active Directory, Terminal Server and Citrix, Printers and will offer specific Views and Reporting. For the Active Directory stuff I decided to create some classes that enabled me to work with AD in a more Delphi OOP way.&lt;/p&gt;</description></item><item><title>New home for Jedi Apilib and Jedi Security Library</title><link>https://remkoweijnen.nl/blog/2008/03/03/new-home-for-jedi-apilib-and-jedi-security-library/</link><pubDate>Mon, 03 Mar 2008 15:38:34 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/03/new-home-for-jedi-apilib-and-jedi-security-library/</guid><description>&lt;p&gt;A new website (blog) was opened for the Jedi Apilib and Jedi Security Library. I invite you all to take a look!&lt;/p&gt;
+&lt;p&gt;You can find it &lt;a href="http://blog.delphi-jedi.net/2008/03/02/welcome/"&gt;here&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Supporting for in loop in TObjectList descendants</title><link>https://remkoweijnen.nl/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/</link><pubDate>Sun, 02 Mar 2008 15:08:19 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/</guid><description>&lt;p&gt;For my Terminal Server unit in the Jedi Security library I use 2 TObjectList descendants to hold a list of Terminal Server Sessions and Processes. Consider the sample below which connects to a server and enumerates all sessions:&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgQVRlcm1pbmFsU2VydmVyOiBUSndUZXJtaW5hbFNlcnZlcjsKICBpOiBJbnRlZ2VyOwpiZWdpbgogIEFUZXJtaW5hbFNlcnZlciA6PSBUandUZXJtaW5hbFNlcnZlci5DcmVhdGU7CgogIEFUZXJtaW5hbFNlcnZlci5TZXJ2ZXIgOj0gJ1RTMDAxJzsKCiAgdHJ5CiAgICBpZiBBVGVybWluYWxTZXJ2ZXIuRW51bWVyYXRlU2Vzc2lvbnMgdGhlbgogICAgYmVnaW4KCiAgICAgIC8vIE5vdyBsb29wIHRocm91Z2ggdGhlIGxpc3QKICAgICAgZm9yIGkgOj0gMCB0byBBVGVybWluYWxTZXJ2ZXIuU2Vzc2lvbnMuQ291bnQgLSAxIGRvCiAgICAgIGJlZ2luCiAgICAgICAgTWVtbzEuTGluZXMuQWRkKEFUZXJtaW5hbFNlcnZlci5TZXNzaW9uc1tpXS5Vc2VybmFtZSk7CiAgICAgIGVuZDsKCiAgICBlbmQ7CiAgZXhjZXB0CiAgICBvbiBFOiBFSndzY2xXaW5DYWxsRmFpbGVkRXhjZXB0aW9uIGRvCiAgICBiZWdpbgogICAgICAvLyBIYW5kbGUgRXhjZXB0aW9uIGhlcmUKICAgIGVuZDsKICBlbmQ7CgogIC8vIEZyZWUgTWVtb3J5CiAgQVRlcm1pbmFsU2VydmVyLkZyZWU7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ ATerminalServer: TJwTerminalServer;
+ i: Integer;
+begin
+ ATerminalServer := TjwTerminalServer.Create;
+
+ ATerminalServer.Server := &amp;#39;TS001&amp;#39;;
+
+ try
+ if ATerminalServer.EnumerateSessions then
+ begin
+
+ // Now loop through the list
+ for i := 0 to ATerminalServer.Sessions.Count - 1 do
+ begin
+ Memo1.Lines.Add(ATerminalServer.Sessions[i].Username);
+ end;
+
+ end;
+ except
+ on E: EJwsclWinCallFailedException do
+ begin
+ // Handle Exception here
+ end;
+ end;
+
+ // Free Memory
+ ATerminalServer.Free;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+In the sample I loop through the sessions with a for loop. Even though Delphi supports the for in loop since Delphi 2005 it's not possible to use this in TObjectList descendants, so we cannot use this:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Ly8gTm93IGxvb3AgdGhyb3VnaCB0aGUgbGlzdApmb3IgU2Vzc2lvbiBpbiBBVGVybWluYWxTZXJ2ZXIuU2Vzc2lvbkxpc3QgZG8KYmVnaW4KICBNZW1vMS5MaW5lcy5BZGQoU2Vzc2lvbi5Vc2VybmFtZSk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;// Now loop through the list
+for Session in ATerminalServer.SessionList do
+begin
+ Memo1.Lines.Add(Session.Username);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+To make this possible we need to implement GetEnumerator and an Enumerator class:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,VEp3U2Vzc2lvbnNFbnVtZXJhdG9yID0gY2xhc3MKcHJpdmF0ZQogIEZJbmRleDogSW50ZWdlcjsKICBGU2Vzc2lvbnM6IFRKd1dUU1Nlc3Npb25MaXN0OwpwdWJsaWMKICBjb25zdHJ1Y3RvciBDcmVhdGUoQVNlc3Npb25MaXN0OiBUSndXVFNTZXNzaW9uTGlzdCk7CiAgZnVuY3Rpb24gR2V0Q3VycmVudDogVEp3V1RTU2Vzc2lvbjsKICBmdW5jdGlvbiBNb3ZlTmV4dDogQm9vbGVhbjsKICBwcm9wZXJ0eSBDdXJyZW50OiBUSndXVFNTZXNzaW9uIHJlYWQgR2V0Q3VycmVudDsKZW5kOwoKY29uc3RydWN0b3IgVEp3U2Vzc2lvbnNFbnVtZXJhdG9yLkNyZWF0ZShBU2Vzc2lvbkxpc3Q6IFRKd1dUU1Nlc3Npb25MaXN0KTsKYmVnaW4KICBpbmhlcml0ZWQgQ3JlYXRlOwogIEZJbmRleCA6PSAtMTsKICBGU2Vzc2lvbnMgOj0gQVNlc3Npb25MaXN0OwplbmQ7CgpmdW5jdGlvbiBUSndTZXNzaW9uc0VudW1lcmF0b3IuR2V0Q3VycmVudDsKYmVnaW4KICBSZXN1bHQgOj0gRlNlc3Npb25zW0ZJbmRleF07CmVuZDsKCmZ1bmN0aW9uIFRKd1Nlc3Npb25zRW51bWVyYXRvci5Nb3ZlTmV4dDogQm9vbGVhbjsKYmVnaW4KICBSZXN1bHQgOj0gRkluZGV4IDwgRlNlc3Npb25zLkNvdW50IC0gMTsKICBpZiBSZXN1bHQgdGhlbgogICAgSW5jKEZJbmRleCk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;TJwSessionsEnumerator = class
+private
+ FIndex: Integer;
+ FSessions: TJwWTSSessionList;
+public
+ constructor Create(ASessionList: TJwWTSSessionList);
+ function GetCurrent: TJwWTSSession;
+ function MoveNext: Boolean;
+ property Current: TJwWTSSession read GetCurrent;
+end;
+
+constructor TJwSessionsEnumerator.Create(ASessionList: TJwWTSSessionList);
+begin
+ inherited Create;
+ FIndex := -1;
+ FSessions := ASessionList;
+end;
+
+function TJwSessionsEnumerator.GetCurrent;
+begin
+ Result := FSessions[FIndex];
+end;
+
+function TJwSessionsEnumerator.MoveNext: Boolean;
+begin
+ Result := FIndex &amp;lt; FSessions.Count - 1;
+ if Result then
+ Inc(FIndex);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+Now we add a function with the name GetEnumerator in the SessionList class:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,ZnVuY3Rpb24gVEp3V1RTU2Vzc2lvbkxpc3QuR2V0RW51bWVyYXRvcjogVEp3U2Vzc2lvbnNFbnVtZXJhdG9yOwpiZWdpbgogIFJlc3VsdCA6PSBUSndTZXNzaW9uc0VudW1lcmF0b3IuQ3JlYXRlKFNlbGYpOwplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;function TJwWTSSessionList.GetEnumerator: TJwSessionsEnumerator;
+begin
+ Result := TJwSessionsEnumerator.Create(Self);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+And that's really all!
+&lt;section class="comments"&gt;
+&lt;h2&gt;1 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="http://blog.delphi-jedi.net/2008/03/03/remko-shows-us-how-to-use-the-terminal-server-feature-of-jwscl/" rel="nofollow ugc"&gt;&amp;amp;nbsp; Remko shows us how to use the Terminal Server feature of JWSCL&amp;amp;nbsp;by&amp;amp;nbsp;JEDI Windows API&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2008-03-03"&gt;Mar 3, 2008&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;[...] Go and learn more about it here. [...]&lt;/p&gt;</description></item><item><title>Undocumented API's from Utildll</title><link>https://remkoweijnen.nl/blog/2007/12/09/undocumented-apis-from-utildll/</link><pubDate>Sun, 09 Dec 2007 11:05:04 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/12/09/undocumented-apis-from-utildll/</guid><description>&lt;p&gt;Several of Microsoft&amp;rsquo;s Terminal Server tools use undocumented API&amp;rsquo;s from Utildll.dll. For instance Terminal Server Admin uses it to get a localised connect state string and to format time strings like idle time, logon time etc.&lt;/p&gt;
+&lt;p&gt;Functions below seems to be the most usefull ones, I will add those to the JwaWinsta unit:&lt;/p&gt;</description></item><item><title>JEDI Apilib and JEDI Windows Security Code Library</title><link>https://remkoweijnen.nl/blog/2007/11/08/jedi-apilib-and-jedi-windows-security-code-library/</link><pubDate>Thu, 08 Nov 2007 12:35:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/08/jedi-apilib-and-jedi-windows-security-code-library/</guid><description>&lt;p&gt;It has been a little silent on the &lt;a target="_blank" href="http://sourceforge.net/projects/jedi-apilib/"&gt;&lt;font color="#22229c"&gt;JEDI Apilib project&lt;/font&gt;&lt;/a&gt; lately, but this will change!&lt;/p&gt;
+&lt;p&gt;We had some change in the team members: Marcel van Brakel, founder and large contributor of the project has signed off because he no longer actively uses Delphi. Christian Wimmer has joined the team and he is a very promising member.&lt;/p&gt;
+&lt;p&gt;Christian has been working on a new include model (optional) of the Jedi Apilib which has the advantage that you only need to use one unit (JwaWindows) for the whole library.&lt;/p&gt;
+&lt;p&gt;Chris has also published the JEDI Windows Security Code Library (Jwscl). This is library that tremendously simplifies using Win32 API calls from Delphi. At this point the library contains:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Windows Version&lt;/li&gt;
+	&lt;li&gt;Token&lt;/li&gt;
+	&lt;li&gt;Impersonation&lt;/li&gt;
+	&lt;li&gt;Login&lt;/li&gt;
+	&lt;li&gt;SID&lt;/li&gt;
+	&lt;li&gt;Access Control List&lt;/li&gt;
+	&lt;li&gt;Security Descriptor&lt;/li&gt;
+	&lt;li&gt;Owner, Group, DACL, SACL&lt;/li&gt;
+	&lt;li&gt;WindowStation&lt;/li&gt;
+	&lt;li&gt;Desktop&lt;/li&gt;
+	&lt;li&gt;LSA&lt;/li&gt;
+	&lt;li&gt;Rights mapping&lt;/li&gt;
+	&lt;li&gt;Secured Objects Files, Registry (+Inheritance), etc.&lt;/li&gt;
+	&lt;li&gt;Credentials (Login Dialog)&lt;/li&gt;
+	&lt;li&gt;Encryption (MS Crypto API)&lt;/li&gt;
+	&lt;li&gt;Well Known SIDs&lt;/li&gt;
+	&lt;li&gt;Privileges&lt;/li&gt;
+	&lt;li&gt;Security Dialogs (The "ACL Editor" you see on the security yab when you rightclick object in Explorer)&lt;/li&gt;
+	&lt;li&gt;Terminal Sessions&lt;/li&gt;
+	&lt;li&gt;Unicode + Ansicode&lt;/li&gt;
+	&lt;li&gt;Vista Elevation&lt;/li&gt;
+	&lt;li&gt;Vista Integrity Level&lt;/li&gt;
+&lt;/ul&gt;
+Although Jwscl is in beta stage it is already very well useable.</description></item></channel></rss>

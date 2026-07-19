@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Printer Driver on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/printer-driver/</link><description>Recent content in Printer Driver on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 08 Feb 2011 21:47:44 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/printer-driver/index.xml" rel="self" type="application/rss+xml"/><item><title>The Case of the Citrix Ready Printer Driver</title><link>https://remkoweijnen.nl/blog/2011/02/08/the-case-of-the-citrix-ready-printer-driver/</link><pubDate>Tue, 08 Feb 2011 21:47:44 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/02/08/the-case-of-the-citrix-ready-printer-driver/</guid><description>&lt;p&gt;I had a very interesting issue today on a new Citrix XenApp 5 farm. We went into production yesterday and we noticed a number of issues:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;&lt;span style="color: #35383d;"&gt;Printing in general was slow, especially when a user connects to a printer for the first time.&lt;/span&gt;&lt;/li&gt;
+	&lt;li&gt;User Profiles were rapidly growing in size (from the expected 1-2 MB to over 40 MB).&lt;/li&gt;
+	&lt;li&gt;Logons took much longer then in the testing period (and since we use a Full Screen Desktop the user doesn't see any progress).&lt;/li&gt;
+	&lt;li&gt;Performance monitoring showed CPU spikes in Word, Excel and IE processes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;span style="color: #4c4c4c;"&gt;I took a look at the profiles first and noticed that the size growth was due to a Xerox subfolder in %APPDATA%:</description></item></channel></rss>

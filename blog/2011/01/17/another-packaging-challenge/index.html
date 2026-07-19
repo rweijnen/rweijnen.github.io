@@ -1,0 +1,188 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Another packaging challenge &#183; Remko's Blog</title><meta name=description content="A Java application that downloads DLLs into its bin directory is made multi-user safe on Citrix by using the CorrectFilePaths shim to redirect the files to the user home directory."><link rel=canonical href=https://remkoweijnen.nl/blog/2011/01/17/another-packaging-challenge/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Another packaging challenge"><meta property="og:description" content="A Java application that downloads DLLs into its bin directory is made multi-user safe on Citrix by using the CorrectFilePaths shim to redirect the files to the user home directory."><meta property="og:url" content="https://remkoweijnen.nl/blog/2011/01/17/another-packaging-challenge/"><meta property="og:image" content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Remko's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Another packaging challenge"><meta name=twitter:description content="A Java application that downloads DLLs into its bin directory is made multi-user safe on Citrix by using the CorrectFilePaths shim to redirect the files to the user home directory."><meta name=twitter:image content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="article:published_time" content="2011-01-17T09:15:37Z"><meta property="article:modified_time" content="2011-01-17T09:15:37Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Remko Weijnen"},"dateModified":"2011-01-17T09:15:37Z","datePublished":"2011-01-17T09:15:37Z","description":"A Java application that downloads DLLs into its bin directory is made multi-user safe on Citrix by using the CorrectFilePaths shim to redirect the files to the user home directory.","headline":"Another packaging challenge","mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2011/01/17/another-packaging-challenge/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2011/01/17/another-packaging-challenge/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Application Compatibility</span><span data-pagefind-filter=category>Java</span><span data-pagefind-filter=category>Packaging</span><span data-pagefind-filter=category>Unattended Installation</span>
+<span data-pagefind-meta=category>Application Compatibility</span>
+<span data-pagefind-filter=tag>InnoSetup</span>
+<span data-pagefind-filter=year>2011</span>
+<span data-pagefind-meta=date>2011-01-17</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/application-compatibility/>application-compatibility</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Another packaging challenge</h1><div class=byline><time datetime=2011-01-17>Jan 17, 2011</time>
+<span class=dot>&#183;</span><span>4 min read</span></div><div class=post-content data-pagefind-body><p>Another post on something that happened last week, this time it&rsquo;s about a Java based Application again.</p><p>This particular application wanted to download three DLL&rsquo;s from the Webserver to the Java bin directory.</p><p>This presents us with several issues on a multi user server such as a Citrix of Terminal Server:</p><ol><li><span style=color:#35383d>The user does not have write permissions in this directory</span></li><li><span style=color:#35383d>If we we give the user write permissions here what happens when the DLL's are in use by another user?</span></li></ol>I assumed that if I preinstalled the DLL's the application wouldn't try to overwrite them but that didn't work.<p>Then I monitored with Process Monitor if the Application wrote some kind of check file but at first I didn&rsquo;t find anything.</p><p>So I decided to use the CorrectFilePaths shim to redirect the DLL&rsquo;s to the user&rsquo;s homedirectory (see <a href=/blog/blog/2010/12/28/using-the-correctfilepaths-shim-to-redirect-an-ini-file-to-a-writable-location/ target=_blank>Using the CorrectFilePaths shim to redirect an ini file to a writable location</a> for an explanation).</p><p>This worked nicely, I started the Application and saw the files being downloaded to the user&rsquo;s homedirectory.</p><p>Side note: this downloading took a much too long time because it downloads byte by byte, #crappy!</p><p>I tested a few things in the application according to the instructions and everything seemed to work fine. Then I closed the Application and finally the Browser.</p><p>And then an error message came, indicating that the Application couldn&rsquo;t a write a file called webutil.properties into the Java Home directory.</p><p>I then redirected this file as well and checked the content and it&rsquo;s an ini alike file:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>ini</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.ini href="data:;charset=utf-8,%23WebUtil%20Properties%20File%0A%23Mon%20Jan%2010%2011:03:38%20CET%202011%0Asyslib.d2kwut60.dll=1.0%0Asyslib.jnisharedstubs.dll=1.0%0Asyslib.jacob.dll=1.0">Download</a></span></div><div class=codebody><pre class=language-ini><code class=language-ini>#WebUtil Properties File
+#Mon Jan 10 11:03:38 CET 2011
+syslib.d2kwut60.dll=1.0
+syslib.jnisharedstubs.dll=1.0
+syslib.jacob.dll=1.0</code></pre></div></div><p>I then removed the CorrectFilePaths shim and place the webutil.properties file in the Java Directory and the DLL&rsquo;s in the bin directory.</p><p>Now everything worked well but of course the challenge is how to package this.</p><p>The easiest approach is to have the installer copy the files but what happens if a webutil.properties file is already present?</p><p>I think it&rsquo;s risky to blindly write this file so I wanted to an installer that does the following:</p><ul><li><span style=color:#35383d>Dynamically determine Java Folder</span></li><li><span style=color:#35383d>Create the webutil.properties file if it doesn't exist</span></li><li><span style=color:#35383d>Add's the DLL entries to the file</span></li><li><span style=color:#35383d>Does not overwrite existing entries</span></li><li><span style=color:#35383d>Does not write the lines if they already exist</span></li><li>On Uninstall remove the DLL files</li><li>On Uninstall remove the lines from the webutil.properties file</li></ul>I used <a href=http://jrsoftware.org/isinfo.php target=_blank>Innosetup</a> for this Task because it has a very nice scripting engine that makes this task a breeze. And best of all: Innosetup is free.<p>Below my Setup.iss script, I think the script parts contains enough comments to explain the code. But if you have any questions please leave a comment.</p><p>If you want to use the script, combine the setup and code part to one .iss file and compile it.<br>The setup part:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>ini</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.ini href="data:;charset=utf-8,%5BSetup%5D%0A;%20NOTE:%20The%20value%20of%20AppId%20uniquely%20identifies%20this%20application.%0A;%20Do%20not%20use%20the%20same%20AppId%20value%20in%20installers%20for%20other%20applications.%0A;%20(To%20generate%20a%20new%20GUID,%20click%20Tools%20%7C%20Generate%20GUID%20inside%20the%20IDE.)%0AAppId=%7B%7B04C0BBA1-22AC-4927-9E42-0DA8A5C1ECB5%7D%0AAppName=Centric%20Key%202%20Financien%20Java%20Components%0AAppVersion=1.0%0A;AppVerName=Centric%20Key%202%20Financien%20Java%20Components%201.0%0AAppPublisher=Remko%20Weijnen%0ACreateAppDir=no%0AOutputBaseFilename=setup%0AOutputDir=..%5C%0ACompression=lzma%0ASolidCompression=yes%0A%0A%5BLanguages%5D%0AName:%20%22english%22;%20MessagesFile:%20%22compiler:Default.isl%22%0A%0A%5BFiles%5D%0ASource:%20%22.%5CSourceFiles%5Cd2kwut60.dll%22;%20DestDir:%20%22%7Bcode:GetJavaBin%7D%22;%20Flags:%20ignoreversion;%0ASource:%20%22.%5CSourceFiles%5Cjacob.dll%22;%20DestDir:%20%22%7Bcode:GetJavaBin%7D%22;%20Flags:%20ignoreversion%0ASource:%20%22.%5CSourceFiles%5Cjnisharedstubs.dll%22;%20DestDir:%20%22%7Bcode:GetJavaBin%7D%22;%20Flags:%20ignoreversion%0A;%20NOTE:%20Don't%20use%20%22Flags:%20ignoreversion%22%20on%20any%20shared%20system%20files">Download</a></span></div><div class=codebody><pre class=language-ini><code class=language-ini>[Setup]
+; NOTE: The value of AppId uniquely identifies this application.
+; Do not use the same AppId value in installers for other applications.
+; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
+AppId={{04C0BBA1-22AC-4927-9E42-0DA8A5C1ECB5}
+AppName=Centric Key 2 Financien Java Components
+AppVersion=1.0
+;AppVerName=Centric Key 2 Financien Java Components 1.0
+AppPublisher=Remko Weijnen
+CreateAppDir=no
+OutputBaseFilename=setup
+OutputDir=..\
+Compression=lzma
+SolidCompression=yes
+
+[Languages]
+Name: &#34;english&#34;; MessagesFile: &#34;compiler:Default.isl&#34;
+
+[Files]
+Source: &#34;.\SourceFiles\d2kwut60.dll&#34;; DestDir: &#34;{code:GetJavaBin}&#34;; Flags: ignoreversion;
+Source: &#34;.\SourceFiles\jacob.dll&#34;; DestDir: &#34;{code:GetJavaBin}&#34;; Flags: ignoreversion
+Source: &#34;.\SourceFiles\jnisharedstubs.dll&#34;; DestDir: &#34;{code:GetJavaBin}&#34;; Flags: ignoreversion
+; NOTE: Don&#39;t use &#34;Flags: ignoreversion&#34; on any shared system files</code></pre></div></div><p>And the script part:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,Y29uc3QKICBKYXZhS2V5ID0gJ1NPRlRXQVJFXEphdmFTb2Z0XEphdmEgUnVudGltZSBFbnZpcm9ubWVudCc7CgpmdW5jdGlvbiBHZXRKYXZhRGlyKGNvbnN0IHM6IFN0cmluZyk6IFN0cmluZzsKdmFyCiAgQ3VycmVudFZlcnNpb246IFN0cmluZzsKYmVnaW4KICAvLyBHZXQgSmF2YSBWZXJzaW9uCiAgaWYgUmVnUXVlcnlTdHJpbmdWYWx1ZShIS0VZX0xPQ0FMX01BQ0hJTkUsIEphdmFLZXksICdDdXJyZW50VmVyc2lvbicsIEN1cnJlbnRWZXJzaW9uKSB0aGVuCiAgYmVnaW4KICAgIC8vIEdldCBKYXZhSG9tZSBQYXRoCiAgICBpZiBSZWdRdWVyeVN0cmluZ1ZhbHVlKEhLRVlfTE9DQUxfTUFDSElORSwgSmF2YUtleSArICdcJyArIEN1cnJlbnRWZXJzaW9uLCAnSmF2YUhvbWUnLCBSZXN1bHQpIHRoZW4KICAgIGJlZ2luCiAgICAgIC8vIEFkZCBzdWJkaXIgdGhhdCB3YXMgZ2l2ZW4gYXMgcGFyYW1ldGVyCiAgICAgIGlmIHMgPD4gJycgdGhlbgogICAgICBiZWdpbgogICAgICAgIFJlc3VsdCA6PSBSZXN1bHQgKyAnXCcgKyBzOwogICAgICBlbmQ7CiAgICBlbmQ7CiAgZW5kOwoKICBpZiBSZXN1bHQgPSAnJyB0aGVuCiAgICBSYWlzZUV4Y2VwdGlvbignVW5hYmxlIHRvIGRldGVybWluZSBKYXZhIFZlcnNpb24hJyk7CmVuZDsKCi8vIFdoZW4gdXNpbmcge2NvZGU6U29tZUZ1bmN0aW9ufSAgdGhlIGZ1bmN0aW9uIG5lZWRzIHRvIGhhdmUgKGNvbnN0IHM6IFN0cmluZykKZnVuY3Rpb24gR2V0SmF2YUJpbihjb25zdCBzOiBTdHJpbmcpOiBTdHJpbmc7CmJlZ2luCiAgUmVzdWx0IDo9IEdldEphdmFEaXIoJ2JpbicpOwplbmQ7Cgpwcm9jZWR1cmUgUG9zdEluc3RhbGxQcm9jOwp2YXIKICBXZWJVdGlsUHJvcHM6IFN0cmluZzsKICBzbDogVFN0cmluZ0xpc3Q7CmJlZ2luCiAgLy8gQXNzZW1ibGUgQ29tcGxldGUgUGF0aAogIFdlYlV0aWxQcm9wcyA6PSBHZXRKYXZhRGlyKCcnKSArICdcd2VidXRpbC5wcm9wZXJ0aWVzJzsKCiAgc2wgOj0gVFN0cmluZ0xpc3QuQ3JlYXRlOwogIHRyeQogICAgLy8gV2UgZG9uJ3Qgd2FudCBkdXBsaWNhdGVzIQogICAgc2wuRHVwbGljYXRlcyA6PSBkdXBJZ25vcmU7CiAgICBzbC5Tb3J0ZWQgOj0gVHJ1ZTsKCiAgICAvLyBMb2FkIGV4aXN0aW5nIGZpbGUKICAgIHRyeQogICAgICBzbC5Mb2FkRnJvbUZpbGUoV2ViVXRpbFByb3BzKTsKICAgIGV4Y2VwdAogICAgICAvLyBJZ25vcmUgaWYgdGhlIGZpbGUgZG9lc24ndCBleGlzdAogICAgZW5kOwoKICAgIC8vIEFkZCBFbnRyaWVzIChvciBvdmVyd3JpdGUpCiAgICBzbC5BZGQoJyNXZWJVdGlsIFByb3BlcnRpZXMgRmlsZScpOwogICAgc2wuQWRkKCdzeXNsaWIuZDJrd3V0NjAuZGxsPTEuMCcpOwogICAgc2wuQWRkKCdzeXNsaWIuam5pc2hhcmVkc3R1YnMuZGxsPTEuMCcpOwogICAgc2wuQWRkKCdzeXNsaWIuamFjb2IuZGxsPTEuMCcpOwoKICAgIC8vIEFuZCBzYXZlIGl0CiAgICBzbC5TYXZlVG9GaWxlKFdlYlV0aWxQcm9wcyk7CiAgZmluYWxseQogICAgc2wuRnJlZTsKICBlbmQ7CmVuZDsKCnByb2NlZHVyZSBEZWxldGVTdHJpbmcoY29uc3Qgc2w6IFRTdHJpbmdMaXN0OyBjb25zdCBzOiBTdHJpbmcpOwp2YXIKICBpOiBJbnRlZ2VyOwpiZWdpbgogIGkgOj0gc2wuSW5kZXhPZihzKTsKICBpZiBpID4gLTEgdGhlbgogIGJlZ2luCiAgICBzbC5EZWxldGUoaSk7CiAgZW5kOwplbmQ7Cgpwcm9jZWR1cmUgUG9zdFVuSW5zdGFsbFByb2M7CnZhcgogIFdlYlV0aWxQcm9wczogU3RyaW5nOwogIHNsOiBUU3RyaW5nTGlzdDsKYmVnaW4KICAvLyBBc3NlbWJsZSBDb21wbGV0ZSBQYXRoCiAgV2ViVXRpbFByb3BzIDo9IEdldEphdmFEaXIoJycpICsgJ1x3ZWJ1dGlsLnByb3BlcnRpZXMnOwoKICBzbCA6PSBUU3RyaW5nTGlzdC5DcmVhdGU7CiAgdHJ5CiAgICAvLyBXZSBkb24ndCB3YW50IGR1cGxpY2F0ZXMhCiAgICBzbC5EdXBsaWNhdGVzIDo9IGR1cElnbm9yZTsKICAgIHNsLlNvcnRlZCA6PSBUcnVlOwoKICAgIC8vIExvYWQgZXhpc3RpbmcgZmlsZQogICAgdHJ5CiAgICAgIHNsLkxvYWRGcm9tRmlsZShXZWJVdGlsUHJvcHMpOwogICAgICBEZWxldGVTdHJpbmcoc2wsICdzeXNsaWIuZDJrd3V0NjAuZGxsPTEuMCcpOwogICAgICBEZWxldGVTdHJpbmcoc2wsICdzeXNsaWIuam5pc2hhcmVkc3R1YnMuZGxsPTEuMCcpOwogICAgICBEZWxldGVTdHJpbmcoc2wsICdzeXNsaWIuamFjb2IuZGxsPTEuMCcpOwogICAgICAvLyBBbmQgc2F2ZSBpdAogICAgICBzbC5TYXZlVG9GaWxlKFdlYlV0aWxQcm9wcyk7CgogICAgZXhjZXB0CiAgICAgIC8vIElnbm9yZSBpZiB0aGUgZmlsZSBkb2Vzbid0IGV4aXN0CiAgICBlbmQ7CgogIGZpbmFsbHkKICAgIHNsLkZyZWU7CiAgZW5kOwplbmQ7Cgpwcm9jZWR1cmUgQ3VyU3RlcENoYW5nZWQoQ3VyU3RlcDogVFNldHVwU3RlcCk7CmJlZ2luCiAgY2FzZSBDdXJTdGVwIG9mCiAgICBzc1Bvc3RJbnN0YWxsOiBQb3N0SW5zdGFsbFByb2M7CiAgZW5kOwplbmQ7Cgpwcm9jZWR1cmUgQ3VyVW5pbnN0YWxsU3RlcENoYW5nZWQoQ3VyVW5pbnN0YWxsU3RlcDogVFVuaW5zdGFsbFN0ZXApOwpiZWdpbgogIGNhc2UgQ3VyVW5pbnN0YWxsU3RlcCBvZgogICAgdXNQb3N0VW5pbnN0YWxsOiBQb3N0VW5JbnN0YWxsUHJvYzsKICBlbmQ7CmVuZDs=">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>const
+  JavaKey = &#39;SOFTWARE\JavaSoft\Java Runtime Environment&#39;;
+
+function GetJavaDir(const s: String): String;
+var
+  CurrentVersion: String;
+begin
+  // Get Java Version
+  if RegQueryStringValue(HKEY_LOCAL_MACHINE, JavaKey, &#39;CurrentVersion&#39;, CurrentVersion) then
+  begin
+    // Get JavaHome Path
+    if RegQueryStringValue(HKEY_LOCAL_MACHINE, JavaKey &#43; &#39;\&#39; &#43; CurrentVersion, &#39;JavaHome&#39;, Result) then
+    begin
+      // Add subdir that was given as parameter
+      if s &lt;&gt; &#39;&#39; then
+      begin
+        Result := Result &#43; &#39;\&#39; &#43; s;
+      end;
+    end;
+  end;
+
+  if Result = &#39;&#39; then
+    RaiseException(&#39;Unable to determine Java Version!&#39;);
+end;
+
+// When using {code:SomeFunction}  the function needs to have (const s: String)
+function GetJavaBin(const s: String): String;
+begin
+  Result := GetJavaDir(&#39;bin&#39;);
+end;
+
+procedure PostInstallProc;
+var
+  WebUtilProps: String;
+  sl: TStringList;
+begin
+  // Assemble Complete Path
+  WebUtilProps := GetJavaDir(&#39;&#39;) &#43; &#39;\webutil.properties&#39;;
+
+  sl := TStringList.Create;
+  try
+    // We don&#39;t want duplicates!
+    sl.Duplicates := dupIgnore;
+    sl.Sorted := True;
+
+    // Load existing file
+    try
+      sl.LoadFromFile(WebUtilProps);
+    except
+      // Ignore if the file doesn&#39;t exist
+    end;
+
+    // Add Entries (or overwrite)
+    sl.Add(&#39;#WebUtil Properties File&#39;);
+    sl.Add(&#39;syslib.d2kwut60.dll=1.0&#39;);
+    sl.Add(&#39;syslib.jnisharedstubs.dll=1.0&#39;);
+    sl.Add(&#39;syslib.jacob.dll=1.0&#39;);
+
+    // And save it
+    sl.SaveToFile(WebUtilProps);
+  finally
+    sl.Free;
+  end;
+end;
+
+procedure DeleteString(const sl: TStringList; const s: String);
+var
+  i: Integer;
+begin
+  i := sl.IndexOf(s);
+  if i &gt; -1 then
+  begin
+    sl.Delete(i);
+  end;
+end;
+
+procedure PostUnInstallProc;
+var
+  WebUtilProps: String;
+  sl: TStringList;
+begin
+  // Assemble Complete Path
+  WebUtilProps := GetJavaDir(&#39;&#39;) &#43; &#39;\webutil.properties&#39;;
+
+  sl := TStringList.Create;
+  try
+    // We don&#39;t want duplicates!
+    sl.Duplicates := dupIgnore;
+    sl.Sorted := True;
+
+    // Load existing file
+    try
+      sl.LoadFromFile(WebUtilProps);
+      DeleteString(sl, &#39;syslib.d2kwut60.dll=1.0&#39;);
+      DeleteString(sl, &#39;syslib.jnisharedstubs.dll=1.0&#39;);
+      DeleteString(sl, &#39;syslib.jacob.dll=1.0&#39;);
+      // And save it
+      sl.SaveToFile(WebUtilProps);
+
+    except
+      // Ignore if the file doesn&#39;t exist
+    end;
+
+  finally
+    sl.Free;
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  case CurStep of
+    ssPostInstall: PostInstallProc;
+  end;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  case CurUninstallStep of
+    usPostUninstall: PostUnInstallProc;
+  end;
+end;</code></pre></div></div></div><div class=author-foot><img class=avatar-img src=/blog/img/remko-avatar.png alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>RW</span><div class=who><div class=side-h>> written by</div><div class=name>Remko Weijnen</div><p>I work on Windows internals, application delivery, security, reverse engineering, automation and AI — building tools, debugging strange behaviour and taking systems apart to understand how they work.</p><div class=links><a href=https://github.com/rweijnen rel=me>GitHub</a>
+<a href=https://www.linkedin.com/in/remkoweijnen/ rel=me>LinkedIn</a></div></div></div></article><aside class=rail><div class=side-modules><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Application Compatibility</div><div class=related-list><a class=related-item href=/blog/2013/05/30/redirect-registry-by-modifying-net-executable/><span class=rt>Redirect Registry by Modifying .NET Executable</span>
+<span class=rm>2013 &#183; 5 min</span>
+</a><a class=related-item href=/blog/2013/03/11/the-case-of-the-com-port-redirection/><span class=rt>The case of the COM Port Redirection</span>
+<span class=rm>2013 &#183; 6 min</span>
+</a><a class=related-item href=/blog/2013/01/02/change-tab-order-in-an-executable/><span class=rt>Change Tab Order in an Executable</span>
+<span class=rm>2013 &#183; 4 min</span>
+</a><a class=related-all href=/blog/categories/application-compatibility/>All Application Compatibility posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2008/03/26/microsoft-remote-server-administration-tools-released/>Microsoft Remote Server Administration Tools released</a><div class=random-meta id=randomMeta>2008 &#183; Active Directory</div><script type=application/json id=randomPool>[{"c":"Active Directory","t":"Microsoft Remote Server Administration Tools released","u":"/blog/2008/03/26/microsoft-remote-server-administration-tools-released/","y":"2008"},{"c":"Apple","t":"Virtualized Mac OS X Freezes","u":"/blog/2011/07/01/virtualized-mac-os-x-freezes/","y":"2011"},{"c":"Delphi","t":"Cannot Access Files, But Need the Origin?","u":"/blog/2011/01/03/cannot-access-files-but-need-the-origin/","y":"2011"},{"c":".NET","t":"Modifying a .NET Application","u":"/blog/2017/03/14/modifying-net-application/","y":"2017"},{"c":"Active Directory","t":"Reading accountExpires attribute from Active Directory (in Delphi)","u":"/blog/2010/02/10/reading-accountexpires-attribute-from-active-directory-in-delphi/","y":"2010"},{"c":"Packaging","t":"Get Rid of the Office 2019 Licensing Nag Screen","u":"/blog/2022/10/11/get-rid-of-the-office-2019-licensing-nag-screen/","y":"2022"},{"c":"Apple","t":"Cannot connect to iTunes Store after enabling https scanning in Sophos UTM","u":"/blog/2014/07/16/cannot-connect-to-itunes-store-after-enabling-https-scanning-in-sophos-utm/","y":"2014"},{"c":"Delphi","t":"Accessing kernel objects in other sessions part 2","u":"/blog/2009/02/03/accessing-kernel-objects-in-other-sessions-part-2/","y":"2009"},{"c":"Active Directory","t":"Check if a useraccount exists with PowerShell","u":"/blog/2011/09/02/check-if-a-useraccount-exists-with-powershell/","y":"2011"},{"c":"Delphi","t":"Memory Leaks when using the Virtual TreeView Component","u":"/blog/2010/06/09/memory-leaks-when-using-virtual-treeview-component/","y":"2010"},{"c":"Citrix","t":"Scriptable Citrix Password Encoder","u":"/blog/2013/03/19/scriptable-citrix-password-encoder/","y":"2013"},{"c":"NetScaler","t":"Show Client IP Address when using NetScaler as a Reverse Proxy","u":"/blog/2017/02/10/show-client-ip-address-when-using-netscaler-as-a-reverse-proxy/","y":"2017"},{"c":"Active Directory","t":"The case of the duplicate SID’s","u":"/blog/2011/06/27/the-case-of-the-duplicate-sids/","y":"2011"},{"c":"Windows Internals","t":"IDA 4.9 released as freeware","u":"/blog/2007/12/09/ida-49-released-as-freeware/","y":"2007"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

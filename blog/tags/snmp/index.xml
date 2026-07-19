@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SNMP on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/snmp/</link><description>Recent content in SNMP on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 04 Feb 2011 11:22:26 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/snmp/index.xml" rel="self" type="application/rss+xml"/><item><title>Script to install SNMP</title><link>https://remkoweijnen.nl/blog/2011/02/04/script-to-install-snmp/</link><pubDate>Fri, 04 Feb 2011 11:22:26 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/02/04/script-to-install-snmp/</guid><description>&lt;p&gt;In my project the monitoring group required that SNMP was installed and configured on all servers. &lt;p&gt;I wrote scripts for Windows 2003 and Windows 2008 that I deploy from my Altiris Server.&lt;/p&gt; &lt;p&gt;This is the script for Windows 2003:&lt;/p&gt;&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;batch&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".bat" href="data:text/plain;charset=utf-8;base64,QGVjaG8gb2ZmCnJlbSBJbnN0YWxsIFNOTVAKCnJlbSBDcmVhdGUgU3lzb2MgQW5zd2VyIEZpbGUKZWNobyBbTmV0T3B0aW9uYWxDb21wb25lbnRzXSAgPkluc3RhbGxTTk1QLnR4dAplY2hvIFNOTVAgPSAxID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8uID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gW1NOTVBdID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gQWNjZXB0X0NvbW11bml0eU5hbWUgPSBNWUNPTU1VTklUWTpSZWFkX09ubHkgPj5JbnN0YWxsU05NUC50eHQKZWNobyBBbnlfSG9zdCA9IE5vID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gQ29tbXVuaXR5X05hbWUgPSAiTVlDT01NVU5JVFkiID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gQ29udGFjdF9OYW1lID0gIk1ZQ09OVEFOVCIgID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gTGltaXRfSG9zdCA9IE1ZSVAgID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gTG9jYXRpb24gPSAiTVlMT0NBVElPTiIgID4&amp;#43;SW5zdGFsbFNOTVAudHh0CmVjaG8gU2VuZF9BdXRoZW50aWNhdGlvbiA9IFllcyA&amp;#43;Pkluc3RhbGxTTk1QLnR4dAplY2hvIFNlcnZpY2UgPSBBcHBsaWNhdGlvbnMsIEludGVybmV0LCBFbmQtdG8tRW5kLCBQaHlzaWNhbCwgRGF0YWxpbmsgPj5JbnN0YWxsU05NUC50eHQKZWNobyBUcmFwcyA9IFRIRVRSQVBJUCAgPj5JbnN0YWxsU05NUC50eHQKClN5c29jbWdyLmV4ZSAvaTpcd2luZG93c1xpbmZcc3lzb2MuaW5mIC91OlxXaW5kb3dzXFRlbXBcSW5zdGFsbFNOTVAudHh0IC9y"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-batch"&gt;&lt;code class="language-batch"&gt;@echo off
+rem Install SNMP
+
+rem Create Sysoc Answer File
+echo [NetOptionalComponents] &amp;gt;InstallSNMP.txt
+echo SNMP = 1 &amp;gt;&amp;gt;InstallSNMP.txt
+echo. &amp;gt;&amp;gt;InstallSNMP.txt
+echo [SNMP] &amp;gt;&amp;gt;InstallSNMP.txt
+echo Accept_CommunityName = MYCOMMUNITY:Read_Only &amp;gt;&amp;gt;InstallSNMP.txt
+echo Any_Host = No &amp;gt;&amp;gt;InstallSNMP.txt
+echo Community_Name = &amp;#34;MYCOMMUNITY&amp;#34; &amp;gt;&amp;gt;InstallSNMP.txt
+echo Contact_Name = &amp;#34;MYCONTANT&amp;#34; &amp;gt;&amp;gt;InstallSNMP.txt
+echo Limit_Host = MYIP &amp;gt;&amp;gt;InstallSNMP.txt
+echo Location = &amp;#34;MYLOCATION&amp;#34; &amp;gt;&amp;gt;InstallSNMP.txt
+echo Send_Authentication = Yes &amp;gt;&amp;gt;InstallSNMP.txt
+echo Service = Applications, Internet, End-to-End, Physical, Datalink &amp;gt;&amp;gt;InstallSNMP.txt
+echo Traps = THETRAPIP &amp;gt;&amp;gt;InstallSNMP.txt
+
+Sysocmgr.exe /i:\windows\inf\sysoc.inf /u:\Windows\Temp\InstallSNMP.txt /r&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>The case of the UPS discovery not working</title><link>https://remkoweijnen.nl/blog/2011/01/24/the-case-of-the-ups-discovery-not-working/</link><pubDate>Mon, 24 Jan 2011 15:22:03 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/24/the-case-of-the-ups-discovery-not-working/</guid><description>&lt;p&gt;I am doing a project involving a Citrix Xenapp environment running on VMWare vSphere.&lt;/p&gt;
+&lt;p&gt;The physical machines are powered by two Eaton Uninterruptable Power Supplies that both a network card.&lt;/p&gt;
+&lt;p&gt;I received some &lt;a href="http://download.mgeops.com/install/linux/ipp/IPP_how_to_vmware_esx_en_1_9.pdf" target="_blank"&gt;documentation&lt;/a&gt; that describes how to implement automatic shutdown in a VMWare vSphere environment.&lt;/p&gt;
+&lt;p&gt;This documentation describes that a &lt;a href="http://www.vmware.com/support/developer/vima/" target="_blank"&gt;vSphere Management Assistant&lt;/a&gt; (vMA) must be deployed in which we need to install some software from Eaton.&lt;/p&gt;
+&lt;p&gt;I followed the documentation that even described the needed iptables rules needed for their software.&lt;/p&gt;
+&lt;p&gt;In the last step a discovery is done and the UPS is supposed to be found. And you have probably guessed by now: it didn&amp;rsquo;t!&lt;/p&gt;
+&lt;p&gt;At first I figured that maybe the iptables configuration was still too tight so I stopped the iptables service but that didn&amp;rsquo;t help.&lt;/p&gt;</description></item></channel></rss>

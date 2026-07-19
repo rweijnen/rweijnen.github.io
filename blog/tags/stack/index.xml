@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Stack on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/stack/</link><description>Recent content in Stack on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 27 May 2011 15:10:00 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/stack/index.xml" rel="self" type="application/rss+xml"/><item><title>Determining stack size</title><link>https://remkoweijnen.nl/blog/2011/05/27/determining-stack-size/</link><pubDate>Fri, 27 May 2011 15:10:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/27/determining-stack-size/</guid><description>&lt;p&gt;I just read an answer on &lt;a href="http://stackoverflow.com/questions/6150018/what-is-a-safe-maximum-stack-size-or-how-to-measure-use-of-stack" target="_blank"&gt;StackOverflow&lt;/a&gt; with this code:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgZXU6RFdPUkQ7CmJlZ2luCiAgYXNtCiAgICBtb3YgZWF4LFtmczokNF0KICAgIG1vdiBlYngsW2ZzOiQ4XQogICAgc3ViIGVheCxlYngKICAgIG1vdiBldSxlYXgKICBlbmQ7CgogIFNob3dNZXNzYWdlKEludFRvU3RyKGV1KSk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ eu:DWORD;
+begin
+ asm
+ mov eax,[fs:$4]
+ mov ebx,[fs:$8]
+ sub eax,ebx
+ mov eu,eax
+ end;
+
+ ShowMessage(IntToStr(eu));
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Unfortunately it lacked explanation, so what does this code do?&lt;/p&gt;
+&lt;p&gt;It reads offset $4 from the Thread Information Block (the top of stack) into eax and then offset $8 (stack base) into ebx.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,303 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds) &#183; Remko's Blog</title><meta name=description content="Practical fixes for a custom Windows XP/2003 autologon using LsaLogonUser and NtCreateToken: adding the logon SID, Everyone group, and copying the lsass token."><link rel=canonical href=https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds)"><meta property="og:description" content="Practical fixes for a custom Windows XP/2003 autologon using LsaLogonUser and NtCreateToken: adding the logon SID, Everyone group, and copying the lsass token."><meta property="og:url" content="https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/"><meta property="og:image" content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Remko's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds)"><meta name=twitter:description content="Practical fixes for a custom Windows XP/2003 autologon using LsaLogonUser and NtCreateToken: adding the logon SID, Everyone group, and copying the lsass token."><meta name=twitter:image content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="article:published_time" content="2011-03-02T00:10:02Z"><meta property="article:modified_time" content="2011-03-02T00:10:02Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Danila Galimov"},"dateModified":"2011-03-02T00:10:02Z","datePublished":"2011-03-02T00:10:02Z","description":"Practical fixes for a custom Windows XP/2003 autologon using LsaLogonUser and NtCreateToken: adding the logon SID, Everyone group, and copying the lsass token.","headline":"Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds)","mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Delphi</span><span data-pagefind-filter=category>Programming</span><span data-pagefind-filter=category>Remote Desktop Services</span><span data-pagefind-filter=category>Windows 2003</span><span data-pagefind-filter=category>Windows XP</span>
+<span data-pagefind-meta=category>Delphi</span>
+<span data-pagefind-filter=tag>LsaLogonUser</span><span data-pagefind-filter=tag>NtCreateToken</span><span data-pagefind-filter=tag>Autologon</span><span data-pagefind-filter=tag>Winlogon</span><span data-pagefind-filter=tag>Access Token</span><span data-pagefind-filter=tag>LSASS</span><span data-pagefind-filter=tag>Windows Internals</span>
+<span data-pagefind-filter=year>2011</span>
+<span data-pagefind-meta=date>2011-03-02</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/delphi/>delphi</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds)</h1><div class=byline><span class=avatar style=width:26px;height:26px;border-radius:7px;font-size:11px>DG</span><span>Danila Galimov</span><span class=dot>&#183;</span>
+<time datetime=2011-03-02>Mar 2, 2011</time>
+<span class=dot>&#183;</span><span>6 min read</span></div><div class=post-content data-pagefind-body><p>In <a href=/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/>part 1</a> I&rsquo;ve described the theoretical parts needed for a custom autologon application implementation.</p><p>But there are some practical problems which I will describe here.</p><ol><li>I use the <a href="http://msdn.microsoft.com/en-us/library/aa378292(v=vs.85).aspx">LsaLogonUser</a> function to log in the user. However, if I do not pass not null for the <em>LocalGroups</em> parameter, msgina.dll fails to process the logon.</li></ol><p>Why? Because it looks for the <strong>SE_GROUP_LOGON_ID</strong> SID and treat it as logon SID. So we have to add the logon SID manually:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gR2V0QWRkaXRpb25hbFNJRFMoU3RyaW5nU0lEUyA6IFRTdHJpbmdEeW5BcnJheSkgOiBKV0FXaW5kb3dzLlBUb2tlbkdyb3VwczsKdmFyCiAgTGVuIDogSW50ZWdlcjsKICBJIDogSW50ZWdlcjsKYmVnaW4KICBSZXN1bHQgOj0gbmlsOwoKICBMZW4gOj0gTGVuZ3RoKFN0cmluZ1NJRFMpOwogIGlmIChMZW4gPiAwKSB0aGVuCiAgYmVnaW4KICAgIFJlc3VsdCA6PSBHZXRNZW1vcnkoU2l6ZU9mKFJlc3VsdF4pICsgU2l6ZU9mKFJlc3VsdF4uR3JvdXBzWzBdKSAqIChMZW4pKTsKCiAgICB3aXRoIFJlc3VsdF4gZG8KICAgIGJlZ2luCiAgICAgIEdyb3VwQ291bnQgOj0gTGVuOwogICAgICBmb3IgSSA6PSBMb3coU3RyaW5nU0lEcykgdG8gSGlnaChTdHJpbmdTSURzKSBkbwogICAgICAgIEdyb3Vwc1tJXSA6PSBDb252ZXJ0U2lkKFN0cmluZ1NJRHNbaV0pOwoKICAgICAgICAvLyBoYXJkY29kZTogbGFzdCBzaWQgd2lsbCBiZSBtYW51YWxseSBhZGRlZCBzaWQsIHNvIG1ha2UgaXQgbG9nb24gc2lkCiAgICAgICAgR3JvdXBzW0hpZ2goU3RyaW5nU0lEcyldLkF0dHJpYnV0ZXMgOj0gR3JvdXBzW0hpZ2goU3RyaW5nU0lEcyldLkF0dHJpYnV0ZXMgb3IgU0VfR1JPVVBfTE9HT05fSUQ7CiAgICAgZW5kOwogIGVuZDsKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function GetAdditionalSIDS(StringSIDS : TStringDynArray) : JWAWindows.PTokenGroups;
+var
+  Len : Integer;
+  I : Integer;
+begin
+  Result := nil;
+
+  Len := Length(StringSIDS);
+  if (Len &gt; 0) then
+  begin
+    Result := GetMemory(SizeOf(Result^) &#43; SizeOf(Result^.Groups[0]) * (Len));
+
+    with Result^ do
+    begin
+      GroupCount := Len;
+      for I := Low(StringSIDs) to High(StringSIDs) do
+        Groups[I] := ConvertSid(StringSIDs[i]);
+
+        // hardcode: last sid will be manually added sid, so make it logon sid
+        Groups[High(StringSIDs)].Attributes := Groups[High(StringSIDs)].Attributes or SE_GROUP_LOGON_ID;
+     end;
+  end;
+end;</code></pre></div></div><ol start=2><li>In case we want to create a token using <a href=http://undocumented.ntinternals.net/UserMode/Undocumented%20Functions/NT%20Objects/Token/NtCreateToken.html>NtCreateToken</a>, we need to add the <em>Everyone</em> Group (otherwise W<em>inlogon</em> will fail to load the user profile):</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,Y29uc3QKICBFdmVyeW9uZVNJRCA9ICdTLTEtMS0wJzsKCnByb2NlZHVyZSBDaGVja0FkZGl0aW9uYWxTSURzKHZhciBTSURzIDogVFN0cmluZ0R5bkFycmF5OyBXb3JraW5nTW9kZSA6IFRXb3JraW5nTW9kZTsKICBjb25zdCBVc2VyTmFtZSwgRG9tYWluLCBQcmltYXJ5U0lEIDogU3RyaW5nOyBJbmNsdWRlRXZlcnlvbmVTSUQgOiBCb29sZWFuKTsKdmFyCiAgU0lEIDogUFNJRDsKICBTaWRMZW5ndGggOiBEV09SRDsKCiAgRG9tYWluTmFtZSA6IFBDaGFyOwogIERvbWFpbkxlbiA6IERXT1JEOwoKICBOYW1lIDogU0lEX05BTUVfVVNFOwpiZWdpbgogIGlmIChXb3JraW5nTW9kZSA9IHdtQ3JlYXRlVG9rZW4pIHRoZW4KICBiZWdpbgogICAgaWYgKEluY2x1ZGVFdmVyeW9uZVNJRCkgdGhlbgogICAgYmVnaW4KICAgICAgICBTZXRMZW5ndGgoU0lEcywgTGVuZ3RoKFNJRHMpICsgMSk7CiAgICAgICAgU0lEc1tMZW5ndGgoU0lEcykgLSAxXSA6PSBFdmVyeW9uZVNJRDsKICAgIGVuZDsKCiAgICBTZXRMZW5ndGgoU0lEcywgTGVuZ3RoKFNJRHMpICsgMSk7CiAgICBTSURzW0xlbmd0aChTSURzKSAtIDFdIDo9IFByaW1hcnlTSUQ7CiAgZW5kOwoKICBpZiAoTGVuZ3RoKFNJRHMpID4gMCkgYW5kIChXb3JraW5nTW9kZSA9IHdtTm9ybWFsTG9naW4pICB0aGVuCiAgYmVnaW4KICAgIFNpZExlbmd0aCA6PSAwOwogICAgRG9tYWluTGVuIDo9IDA7CgogICAgTG9va3VwQWNjb3VudE5hbWUoUENoYXIoRG9tYWluKSwgUENoYXIoVXNlck5hbWUpLCBuaWwsIFNpZExlbmd0aCwgbmlsLCBEb21haW5MZW4sIE5hbWUpOwogICAgaWYgKEdldExhc3RFcnJvciA8PiBFUlJPUl9JTlNVRkZJQ0lFTlRfQlVGRkVSKSB0aGVuCiAgICAgIFJhaXNlTGFzdE9TRXJyb3I7CgogICAgU0lEIDo9IEdldE1lbW9yeShTaWRMZW5ndGgpOwogICAgdHJ5CiAgICAgIERvbWFpbk5hbWUgOj0gR2V0TWVtb3J5KERvbWFpbkxlbik7CiAgICAgIHRyeQogICAgICAgIFdpbjMyQ2hlY2soTG9va3VwQWNjb3VudE5hbWUoUENoYXIoRG9tYWluKSwgUENoYXIoVXNlck5hbWUpLCBTSUQsIFNpZExlbmd0aCwgRG9tYWluTmFtZSwgRG9tYWluTGVuLCBOYW1lKSk7CgogICAgICAgIFNldExlbmd0aChTSURzLCBMZW5ndGgoU0lEcykgKyAxKTsKICAgICAgICBTSURzW0xlbmd0aChTSURzKSAtIDFdIDo9IENvbnZlcnRTSURUb1N0cmluZyhTSUQpOwogICAgICBmaW5hbGx5CiAgICAgICAgRnJlZU1lbW9yeShEb21haW5OYW1lKTsKICAgICAgZW5kOwogICAgZmluYWxseQogICAgICBGcmVlTWVtb3J5KFNJRCk7CiAgICBlbmQ7CiAgZW5kOwplbmQ7">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>const
+  EveryoneSID = &#39;S-1-1-0&#39;;
+
+procedure CheckAdditionalSIDs(var SIDs : TStringDynArray; WorkingMode : TWorkingMode;
+  const UserName, Domain, PrimarySID : String; IncludeEveryoneSID : Boolean);
+var
+  SID : PSID;
+  SidLength : DWORD;
+
+  DomainName : PChar;
+  DomainLen : DWORD;
+
+  Name : SID_NAME_USE;
+begin
+  if (WorkingMode = wmCreateToken) then
+  begin
+    if (IncludeEveryoneSID) then
+    begin
+        SetLength(SIDs, Length(SIDs) &#43; 1);
+        SIDs[Length(SIDs) - 1] := EveryoneSID;
+    end;
+
+    SetLength(SIDs, Length(SIDs) &#43; 1);
+    SIDs[Length(SIDs) - 1] := PrimarySID;
+  end;
+
+  if (Length(SIDs) &gt; 0) and (WorkingMode = wmNormalLogin)  then
+  begin
+    SidLength := 0;
+    DomainLen := 0;
+
+    LookupAccountName(PChar(Domain), PChar(UserName), nil, SidLength, nil, DomainLen, Name);
+    if (GetLastError &lt;&gt; ERROR_INSUFFICIENT_BUFFER) then
+      RaiseLastOSError;
+
+    SID := GetMemory(SidLength);
+    try
+      DomainName := GetMemory(DomainLen);
+      try
+        Win32Check(LookupAccountName(PChar(Domain), PChar(UserName), SID, SidLength, DomainName, DomainLen, Name));
+
+        SetLength(SIDs, Length(SIDs) &#43; 1);
+        SIDs[Length(SIDs) - 1] := ConvertSIDToString(SID);
+      finally
+        FreeMemory(DomainName);
+      end;
+    finally
+      FreeMemory(SID);
+    end;
+  end;
+end;</code></pre></div></div><ol start=3><li>On the X64 versions of Windows XP and all version of Windows 2003 a service process doesn&rsquo;t have the <a href=http://msdn.microsoft.com/en-us/library/bb530716(VS.85).aspx>SeCreateTokenName</a> privilege. But we can open <em>lsass.exe</em> process and copy it&rsquo;s token:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,dHlwZQogIFRQcm9jZXNzQWNjZXNzVG9rZW4gPSByZWNvcmQKICAgIGhUb2tlbiA6IFRIYW5kbGU7CiAgICBoVGhyZWFkIDogVEhhbmRsZTsKICBlbmQ7Cgpwcm9jZWR1cmUgQWRqdXN0VG9rZW47CnZhcgogIExzYXNzUHJvY2VzcyA6IFRIYW5kbGU7CiAgTHNhc3NUb2tlbiA6IFRIYW5kbGU7CiAgUHJvY2Vzc1Rva2VuIDogVFByb2Nlc3NBY2Nlc3NUb2tlbjsKICBEdXBsaWNhdGVkVG9rZW4gOiBUSGFuZGxlOwpiZWdpbgogIGlmIChJczIwMDMpIHRoZW4KICBiZWdpbgogICAgRW5hYmxlVG9rZW4oU0VfREVCVUdfTkFNRSk7CiAgICBMc2Fzc1Byb2Nlc3MgOj0gRmluZFByb2Nlc3NJblNlc3Npb24oMCwgJ2xzYXNzLmV4ZScpOwoKICAgIGlmIChMc2Fzc1Byb2Nlc3MgPSBJTlZBTElEX0hBTkRMRV9WQUxVRSkgdGhlbgogICAgYmVnaW4KICAgICAgV3JpdGVsbignVW5hYmxlIHRvIGZpbmQgbHNhc3MuZXhlIHByb2Nlc3MnKTsKICAgICAgQWJvcnQ7CiAgICBlbmQ7CgogICAgdHJ5CiAgICAgIFdpbjMyQ2hlY2soT3BlblByb2Nlc3NUb2tlbihMc2Fzc1Byb2Nlc3MsIFRPS0VOX0FMTF9BQ0NFU1MsIExzYXNzVG9rZW4pKTsKICAgICAgdHJ5CiAgICAgICAgV2luMzJDaGVjayhEdXBsaWNhdGVUb2tlbkV4KExzYXNzVG9rZW4sIFRPS0VOX0FMTF9BQ0NFU1MsIG5pbCwgU2VjdXJpdHlJbXBlcnNvbmF0aW9uLCBUb2tlblByaW1hcnksIER1cGxpY2F0ZWRUb2tlbikpOwogICAgICAgIHRyeQogICAgICAgICAgUHJvY2Vzc1Rva2VuLmhUaHJlYWQgOj0gR2V0Q3VycmVudFRocmVhZDsKICAgICAgICAgIFByb2Nlc3NUb2tlbi5oVG9rZW4gOj0gRHVwbGljYXRlZFRva2VuOwoKICAgICAgICAgIEVuYWJsZVRva2VuKFNFX0FTU0lHTlBSSU1BUllUT0tFTl9OQU1FKTsKICAgICAgICAgIE50Q2hlY2soTnRTZXRJbmZvcm1hdGlvblByb2Nlc3MoR2V0Q3VycmVudFByb2Nlc3MsIFByb2Nlc3NBY2Nlc3NUb2tlbiwgQFByb2Nlc3NUb2tlbiwgU2l6ZU9mKFByb2Nlc3NUb2tlbikpKTsKICAgICAgICBmaW5hbGx5CiAgICAgICAgICBDbG9zZUhhbmRsZShEdXBsaWNhdGVkVG9rZW4pOwogICAgICAgIGVuZDsKICAgICAgZmluYWxseQogICAgICAgIENsb3NlSGFuZGxlKExzYXNzVG9rZW4pOwogICAgICBlbmQ7CiAgICBmaW5hbGx5CiAgICAgIENsb3NlSGFuZGxlKExzYXNzUHJvY2Vzcyk7CiAgICBlbmQ7CiAgZW5kOwplbmQ7">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>type
+  TProcessAccessToken = record
+    hToken : THandle;
+    hThread : THandle;
+  end;
+
+procedure AdjustToken;
+var
+  LsassProcess : THandle;
+  LsassToken : THandle;
+  ProcessToken : TProcessAccessToken;
+  DuplicatedToken : THandle;
+begin
+  if (Is2003) then
+  begin
+    EnableToken(SE_DEBUG_NAME);
+    LsassProcess := FindProcessInSession(0, &#39;lsass.exe&#39;);
+
+    if (LsassProcess = INVALID_HANDLE_VALUE) then
+    begin
+      Writeln(&#39;Unable to find lsass.exe process&#39;);
+      Abort;
+    end;
+
+    try
+      Win32Check(OpenProcessToken(LsassProcess, TOKEN_ALL_ACCESS, LsassToken));
+      try
+        Win32Check(DuplicateTokenEx(LsassToken, TOKEN_ALL_ACCESS, nil, SecurityImpersonation, TokenPrimary, DuplicatedToken));
+        try
+          ProcessToken.hThread := GetCurrentThread;
+          ProcessToken.hToken := DuplicatedToken;
+
+          EnableToken(SE_ASSIGNPRIMARYTOKEN_NAME);
+          NtCheck(NtSetInformationProcess(GetCurrentProcess, ProcessAccessToken, @ProcessToken, SizeOf(ProcessToken)));
+        finally
+          CloseHandle(DuplicatedToken);
+        end;
+      finally
+        CloseHandle(LsassToken);
+      end;
+    finally
+      CloseHandle(LsassProcess);
+    end;
+  end;
+end;</code></pre></div></div><ol start=4><li><p>In case we create the token manually, we have to specify the logon session. As there is no way to create a session without injecting into <em>lsass.exe</em>, I use a SYSTEM luid as a logon session luid. It has the side-effect of showing the user as SYSTEM regardless of the actual used SID.</p></li><li><p>Sometimes opening the pipe fails (it may have been connected to some other session&rsquo;s <em>winlogon</em>). I try to open the pipe with short timeout and post a disconnect pipe message:</p></li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,Y29uc3QKICBXUEFSQU1fRElTQ09OTkVDVF9QSVBFID0gMjA7Cgpwcm9jZWR1cmUgVHJ5VG9Db25uZWN0VG9QaXBlOwp2YXIKICBQaXBlSGFuZGxlIDogVEhhbmRsZTsKYmVnaW4KICBQaXBlSGFuZGxlIDo9IElOVkFMSURfSEFORExFX1ZBTFVFOwogIHRyeQogICAgUGlwZUhhbmRsZSA6PSBPcGVuUGlwZSgxMDApOwogIGV4Y2VwdAogICAgb24gRSA6IEVPU0Vycm9yIGRvCiAgICAgIGlmIEUuRXJyb3JDb2RlIDw+IEVSUk9SX1NFTV9USU1FT1VUIHRoZW4KICAgICAgICBSYWlzZTsKICBlbmQ7CiAgdHJ5CiAgICBEb0xvZ29uTm90aWZ5TWVzc2FnZShXUEFSQU1fRElTQ09OTkVDVF9QSVBFLCAwKTsgLy8gZW11bGF0ZSBfV2luc3RhdGlvbk5vdGlmeURpc2Nvbm5lY3RQaXBlLCBmb3JjZSBwaXBlIHRvIGJlIHJlY29ubmVjdGVkLgogIGZpbmFsbHkKICAgIGlmIChQaXBlSGFuZGxlIDw+IElOVkFMSURfSEFORExFX1ZBTFVFKSB0aGVuCiAgICAgIENsb3NlSGFuZGxlKFBpcGVIYW5kbGUpOwogIGVuZDsKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>const
+  WPARAM_DISCONNECT_PIPE = 20;
+
+procedure TryToConnectToPipe;
+var
+  PipeHandle : THandle;
+begin
+  PipeHandle := INVALID_HANDLE_VALUE;
+  try
+    PipeHandle := OpenPipe(100);
+  except
+    on E : EOSError do
+      if E.ErrorCode &lt;&gt; ERROR_SEM_TIMEOUT then
+        Raise;
+  end;
+  try
+    DoLogonNotifyMessage(WPARAM_DISCONNECT_PIPE, 0); // emulate _WinstationNotifyDisconnectPipe, force pipe to be reconnected.
+  finally
+    if (PipeHandle &lt;&gt; INVALID_HANDLE_VALUE) then
+      CloseHandle(PipeHandle);
+  end;
+end;</code></pre></div></div><ol start=6><li>In Windows 2003 (or on XP x64) you should read the BOOL variable from the pipe after you&rsquo;ve written to it. But it may not work as <em>Winlogon</em> simply writes the value and then disconnects the pipe, so sometimes the data can not be read (subject to threading issue). I simply ignore the read error, since even if it shows that the credentials were accepted by <em>Winlogon</em>, they may have been rejected by <em>gina</em></li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,cHJvY2VkdXJlIFByb2Nlc3NQaXBlKFBpcGVIYW5kbGUgOiBUSGFuZGxlOyBCdWZmZXIgOiBQTGVuZ3RoQnVmZmVyKTsKdmFyCiAgTnVtYmVyT2ZCeXRlcyA6IENhcmRpbmFsOwogIFJlcyA6IEJPT0w7CmJlZ2luCiAgV2luMzJDaGVjayhXcml0ZUZpbGUoUGlwZUhhbmRsZSwgQnVmZmVyLCBCdWZmZXJeLkxlbmd0aCwgQE51bWJlck9mQnl0ZXMsIG5pbCkpOwogIFdpbjMyQ2hlY2soTnVtYmVyT2ZCeXRlcyA9IEJ1ZmZlcl4uTGVuZ3RoKTsKICBpZiAoSXMyMDAzKSB0aGVuCiAgYmVnaW4KICAgIGlmIChSZWFkRmlsZShQaXBlSGFuZGxlLCBAUmVzLCBTaXplT2YoUmVzKSwgQE51bWJlck9mQnl0ZXMsIG5pbCkgYW5kCiAgICAgKE51bWJlck9mQnl0ZXMgPSBTaXplT2YoUmVzKSkgYW5kCiAgICBub3QgUmVzKSB0aGVuCiAgICBiZWdpbgogICAgICBXcml0ZWxuKCdDcmVkZW50aWFscyB3ZXJlIG5vdCBhY2NlcHRlZCcpOwogICAgICBBYm9ydDsKICAgIGVuZDsKICBlbmQKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>procedure ProcessPipe(PipeHandle : THandle; Buffer : PLengthBuffer);
+var
+  NumberOfBytes : Cardinal;
+  Res : BOOL;
+begin
+  Win32Check(WriteFile(PipeHandle, Buffer, Buffer^.Length, @NumberOfBytes, nil));
+  Win32Check(NumberOfBytes = Buffer^.Length);
+  if (Is2003) then
+  begin
+    if (ReadFile(PipeHandle, @Res, SizeOf(Res), @NumberOfBytes, nil) and
+     (NumberOfBytes = SizeOf(Res)) and
+    not Res) then
+    begin
+      Writeln(&#39;Credentials were not accepted&#39;);
+      Abort;
+    end;
+  end
+end;</code></pre></div></div><ol start=7><li>In some extremely rare cases our process may exit before <em>Winlogon</em> has read the credentials and duplicated them (actuallyI was able to repeat this only under debugging <em>winlogon</em>).</li></ol><p>To be sure that our credentials have been correctly processed, I create a different thread and wait for console logon event:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gV2FpdEZvckxvZ29uVGhyZWFkUHJvYyhQYXJhbWV0ZXI6IFBvaW50ZXIpOiBJbnRlZ2VyOwp2YXIKICBFdmVudEZsYWdzIDogQ2FyZGluYWw7CmJlZ2luCiAgUmVzdWx0IDo9IDA7CgogIHRyeQogICAgcmVwZWF0CiAgICAgIFdpbjMyQ2hlY2soV1RTV2FpdFN5c3RlbUV2ZW50KFdUU19DVVJSRU5UX1NFUlZFUl9IQU5ETEUsIFdUU19FVkVOVF9MT0dPTiwgRXZlbnRGbGFncykpOwogICAgdW50aWwgRXZlbnRGbGFncyBhbmQgV1RTX0VWRU5UX0xPR09OIDw+IDA7CiAgZXhjZXB0CiAgICBvbiBFIDogRU9TRXJyb3IgZG8KICAgICAgUmVzdWx0IDo9IEVPc0Vycm9yKEUpLkVycm9yQ29kZTsKICAgIG9uIEUgOiBFeGNlcHRpb24gZG8KICAgICAgUmVzdWx0IDo9IEVSUk9SX0dFTl9GQUlMVVJFOwogIGVuZDsKCiAgRW5kVGhyZWFkKFJlc3VsdCk7CmVuZDsKCmZ1bmN0aW9uIFdhaXRGb3JMb2dvbkFzeW5jIDogVEhhbmRsZTsKYmVnaW4KICBSZXN1bHQgOj0gQmVnaW5UaHJlYWQobmlsLCA2NCoxMDI0LCBAV2FpdEZvckxvZ29uVGhyZWFkUHJvYywgbmlsLCAwLCBQQ2FyZGluYWwobmlsKV4pOwogIGlmIFJlc3VsdCA9IDAgdGhlbgogICAgUmFpc2VMYXN0T1NFcnJvcjsKZW5kOw==">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function WaitForLogonThreadProc(Parameter: Pointer): Integer;
+var
+  EventFlags : Cardinal;
+begin
+  Result := 0;
+
+  try
+    repeat
+      Win32Check(WTSWaitSystemEvent(WTS_CURRENT_SERVER_HANDLE, WTS_EVENT_LOGON, EventFlags));
+    until EventFlags and WTS_EVENT_LOGON &lt;&gt; 0;
+  except
+    on E : EOSError do
+      Result := EOsError(E).ErrorCode;
+    on E : Exception do
+      Result := ERROR_GEN_FAILURE;
+  end;
+
+  EndThread(Result);
+end;
+
+function WaitForLogonAsync : THandle;
+begin
+  Result := BeginThread(nil, 64*1024, @WaitForLogonThreadProc, nil, 0, PCardinal(nil)^);
+  if Result = 0 then
+    RaiseLastOSError;
+end;</code></pre></div></div><p>8‌) If Fast User Switching is enabled and we are on a Workstation OS, W<em>inlogon</em> ignores the <em>WLX_SAS_TYPE_AUTHENTICATED</em> message. However, before execution we can disable the <em>AllowMultipleTSSessions</em> key, and enable it again after the execution. Of course, we do have to remember that under WOW we need to use the special registry flag to access real HKLM hive.</p><ol start=9><li><p>In case session 0 has a logged-on user, W<em>inlogon</em> also ignores the <em>WLX_SAS_TYPE_AUTHENTICATED</em> message. I use <a href="http://msdn.microsoft.com/en-us/library/aa383840(v=vs.85).aspx">WTSQueryUserToken</a> to get the token of the logged on user. If the function succeeds, then a user is logged on. There are some problems calling this function on 64 bit systems, and they are described in <a href="/blog/?p=1299">Querying a user token under 64 bit version of 2003/XP</a></p></li><li><p>If the screensaver is running, we&rsquo;ll have to wait until someone breaks the screensaver. So we need to stop screensaver programmatically. MSDN recommends posting the WM_CLOSE message to the foreground window, so let&rsquo;s do it:</p></li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,ZnVuY3Rpb24gQ3JlYXRlU3RvcFNjcmVlblNhdmVyVGhyZWFkUHJvYyhQYXJhbWV0ZXI6IFBvaW50ZXIpOiBJbnRlZ2VyOwp2YXIKICBEZXNrdG9wSGFuZGxlIDogVEhhbmRsZTsKYmVnaW4KICBSZXN1bHQgOj0gMDsKCiAgdHJ5CiAgICBEZXNrdG9wSGFuZGxlICA6PSBPcGVuSW5wdXREZXNrdG9wKERGX0FMTE9XT1RIRVJBQ0NPVU5USE9PSywgRmFsc2UsIERFU0tUT1BfUkVBRE9CSkVDVFMpOwogICAgaWYgKERlc2t0b3BIYW5kbGUgPSAwKSB0aGVuCiAgICAgIFJhaXNlTGFzdE9TRXJyb3I7CiAgICB0cnkKICAgICAgV2luMzJDaGVjayhTZXRUaHJlYWREZXNrdG9wKERlc2t0b3BIYW5kbGUpKTsKICAgICAgV2luMzJDaGVjayhQb3N0TWVzc2FnZShHZXRGb3JlZ3JvdW5kV2luZG93KCksIFdNX0NMT1NFLCAwLCAwKSk7CiAgICBmaW5hbGx5CiAgICAgIENsb3NlRGVza3RvcChEZXNrdG9wSGFuZGxlKTsKICAgIGVuZDsKICBleGNlcHQKICAgIG9uIEUgOiBFT1NFcnJvciBkbwogICAgICBSZXN1bHQgOj0gRU9zRXJyb3IoRSkuRXJyb3JDb2RlOwogICAgb24gRSA6IEV4Y2VwdGlvbiBkbwogICAgICBSZXN1bHQgOj0gRVJST1JfR0VOX0ZBSUxVUkU7CiAgZW5kOwoKICBFbmRUaHJlYWQoUmVzdWx0KTsKZW5kOwoKZnVuY3Rpb24gQ3JlYXRlU3RvcFNjcmVlblNhdmVyVGhyZWFkIDogVEhhbmRsZTsKYmVnaW4KICBSZXN1bHQgOj0gQmVnaW5UaHJlYWQobmlsLCA2NCoxMDI0LCBAQ3JlYXRlU3RvcFNjcmVlblNhdmVyVGhyZWFkUHJvYywgbmlsLCAwLCBQQ2FyZGluYWwobmlsKV4pOwogIGlmIFJlc3VsdCA9IDAgdGhlbgogICAgUmFpc2VMYXN0T1NFcnJvcjsKZW5kOwoKcHJvY2VkdXJlIENoZWNrU2NyZWVuU2F2ZXI7CnZhcgogIElzU2NyZWVuU2F2ZXJSdW5uaW5nIDogQk9PTDsKICBUaHJlYWRIYW5kbGUgOiBUSGFuZGxlOwogIFJlcyA6IERXT1JEOwpiZWdpbgogIFdpbjMyQ2hlY2soU3lzdGVtUGFyYW1ldGVyc0luZm8oU1BJX0dFVFNDUkVFTlNBVkVSUlVOTklORywgMCwgQElzU2NyZWVuU2F2ZXJSdW5uaW5nLCAwKSk7CiAgaWYgKElzU2NyZWVuU2F2ZXJSdW5uaW5nKSB0aGVuCiAgYmVnaW4KICAgIFRocmVhZEhhbmRsZSA6PSBDcmVhdGVTdG9wU2NyZWVuU2F2ZXJUaHJlYWQ7CgogICAgUmVzIDo9IFdhaXRGb3JTaW5nbGVPYmplY3QoVGhyZWFkSGFuZGxlLCBJTkZJTklURSk7CiAgICBpZiAoUmVzIDw+IFdBSVRfT0JKRUNUXzApIHRoZW4KICAgIGJlZ2luCiAgICAgIFNldExhc3RFcnJvcihSZXMpOwogICAgICBSYWlzZUxhc3RPU0Vycm9yOwogICAgZW5kOwoKICAgIFdpbjMyQ2hlY2soR2V0RXhpdENvZGVUaHJlYWQoVGhyZWFkSGFuZGxlLCBSZXMpKTsKICAgIFNldExhc3RFcnJvcihSZXMpOwogICAgV2luMzJDaGVjayhSZXMgPSBFUlJPUl9TVUNDRVNTKTsKICBlbmQ7CmVuZDs=">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>function CreateStopScreenSaverThreadProc(Parameter: Pointer): Integer;
+var
+  DesktopHandle : THandle;
+begin
+  Result := 0;
+
+  try
+    DesktopHandle  := OpenInputDesktop(DF_ALLOWOTHERACCOUNTHOOK, False, DESKTOP_READOBJECTS);
+    if (DesktopHandle = 0) then
+      RaiseLastOSError;
+    try
+      Win32Check(SetThreadDesktop(DesktopHandle));
+      Win32Check(PostMessage(GetForegroundWindow(), WM_CLOSE, 0, 0));
+    finally
+      CloseDesktop(DesktopHandle);
+    end;
+  except
+    on E : EOSError do
+      Result := EOsError(E).ErrorCode;
+    on E : Exception do
+      Result := ERROR_GEN_FAILURE;
+  end;
+
+  EndThread(Result);
+end;
+
+function CreateStopScreenSaverThread : THandle;
+begin
+  Result := BeginThread(nil, 64*1024, @CreateStopScreenSaverThreadProc, nil, 0, PCardinal(nil)^);
+  if Result = 0 then
+    RaiseLastOSError;
+end;
+
+procedure CheckScreenSaver;
+var
+  IsScreenSaverRunning : BOOL;
+  ThreadHandle : THandle;
+  Res : DWORD;
+begin
+  Win32Check(SystemParametersInfo(SPI_GETSCREENSAVERRUNNING, 0, @IsScreenSaverRunning, 0));
+  if (IsScreenSaverRunning) then
+  begin
+    ThreadHandle := CreateStopScreenSaverThread;
+
+    Res := WaitForSingleObject(ThreadHandle, INFINITE);
+    if (Res &lt;&gt; WAIT_OBJECT_0) then
+    begin
+      SetLastError(Res);
+      RaiseLastOSError;
+    end;
+
+    Win32Check(GetExitCodeThread(ThreadHandle, Res));
+    SetLastError(Res);
+    Win32Check(Res = ERROR_SUCCESS);
+  end;
+end;</code></pre></div></div><ol start=11><li>Although you can send an empty username, some GINA&rsquo;s, at least <em>msgina.dll</em> require it to be not-null. So we can use an empty string (#0) instead. You may need to overwrite this procedure to increase compatibility with your GINA:</li></ol><div class=codecard><div class=codehead><span class=codefile><span class=codelang>delphi</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.pas href="data:;charset=utf-8;base64,cHJvY2VkdXJlIENoZWNrR2luYUNvbXBhdGliaWxpdHkodmFyIFVzZXJOYW1lIDogU3RyaW5nOyB2YXIgRG9tYWluIDogU3RyaW5nKTsKdmFyCiAgQnVmZmVyIDogYXJyYXkgWzAuLk1BWF9DT01QVVRFUk5BTUVfTEVOR1RIXSBvZiBDaGFyOwogIFNpemUgOiBEV09SRDsKYmVnaW4KICBpZiAoVXNlck5hbWUgPSAnJykgdGhlbgogICAgICBVc2VyTmFtZSA6PSAjMDsgLy8gbXNnaW5hLmRsbCBleHBlY3RzIHVzZXIgbmFtZSB0byBiZSBub3QgZW1wdHkKCiAgaWYgKChEb21haW4gPSAnJykgYW5kIChBbnNpQ29tcGFyZVRleHQoR2V0R0lOQU5hbWUsICdGTUxvZ2luLmRsbCcpID0gMCkpIHRoZW4KICBiZWdpbgogICAgU2l6ZSA6PSBTaXplT2YoQnVmZmVyKTsKICAgIFplcm9NZW1vcnkoQEJ1ZmZlciwgU2l6ZSk7CiAgICBXaW4zMkNoZWNrKEdldENvbXB1dGVyTmFtZShCdWZmZXIsIFNpemUpKTsKICAgIERvbWFpbiA6PSBCdWZmZXI7CiAgZW5kOwplbmQ7">Download</a></span></div><div class=codebody><pre class=language-pascal><code class=language-pascal>procedure CheckGinaCompatibility(var UserName : String; var Domain : String);
+var
+  Buffer : array [0..MAX_COMPUTERNAME_LENGTH] of Char;
+  Size : DWORD;
+begin
+  if (UserName = &#39;&#39;) then
+      UserName := #0; // msgina.dll expects user name to be not empty
+
+  if ((Domain = &#39;&#39;) and (AnsiCompareText(GetGINAName, &#39;FMLogin.dll&#39;) = 0)) then
+  begin
+    Size := SizeOf(Buffer);
+    ZeroMemory(@Buffer, Size);
+    Win32Check(GetComputerName(Buffer, Size));
+    Domain := Buffer;
+  end;
+end;</code></pre></div></div><ol start=12><li><p>There is incompatibility with some custom GINA&rsquo;s, for example, with <a href=http://www.frontmotion.com/FMLogin/>FMLogin</a>, which subclasses &ldquo;Sas Window&rdquo;. I&rsquo;ve tested the sample with original msgina.dll, so the further compatibility should be tested with the exact gina.</p></li><li><p>Getting a session process list on x64 may fail if you do not allocate buffers correctly - described <a href=/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/>here</a></p></li></ol><p>So we&rsquo;re ready to go on to the implementation which will be described in the <a href=/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/>part 3</a>.</p></div><div class=author-foot><img class=avatar-img src=/blog/img/danil-avatar.webp alt="Danila Galimov" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>DG</span><div class=who><div class=side-h>> written by</div><div class=name>Danila Galimov</div><p>A specialist in Java, database development and performance optimization, with more than 20 years of hands-on software development experience — and, as these posts show, a lot of Windows internals and reverse-engineering skill. Currently at Wrike.</p></div></div></article><aside class=rail><div class=side-modules><div class=side-mod><div class=side-h>In this series</div><div class=series-list><a class=series-item href=/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/><span class=num>1</span><span class=lbl>Theory</span></a>
+<span class="series-item current"><span class=num>2</span><span class=lbl>Problems & workarounds</span></span>
+<a class=series-item href=/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/><span class=num>3</span><span class=lbl>Implementation</span></a></div></div><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Delphi</div><div class=related-list><a class=related-item href=/blog/2017/12/18/rad-studio-tokyo-10-2-2-data-collection/><span class=rt>RAD Studio Tokyo 10.2(.2) Data Collection</span>
+<span class=rm>2017 &#183; 1 min</span>
+</a><a class=related-item href=/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/><span class=rt>Returning a string from unmanaged dll to .net</span>
+<span class=rm>2013 &#183; 3 min</span>
+</a><a class=related-item href=/blog/2012/11/28/get-process-id-of-a-running-service/><span class=rt>Get Process Id of a running Service</span>
+<span class=rm>2012 &#183; 1 min</span>
+</a><a class=related-all href=/blog/categories/delphi/>All Delphi posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2009/12/03/citrix-workspace-control-not-working-on-hp-t5540/>Citrix Workspace Control not working on HP t5540</a><div class=random-meta id=randomMeta>2009 &#183; Citrix</div><script type=application/json id=randomPool>[{"c":"Citrix","t":"Citrix Workspace Control not working on HP t5540","u":"/blog/2009/12/03/citrix-workspace-control-not-working-on-hp-t5540/","y":"2009"},{"c":"PowerShell","t":"Handling ini files in PowerShell","u":"/blog/2014/07/29/handling-ini-files-powershell/","y":"2014"},{"c":"Citrix","t":"Return username instead of computername in a ThinApp","u":"/blog/2013/01/15/return-username-instead-of-computername-in-a-thinapp/","y":"2013"},{"c":"SQL Server","t":"Where to find System.NetworkManagement.Monitoring.mp?","u":"/blog/2014/07/13/where-to-find-system-networkmanagement-monitoring-mp/","y":"2014"},{"c":"General","t":"MSCOMM32.OCX returns error 80040112","u":"/blog/2013/03/13/mscomm32-ocx-returns-error-80040112/","y":"2013"},{"c":"General","t":"RNS510 firmware has new startup logo’s","u":"/blog/2011/09/02/rns510-firmware-has-new-startup-logos/","y":"2011"},{"c":"Scripting","t":"The messaging interface has returned an unknown error","u":"/blog/2009/06/12/the-messaging-interface-has-returned-an-unknown-error/","y":"2009"},{"c":"Delphi","t":"Convert Drive Bitmask to Drive Letter","u":"/blog/2011/01/14/convert-drive-bitmask-to-drive-letter/","y":"2011"},{"c":"Application Compatibility","t":"Redirect Registry by Modifying .NET Executable","u":"/blog/2013/05/30/redirect-registry-by-modifying-net-executable/","y":"2013"},{"c":"Active Directory","t":"Adding a hidden Exchange mailbox to Outlook","u":"/blog/2011/01/25/adding-a-hidden-exchange-mailbox-to-outlook/","y":"2011"},{"c":"VMware","t":"Slow power on and storage operations with HP Smart Array P410i controller on VMWare vSphere 4.0","u":"/blog/2010/10/16/slow-power-on-and-storage-operations-with-hp-smart-array-p410i-controller-on-vmware-vsphere-4-0/","y":"2010"},{"c":"Programming","t":"How rdp passwords are encrypted 2","u":"/blog/2008/03/02/how-rdp-passwords-are-encrypted-2/","y":"2008"},{"c":"Citrix","t":"Citrix online plug-in received a corrupt ICA File","u":"/blog/2011/12/13/citrix-online-plug-in-received-a-corrupt-ica-file/","y":"2011"},{"c":"General","t":"Google adds IMAP support to GMail","u":"/blog/2007/11/01/google-adds-imap-support-to-gmail/","y":"2007"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

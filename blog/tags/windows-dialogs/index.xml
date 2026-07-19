@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Windows Dialogs on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/windows-dialogs/</link><description>Recent content in Windows Dialogs on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 24 Mar 2010 11:48:41 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/windows-dialogs/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Windows Dialogs from Delphi</title><link>https://remkoweijnen.nl/blog/2010/03/24/using-windows-dialogs-from-delphi/</link><pubDate>Wed, 24 Mar 2010 11:48:41 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/24/using-windows-dialogs-from-delphi/</guid><description>&lt;p&gt;Today I reused a unit I wrote a long time ago for TSAdminEx that shows Resource Dialogs from DLL&amp;rsquo;s or Executables. I wrote it for a couple of reasons:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;Reusing existing dialogs is conventient since the user already knows it.&lt;/li&gt;
+	&lt;li&gt;Windows takes care of translating it into the user's language.&lt;/li&gt;
+	&lt;li&gt;I am too lazy to recreate them ;-)&lt;/li&gt;
+&lt;/ul&gt;
+The code is hardly rocket science and could probably be improved and made more sophisticated but it works for me. I decided to share it since you may find it usefull.
+&lt;p&gt;Here is a small usage example that shows the Reset Password dialog from Active Directory Users &amp;amp; Computers. This dialog is in dsadmin.dll (on Windows Vista/7 you will find it in ds.admin.dll.mui in the language subfolder eg %systemroot%\system32\en-US but you can load it using just the dll name).&lt;/p&gt;
+&lt;p&gt;It looks like this:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;c&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".c" href="data:text/plain;charset=utf-8;base64,MjE1IERJQUxPR0VYIDAsIDAsIDI1MiwgMTM5ClNUWUxFIERTX01PREFMRlJBTUUgfCBEU19DT05URVhUSEVMUCB8IFdTX1BPUFVQIHwgV1NfQ0FQVElPTiB8IFdTX1NZU01FTlUKRVhTVFlMRSBXU19FWF9DT05URVhUSEVMUApDQVBUSU9OICJSZXNldCBQYXNzd29yZCIKTEFOR1VBR0UgTEFOR19FTkdMSVNILCBTVUJMQU5HX0VOR0xJU0hfVVMKRk9OVCA4LCAiTVMgU2hlbGwgRGxnIgp7CiAgIENPTlRST0wgIiZOZXcgcGFzc3dvcmQ6IiwgLTEsIFNUQVRJQywgU1NfTEVGVCB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0dST1VQLCA3LCAxMCwgNzksIDEwCiAgIENPTlRST0wgIiIsIDIyMCwgRURJVCwgRVNfTEVGVCB8IEVTX1BBU1NXT1JEIHwgRVNfQVVUT0hTQ1JPTEwgfCBXU19DSElMRCB8IFdTX1ZJU0lCTEUgfCBXU19CT1JERVIgfCBXU19UQUJTVE9QLCA5MiwgNywgMTUzLCAxNAogICBDT05UUk9MICImQ29uZmlybSBwYXNzd29yZDoiLCAtMSwgU1RBVElDLCBTU19MRUZUIHwgV1NfQ0hJTEQgfCBXU19WSVNJQkxFIHwgV1NfR1JPVVAsIDcsIDI4LCA3OSwgMTAKICAgQ09OVFJPTCAiIiwgMjIyLCBFRElULCBFU19MRUZUIHwgRVNfUEFTU1dPUkQgfCBFU19BVVRPSFNDUk9MTCB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0JPUkRFUiB8IFdTX1RBQlNUT1AsIDkyLCAyNSwgMTUzLCAxNAogICBDT05UUk9MICImVXNlciBtdXN0IGNoYW5nZSBwYXNzd29yZCBhdCBuZXh0IGxvZ29uIiwgMjYxLCBCVVRUT04sIEJTX0FVVE9DSEVDS0JPWCB8IEJTX0xFRlQgfCBCU19UT1AgfCBCU19NVUxUSUxJTkUgfCBXU19DSElMRCB8IFdTX1ZJU0lCTEUgfCBXU19UQUJTVE9QLCA3LCA0NiwgMjM3LCAxMAogICBDT05UUk9MICJUaGUgdXNlciBtdXN0IGxvZ29mZiBhbmQgdGhlbiBsb2dvbiBhZ2FpbiBmb3IgdGhlIGNoYW5nZSB0byB0YWtlIGVmZmVjdC4iLCAtMSwgU1RBVElDLCBTU19MRUZUIHwgV1NfQ0hJTEQgfCBXU19WSVNJQkxFIHwgV1NfR1JPVVAsIDE0LCA2MSwgMjMxLCA4CiAgIENPTlRST0wgIiIsIDgzMjcsIFNUQVRJQywgU1NfTEVGVCB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0dST1VQLCA3LCA3NiwgMjM4LCAxNgogICBDT05UUk9MICJVbmxvY2sgdGhlIHVzZXIncyAmYWNjb3VudCIsIDgzMjgsIEJVVFRPTiwgQlNfQVVUT0NIRUNLQk9YIHwgQlNfTEVGVCB8IEJTX1RPUCB8IEJTX01VTFRJTElORSB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX1RBQlNUT1AsIDE0LCA5NiwgMjMwLCAxMAogICBDT05UUk9MICJPSyIsIDEsIEJVVFRPTiwgQlNfREVGUFVTSEJVVFRPTiB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX1RBQlNUT1AsIDE0MCwgMTE4LCA1MCwgMTQKICAgQ09OVFJPTCAiQ2FuY2VsIiwgMiwgQlVUVE9OLCBCU19QVVNIQlVUVE9OIHwgV1NfQ0hJTEQgfCBXU19WSVNJQkxFIHwgV1NfVEFCU1RPUCwgMTk1LCAxMTgsIDUwLCAxNAp9"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-c"&gt;&lt;code class="language-c"&gt;215 DIALOGEX 0, 0, 252, 139
+STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION &amp;#34;Reset Password&amp;#34;
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+FONT 8, &amp;#34;MS Shell Dlg&amp;#34;
+{
+ CONTROL &amp;#34;&amp;amp;New password:&amp;#34;, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 7, 10, 79, 10
+ CONTROL &amp;#34;&amp;#34;, 220, EDIT, ES_LEFT | ES_PASSWORD | ES_AUTOHSCROLL | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP, 92, 7, 153, 14
+ CONTROL &amp;#34;&amp;amp;Confirm password:&amp;#34;, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 7, 28, 79, 10
+ CONTROL &amp;#34;&amp;#34;, 222, EDIT, ES_LEFT | ES_PASSWORD | ES_AUTOHSCROLL | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP, 92, 25, 153, 14
+ CONTROL &amp;#34;&amp;amp;User must change password at next logon&amp;#34;, 261, BUTTON, BS_AUTOCHECKBOX | BS_LEFT | BS_TOP | BS_MULTILINE | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 7, 46, 237, 10
+ CONTROL &amp;#34;The user must logoff and then logon again for the change to take effect.&amp;#34;, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 14, 61, 231, 8
+ CONTROL &amp;#34;&amp;#34;, 8327, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 7, 76, 238, 16
+ CONTROL &amp;#34;Unlock the user&amp;#39;s &amp;amp;account&amp;#34;, 8328, BUTTON, BS_AUTOCHECKBOX | BS_LEFT | BS_TOP | BS_MULTILINE | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 14, 96, 230, 10
+ CONTROL &amp;#34;OK&amp;#34;, 1, BUTTON, BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 140, 118, 50, 14
+ CONTROL &amp;#34;Cancel&amp;#34;, 2, BUTTON, BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 195, 118, 50, 14
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Organizational Unit on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/organizational-unit/</link><description>Recent content in Organizational Unit on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 14 Feb 2012 11:12:30 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/organizational-unit/index.xml" rel="self" type="application/rss+xml"/><item><title>Script to Get Computer OU</title><link>https://remkoweijnen.nl/blog/2012/02/14/script-to-get-computer-ou/</link><pubDate>Tue, 14 Feb 2012 11:12:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/02/14/script-to-get-computer-ou/</guid><description>&lt;p&gt;Just some quick code to get the OU Name of the computer we run the script on.&lt;/p&gt;
+&lt;p&gt;VBS:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;vb.net&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".vb" href="data:text/plain;charset=utf-8;base64,RnVuY3Rpb24gR2V0Q29tcHV0ZXJPVQoJRGltIG9ialN5c0luZm86IFNldCBvYmpTeXNJbmZvID0gQ3JlYXRlT2JqZWN0KCJBRFN5c3RlbUluZm8iKQoJRGltIG9iakNvbXB1dGVyOiBTZXQgb2JqQ29tcHV0ZXIgPSBHZXRPYmplY3QoIkxEQVA6Ly8iICYgb2JqU3lzSW5mby5Db21wdXRlck5hbWUpCglEaW0gb2JqT1UgOiBTZXQgb2JqT1UgPSBHZXRPYmplY3Qob2JqQ29tcHV0ZXIuUGFyZW50KQoJR2V0Q29tcHV0ZXJPVSA9IG9iak9VLk9VCkVuZCBGdW5jdGlvbgoKV3NjcmlwdC5FY2hvIEdldENvbXB1dGVyT1U="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-vbnet"&gt;&lt;code class="language-vbnet"&gt;Function GetComputerOU
+	Dim objSysInfo: Set objSysInfo = CreateObject(&amp;#34;ADSystemInfo&amp;#34;)
+	Dim objComputer: Set objComputer = GetObject(&amp;#34;LDAP://&amp;#34; &amp;amp; objSysInfo.ComputerName)
+	Dim objOU : Set objOU = GetObject(objComputer.Parent)
+	GetComputerOU = objOU.OU
+End Function
+
+Wscript.Echo GetComputerOU&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;PowerShell:&lt;/p&gt;</description></item></channel></rss>

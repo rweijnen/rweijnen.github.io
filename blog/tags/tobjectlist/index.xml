@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>TObjectList on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/tobjectlist/</link><description>Recent content in TObjectList on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 02 Mar 2008 15:08:19 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/tobjectlist/index.xml" rel="self" type="application/rss+xml"/><item><title>Supporting for in loop in TObjectList descendants</title><link>https://remkoweijnen.nl/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/</link><pubDate>Sun, 02 Mar 2008 15:08:19 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/</guid><description>&lt;p&gt;For my Terminal Server unit in the Jedi Security library I use 2 TObjectList descendants to hold a list of Terminal Server Sessions and Processes. Consider the sample below which connects to a server and enumerates all sessions:&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgQVRlcm1pbmFsU2VydmVyOiBUSndUZXJtaW5hbFNlcnZlcjsKICBpOiBJbnRlZ2VyOwpiZWdpbgogIEFUZXJtaW5hbFNlcnZlciA6PSBUandUZXJtaW5hbFNlcnZlci5DcmVhdGU7CgogIEFUZXJtaW5hbFNlcnZlci5TZXJ2ZXIgOj0gJ1RTMDAxJzsKCiAgdHJ5CiAgICBpZiBBVGVybWluYWxTZXJ2ZXIuRW51bWVyYXRlU2Vzc2lvbnMgdGhlbgogICAgYmVnaW4KCiAgICAgIC8vIE5vdyBsb29wIHRocm91Z2ggdGhlIGxpc3QKICAgICAgZm9yIGkgOj0gMCB0byBBVGVybWluYWxTZXJ2ZXIuU2Vzc2lvbnMuQ291bnQgLSAxIGRvCiAgICAgIGJlZ2luCiAgICAgICAgTWVtbzEuTGluZXMuQWRkKEFUZXJtaW5hbFNlcnZlci5TZXNzaW9uc1tpXS5Vc2VybmFtZSk7CiAgICAgIGVuZDsKCiAgICBlbmQ7CiAgZXhjZXB0CiAgICBvbiBFOiBFSndzY2xXaW5DYWxsRmFpbGVkRXhjZXB0aW9uIGRvCiAgICBiZWdpbgogICAgICAvLyBIYW5kbGUgRXhjZXB0aW9uIGhlcmUKICAgIGVuZDsKICBlbmQ7CgogIC8vIEZyZWUgTWVtb3J5CiAgQVRlcm1pbmFsU2VydmVyLkZyZWU7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ ATerminalServer: TJwTerminalServer;
+ i: Integer;
+begin
+ ATerminalServer := TjwTerminalServer.Create;
+
+ ATerminalServer.Server := &amp;#39;TS001&amp;#39;;
+
+ try
+ if ATerminalServer.EnumerateSessions then
+ begin
+
+ // Now loop through the list
+ for i := 0 to ATerminalServer.Sessions.Count - 1 do
+ begin
+ Memo1.Lines.Add(ATerminalServer.Sessions[i].Username);
+ end;
+
+ end;
+ except
+ on E: EJwsclWinCallFailedException do
+ begin
+ // Handle Exception here
+ end;
+ end;
+
+ // Free Memory
+ ATerminalServer.Free;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+In the sample I loop through the sessions with a for loop. Even though Delphi supports the for in loop since Delphi 2005 it's not possible to use this in TObjectList descendants, so we cannot use this:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Ly8gTm93IGxvb3AgdGhyb3VnaCB0aGUgbGlzdApmb3IgU2Vzc2lvbiBpbiBBVGVybWluYWxTZXJ2ZXIuU2Vzc2lvbkxpc3QgZG8KYmVnaW4KICBNZW1vMS5MaW5lcy5BZGQoU2Vzc2lvbi5Vc2VybmFtZSk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;// Now loop through the list
+for Session in ATerminalServer.SessionList do
+begin
+ Memo1.Lines.Add(Session.Username);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+To make this possible we need to implement GetEnumerator and an Enumerator class:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,VEp3U2Vzc2lvbnNFbnVtZXJhdG9yID0gY2xhc3MKcHJpdmF0ZQogIEZJbmRleDogSW50ZWdlcjsKICBGU2Vzc2lvbnM6IFRKd1dUU1Nlc3Npb25MaXN0OwpwdWJsaWMKICBjb25zdHJ1Y3RvciBDcmVhdGUoQVNlc3Npb25MaXN0OiBUSndXVFNTZXNzaW9uTGlzdCk7CiAgZnVuY3Rpb24gR2V0Q3VycmVudDogVEp3V1RTU2Vzc2lvbjsKICBmdW5jdGlvbiBNb3ZlTmV4dDogQm9vbGVhbjsKICBwcm9wZXJ0eSBDdXJyZW50OiBUSndXVFNTZXNzaW9uIHJlYWQgR2V0Q3VycmVudDsKZW5kOwoKY29uc3RydWN0b3IgVEp3U2Vzc2lvbnNFbnVtZXJhdG9yLkNyZWF0ZShBU2Vzc2lvbkxpc3Q6IFRKd1dUU1Nlc3Npb25MaXN0KTsKYmVnaW4KICBpbmhlcml0ZWQgQ3JlYXRlOwogIEZJbmRleCA6PSAtMTsKICBGU2Vzc2lvbnMgOj0gQVNlc3Npb25MaXN0OwplbmQ7CgpmdW5jdGlvbiBUSndTZXNzaW9uc0VudW1lcmF0b3IuR2V0Q3VycmVudDsKYmVnaW4KICBSZXN1bHQgOj0gRlNlc3Npb25zW0ZJbmRleF07CmVuZDsKCmZ1bmN0aW9uIFRKd1Nlc3Npb25zRW51bWVyYXRvci5Nb3ZlTmV4dDogQm9vbGVhbjsKYmVnaW4KICBSZXN1bHQgOj0gRkluZGV4IDwgRlNlc3Npb25zLkNvdW50IC0gMTsKICBpZiBSZXN1bHQgdGhlbgogICAgSW5jKEZJbmRleCk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;TJwSessionsEnumerator = class
+private
+ FIndex: Integer;
+ FSessions: TJwWTSSessionList;
+public
+ constructor Create(ASessionList: TJwWTSSessionList);
+ function GetCurrent: TJwWTSSession;
+ function MoveNext: Boolean;
+ property Current: TJwWTSSession read GetCurrent;
+end;
+
+constructor TJwSessionsEnumerator.Create(ASessionList: TJwWTSSessionList);
+begin
+ inherited Create;
+ FIndex := -1;
+ FSessions := ASessionList;
+end;
+
+function TJwSessionsEnumerator.GetCurrent;
+begin
+ Result := FSessions[FIndex];
+end;
+
+function TJwSessionsEnumerator.MoveNext: Boolean;
+begin
+ Result := FIndex &amp;lt; FSessions.Count - 1;
+ if Result then
+ Inc(FIndex);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+Now we add a function with the name GetEnumerator in the SessionList class:
+&lt;br&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,ZnVuY3Rpb24gVEp3V1RTU2Vzc2lvbkxpc3QuR2V0RW51bWVyYXRvcjogVEp3U2Vzc2lvbnNFbnVtZXJhdG9yOwpiZWdpbgogIFJlc3VsdCA6PSBUSndTZXNzaW9uc0VudW1lcmF0b3IuQ3JlYXRlKFNlbGYpOwplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;function TJwWTSSessionList.GetEnumerator: TJwSessionsEnumerator;
+begin
+ Result := TJwSessionsEnumerator.Create(Self);
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+And that's really all!
+&lt;section class="comments"&gt;
+&lt;h2&gt;1 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="http://blog.delphi-jedi.net/2008/03/03/remko-shows-us-how-to-use-the-terminal-server-feature-of-jwscl/" rel="nofollow ugc"&gt;&amp;amp;nbsp; Remko shows us how to use the Terminal Server feature of JWSCL&amp;amp;nbsp;by&amp;amp;nbsp;JEDI Windows API&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2008-03-03"&gt;Mar 3, 2008&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;[...] Go and learn more about it here. [...]&lt;/p&gt;</description></item></channel></rss>

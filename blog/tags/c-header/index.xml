@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C Header on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/c-header/</link><description>Recent content in C Header on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 01 May 2008 23:06:00 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/c-header/index.xml" rel="self" type="application/rss+xml"/><item><title>Working with bitfields in Delphi</title><link>https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/</link><pubDate>Thu, 01 May 2008 23:06:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/05/01/working-with-bitfields-in-delphi/</guid><description>&lt;p&gt;Recently I needed to convert a C header file to Delphi which contained bitfields. Let&amp;rsquo;s take a look at a sample structure that contains bitfields:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;c&amp;#43;&amp;#43;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".cpp" href="data:text/plain;charset=utf-8;base64,dHlwZWRlZiBzdHJ1Y3QgX0JJVEZJRUxEU1RSVUNUVVJFIHsKICAgIERXT1JEIGR3VmFsdWUxOwogICAgVUxPTkcgQml0VmFsdWUxOiAxOwogICAgVUxPTkcgQml0VmFsdWUyOiAxOwogICAgVUxPTkcgQml0VmFsdWUzOiAxOwogICAgVUxPTkcgQml0VmFsdWU0OiAxOwp9IEJJVEZJRUxEU1RSVUNUVVJFLCAqIEJJVEZJRUxEU1RSVUNUVVJFOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-cpp"&gt;&lt;code class="language-cpp"&gt;typedef struct _BITFIELDSTRUCTURE {
+ DWORD dwValue1;
+ ULONG BitValue1: 1;
+ ULONG BitValue2: 1;
+ ULONG BitValue3: 1;
+ ULONG BitValue4: 1;
+} BITFIELDSTRUCTURE, * BITFIELDSTRUCTURE;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;It means that there is a DWORD (Cardinal) dwValue1 followed by a bitfield with the size of a ULONG (32 bits). In this bitfield 4 values are defined (BitValue1..4) which are used as boolean&amp;rsquo;s because the value can offcourse be 0 or 1. Since Delphi doesn&amp;rsquo;t know a bitfield type the question is how to translate it. Usually it would mean that we simply treat the whole bitfield value as a ULONG and extract the required properties by applying a bitmask (shl/shr). Starting from BDS2006 we can define a record with propertes and use getters and setters. Using this technique we can present boolean values to the user:&lt;/p&gt;</description></item></channel></rss>

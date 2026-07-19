@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Internals on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/internals/</link><description>Recent content in Internals on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 27 Jun 2011 15:37:04 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/internals/index.xml" rel="self" type="application/rss+xml"/><item><title>AD Internals: Display RID Allocation Pools</title><link>https://remkoweijnen.nl/blog/2011/06/27/ad-internals-display-rid-allocation-pools/</link><pubDate>Mon, 27 Jun 2011 15:37:04 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/06/27/ad-internals-display-rid-allocation-pools/</guid><description>&lt;p&gt;In my previous post I wrote about a problem I had with duplicate RID Allocation pools. &lt;/p&gt; &lt;p&gt;But how do we get more insight into these RID Allocation pools?&lt;/p&gt; &lt;p&gt;The DCDIAG tool can display this information per domain controleler using the following syntax&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;batch&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".bat" href="data:text/plain;charset=utf-8;base64,ZGNkaWFnIC9zOnNlcnZlciAvdiAvdGVzdDpyaWRtYW5hZ2Vy"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-batch"&gt;&lt;code class="language-batch"&gt;dcdiag /s:server /v /test:ridmanager&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Example output:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/06/image28.webp" class="glightbox" data-type="image" data-gallery="post-1950"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-right-width: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="DCDiag Ridmanager Test" border="0" alt="DCDiag Ridmanager Test" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/06/image_thumb28.webp" width="419" height="85" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;But where in Active Directory is this information stored and can we display it for all Domain Controllers at once for larger environments?&lt;/p&gt;</description></item></channel></rss>

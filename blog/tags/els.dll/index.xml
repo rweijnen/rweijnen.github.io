@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Els.dll on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/els.dll/</link><description>Recent content in Els.dll on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 26 Nov 2009 13:15:55 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/els.dll/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Back the Classic Event Viewer in Vista and Windows 7</title><link>https://remkoweijnen.nl/blog/2009/11/26/getting-back-the-classic-event-viewer-in-vista-and-windows-7/</link><pubDate>Thu, 26 Nov 2009 13:15:55 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/26/getting-back-the-classic-event-viewer-in-vista-and-windows-7/</guid><description>&lt;p&gt;I never liked the new eventviewer that was introduced with Windows Vista. If you want to have the old eventviewer back (you can use the old and new one together) you need to follow the following steps:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Open a command prompt as Adminstrator.&lt;/li&gt;
+&lt;li&gt;Type Regsvr32 els.dll (if you get error code 0x80070005 then you didn't run as Administrator).&lt;/li&gt;
+&lt;li&gt;Start mmc.exe and goto File | Add/Remove Snapin.&lt;/li&gt;
+&lt;li&gt;From the available Snapins choose "Classic Event Viewer".&lt;/li&gt;
+&lt;li&gt;Right-Click Classic Event Viewer under Console Root and select New Window from Here.&lt;/li&gt;
+&lt;li&gt;Choose Customize from the View menu.&lt;/li&gt;
+&lt;li&gt;Deselect the Action Pane and Click OK&lt;/li&gt;
+&lt;li&gt;Now save the file with a name of your choice eg EventVwrC.msc.&lt;/li&gt;&lt;/ol&gt;
+&lt;p&gt;It should look like this:&lt;/p&gt;</description></item></channel></rss>

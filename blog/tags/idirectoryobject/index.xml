@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>IDirectoryObject on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/idirectoryobject/</link><description>Recent content in IDirectoryObject on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 30 Mar 2010 15:04:51 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/idirectoryobject/index.xml" rel="self" type="application/rss+xml"/><item><title>Random Active Directory Notes #4</title><link>https://remkoweijnen.nl/blog/2010/03/30/random-active-directory-notes-4/</link><pubDate>Tue, 30 Mar 2010 15:04:51 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/30/random-active-directory-notes-4/</guid><description>&lt;p&gt;Previously I discussed IDirectoryObject, today I will show how to change a user&amp;rsquo;s password with IDirectoryObject.&lt;/p&gt;
+&lt;p&gt;I didn&amp;rsquo;t find any documentation except a &lt;a href="http://support.microsoft.com/kb/269190" target="_self"&gt;kb article&lt;/a&gt; describing how to use pure ldap to do it. Of course I could have used IADsUser::SetPassword but I decided not to because of the following reasons:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;IADs interfaces are terribly slow (although for one use you probably wouldn't really notice).&lt;/li&gt;
+	&lt;li&gt;IADsUser::SetPassword tries 3 different methods to set the password (ldap over ssl, kerberos and finally NetUserSetInfo) which makes it even slower (most domain controllers do not have an ssl certificate) and unpredictable.&lt;/li&gt;
+&lt;/ul&gt;
+All example code I found was .NET based using the .NET wrappers for Active Directory and seemed to be meant for use in Adam rather than full Active Directory (it set port number to 389 and password mode to cleartext).
+&lt;p&gt;In the end it&amp;rsquo;s not very difficult but nonetheless it took me a while before I got it right.&lt;/p&gt;
+&lt;p&gt;We can write to the unicodePwd attribute which wants the password as a double quoted unicode string. If you look at this attribute with AdsiEdit you&amp;rsquo;ll see that the type is Octet String and that it can be written only.&lt;/p&gt;
+&lt;p&gt;I was tricked with Delphi&amp;rsquo;s QuotedStr function for a while because it doesn&amp;rsquo;t return a double but single quoted string ;-)&lt;/p&gt;
+&lt;p&gt;Below a small snippet from the upcoming JwsclActiveDirectory that shows how to use it:&lt;/p&gt;</description></item><item><title>Random Active Directory Notes #3</title><link>https://remkoweijnen.nl/blog/2010/03/22/random-active-directory-notes-3/</link><pubDate>Mon, 22 Mar 2010 22:57:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/22/random-active-directory-notes-3/</guid><description>&lt;p&gt;Last time I talked briefly about IDirectoryObject and IDirectorySearch, let&amp;rsquo;s go into a little more detail today.&lt;/p&gt;
+&lt;p&gt;IDirectoryObject is an Interface that we can use to query anything in Active Directory, users, groups, organizational units, containers and so on.&lt;/p&gt;
+&lt;p&gt;I thought the best explanation would be to build a very small sample project, so let&amp;rsquo;s do that!&lt;/p&gt;
+&lt;p&gt;First we need some units, so please add the following units to your uses clause:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;ComObj (for EOleException and it calls CoInitialize for us)&lt;/li&gt;
+	&lt;li&gt;JwaWindows for the proper Adsi declarations&lt;/li&gt;
+&lt;/ul&gt;
+Next declare the following types:
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dHlwZQogIC8vIEZvciBEZWxwaGkgPCAyMDA5IHVzZSBXaWRlU3RyaW5nCiAgVVN0cmluZyA9IHskSUZERUYgVU5JQ09ERX1Vbmljb2RlU3RyaW5neyRFTFNFfVdpZGVTdHJpbmd7JEVORElGfTsKCiAgLy8gQXJyYXkgb2YgQURTX0FUVFJfSU5GTyByZWNvcmRzCiAgVEFkc0F0dHJJbmZvQXJyYXkgPSBhcnJheVswLi5BTllTSVpFX0FSUkFZLTFdIG9mIEFEU19BVFRSX0lORk87CiAgUEFkc0F0dHJJbmZvQXJyYXkgPSBeVEFkc0F0dHJJbmZvQXJyYXk7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;type
+ // For Delphi &amp;lt; 2009 use WideString
+ UString = {$IFDEF UNICODE}UnicodeString{$ELSE}WideString{$ENDIF};
+
+ // Array of ADS_ATTR_INFO records
+ TAdsAttrInfoArray = array[0..ANYSIZE_ARRAY-1] of ADS_ATTR_INFO;
+ PAdsAttrInfoArray = ^TAdsAttrInfoArray;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

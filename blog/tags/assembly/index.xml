@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Assembly on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/assembly/</link><description>Recent content in Assembly on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 22 Aug 2012 09:42:06 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/assembly/index.xml" rel="self" type="application/rss+xml"/><item><title>Calling a function inside another assembly in .NET</title><link>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</link><pubDate>Wed, 22 Aug 2012 09:42:06 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/</guid><description>&lt;p&gt;&lt;img style="display: inline; float: right" alt="Red Gate .NET Reflector" align="right" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/920a4b121ffc2422.jpg" width="32" height="32" /&gt;I wanted to call a hash function from a .net executable from my code. My first step was to inspect the executable with &lt;a href="http://www.reflector.net/"&gt;Reflector&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;The Hash function was in a namespace called Core:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;namespace Core &lt;span class="codelang"&gt;&amp;middot; c#&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="namespace-core.cs" href="data:text/plain;charset=utf-8;base64,bmFtZXNwYWNlIFRoZUV4ZS5Db3JlCnsKICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBBc3NlbWJseUluZm8KICAgIGludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCn0KCmludGVybmFsIHN0YXRpYyBjbGFzcyBTdHJpbmdFeHRlbnNpb25NZXRob2RzCnsKICAgIC8vIE1ldGhvZHMKICAgIHB1YmxpYyBzdGF0aWMgc3RyaW5nIEhhc2godGhpcyBzdHJpbmcgb3JpZ2luYWwsIHN0cmluZyBwYXNzd29yZCk7CiAgICAvLyBNb3JlIG1ldGhvZHMuLi4KfQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-csharp"&gt;&lt;code class="language-csharp"&gt;namespace TheExe.Core
+{
+ internal static class AssemblyInfo
+ internal static class StringExtensionMethods
+}
+
+internal static class StringExtensionMethods
+{
+ // Methods
+ public static string Hash(this string original, string password);
+ // More methods...
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that the Core namespace is marked as internal so it was not meant to be callable outside of the executable. It's still possible to call it using Reflection:&lt;/p&gt;</description></item><item><title>Determining stack size</title><link>https://remkoweijnen.nl/blog/2011/05/27/determining-stack-size/</link><pubDate>Fri, 27 May 2011 15:10:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/27/determining-stack-size/</guid><description>&lt;p&gt;I just read an answer on &lt;a href="http://stackoverflow.com/questions/6150018/what-is-a-safe-maximum-stack-size-or-how-to-measure-use-of-stack" target="_blank"&gt;StackOverflow&lt;/a&gt; with this code:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgZXU6RFdPUkQ7CmJlZ2luCiAgYXNtCiAgICBtb3YgZWF4LFtmczokNF0KICAgIG1vdiBlYngsW2ZzOiQ4XQogICAgc3ViIGVheCxlYngKICAgIG1vdiBldSxlYXgKICBlbmQ7CgogIFNob3dNZXNzYWdlKEludFRvU3RyKGV1KSk7CmVuZDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ eu:DWORD;
+begin
+ asm
+ mov eax,[fs:$4]
+ mov ebx,[fs:$8]
+ sub eax,ebx
+ mov eu,eax
+ end;
+
+ ShowMessage(IntToStr(eu));
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Unfortunately it lacked explanation, so what does this code do?&lt;/p&gt;
+&lt;p&gt;It reads offset $4 from the Thread Information Block (the top of stack) into eax and then offset $8 (stack base) into ebx.&lt;/p&gt;</description></item><item><title>Fun with asm</title><link>https://remkoweijnen.nl/blog/2010/06/18/fun-with-asm/</link><pubDate>Fri, 18 Jun 2010 12:02:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/18/fun-with-asm/</guid><description>&lt;p&gt;Today just some fun stuff with ASM, probably not the most recommended way to do things but for sure the most geeky way :P&lt;/p&gt;
+&lt;p&gt;Get the Current Session Id:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,ZnVuY3Rpb24gR2V0Q3VycmVudFNlc3Npb25JZDogRFdPUkQ7CmFzbQogIG1vdiAgICAgZWF4LGZzOlskMDAwMDAwMThdOyAgIC8vIEdldCBURUIKICBtb3YgICAgIGVheCxbZWF4KyQzMF07ICAgICAgICAvLyBQUEVCCiAgbW92ICAgICBlYXgsW2VheCskMWQ0XTsgICAgICAgLy8gUEVCLlNlc3Npb25JZAplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;function GetCurrentSessionId: DWORD;
+asm
+ mov eax,fs:[$00000018]; // Get TEB
+ mov eax,[eax&amp;#43;$30]; // PPEB
+ mov eax,[eax&amp;#43;$1d4]; // PEB.SessionId
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Get the Current Console Session Id:&lt;/p&gt;</description></item></channel></rss>

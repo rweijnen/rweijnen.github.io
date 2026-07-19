@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SAS on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/sas/</link><description>Recent content in SAS on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 03 Mar 2011 13:00:46 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/sas/index.xml" rel="self" type="application/rss+xml"/><item><title>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)</title><link>https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/</link><pubDate>Thu, 03 Mar 2011 13:00:46 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/</guid><description>&lt;p&gt;In the previous parts (&lt;a href="https://remkoweijnen.nl/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/"&gt;part 1&lt;/a&gt; &lt;a href="https://remkoweijnen.nl/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/"&gt;part 2&lt;/a&gt;) i&amp;rsquo;ve described the theoretical part and implementation problems. So, now we can write the code:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;In case we login the user, we just call &lt;a href="http://msdn.microsoft.com/en-us/library/aa378292(v=vs.85).aspx"&gt;LsaLogonUser&lt;/a&gt; to get the token:&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>Locking a workstation - part 2</title><link>https://remkoweijnen.nl/blog/2008/12/23/locking-a-workstation-part-2/</link><pubDate>Tue, 23 Dec 2008 17:13:37 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/12/23/locking-a-workstation-part-2/</guid><description>&lt;p&gt;In &lt;a href="https://remkoweijnen.nl/blog/2008/12/13/locking-a-workstation-part-1/"&gt;part 1&lt;/a&gt; I showed how &lt;em&gt;winlogon.exe&lt;/em&gt; registers its process and main window handle.&lt;/p&gt;
+&lt;p&gt;In the &lt;em&gt;SasCreate&lt;/em&gt; function, winlogon.exe registers hotkeys like this:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Y29uc3QKICBNT0RfU0FTID0gJDgwMDA7CgogIFJlZ2lzdGVySG90S2V5KFNhc1dpbmRvdywgMCwgTU9EX1NBUyBvciBNT0RfQ09OVFJPTCBvciBNT0RfQUxULCBWS19ERUxFVEUpOwoKeyRJRkRFRiBDSEVDS0VEX0JVSUxEfQogIFJlZ2lzdGVySG90S2V5KFNhc1dpbmRvdywgMSwgTU9EX0FMVCBvciBNT0RfQ09OVFJPTCBvciBNT0RfU0hJRlQsIFZLX0RFTEVURSk7IC8vIGhhbmRsZXIganVzdCBjYWxscyBOdFNodXRkb3duU3lzdGVtCiAgaWYgRW5hYmxlRGVza3RvcFN3aXRjaGluZyB0aGVuCiAgICBSZWdpc3RlckhvdEtleShTYXNXaW5kb3csIDIsIE1PRF9BTFQgb3IgTU9EX0NPTlRST0wsIFZLX1RBQik7IC8vIGhhbmRsZXIgc3dpdGNoZXMgZGVmYXVsdCBhbmQgd2lubG9nb24gZGVza3RvcHMKICBpZiBXaW5sb2dvbkluZm9MZXZlbEZsYWcgdGhlbgogICAgUmVnaXN0ZXJIb3RrZXkoU2FzV2luZG93LCAzLCBNT0RfQUxUIG9yIE1PRF9DT05UUk9MIG9yIE1PRF9TSElGVCwgVktfVEFCKTsgLy8gaGFuZGxlciBqdXN0IGNhbGxzIERlYnVnQnJlYWsKeyRFTkRJRn0KCiAgUmVnaXN0ZXJIb3RLZXkoU2FzV2luZG93LCA0LCBNT0RfQ09OVFJPTCBvciBNT0RfU0hJRlQsIFZLX0VTQ0FQRSk7IC8vIGhhbmRsZXIgZXhlY3V0ZXMgdGFzayBtYW5hZ2VyCnskSUZERUYgV0lOWFBfT1JfTEFURVJ9CiAgUmVnaXN0ZXJIb3RLZXkoU2FzV2luZG93LCA1LCBNT0RfV0lOLCBCeXRlKCdMJyk7IC8vIGhhbmRsZXIgbG9ja3MgdGhlIHdvcmtzdGF0aW9uCiAgUmVnaXN0ZXJIb3RrZXkoU2FzV2luZG93LCA2LCBNT0RfV0lOLCBCeXRlKCdVJyk7IC8vIGhhbmRsZXIgZXhlY3V0ZXMgdXRpbG1hbiBvbiBjdXJyZW50IGRlc2t0b3AKeyRFTkRJRn0="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;const
+ MOD_SAS = $8000;
+
+ RegisterHotKey(SasWindow, 0, MOD_SAS or MOD_CONTROL or MOD_ALT, VK_DELETE);
+
+{$IFDEF CHECKED_BUILD}
+ RegisterHotKey(SasWindow, 1, MOD_ALT or MOD_CONTROL or MOD_SHIFT, VK_DELETE); // handler just calls NtShutdownSystem
+ if EnableDesktopSwitching then
+ RegisterHotKey(SasWindow, 2, MOD_ALT or MOD_CONTROL, VK_TAB); // handler switches default and winlogon desktops
+ if WinlogonInfoLevelFlag then
+ RegisterHotkey(SasWindow, 3, MOD_ALT or MOD_CONTROL or MOD_SHIFT, VK_TAB); // handler just calls DebugBreak
+{$ENDIF}
+
+ RegisterHotKey(SasWindow, 4, MOD_CONTROL or MOD_SHIFT, VK_ESCAPE); // handler executes task manager
+{$IFDEF WINXP_OR_LATER}
+ RegisterHotKey(SasWindow, 5, MOD_WIN, Byte(&amp;#39;L&amp;#39;); // handler locks the workstation
+ RegisterHotkey(SasWindow, 6, MOD_WIN, Byte(&amp;#39;U&amp;#39;); // handler executes utilman on current desktop
+{$ENDIF}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Did you notice the MOD_SAS constant?&lt;/p&gt;</description></item></channel></rss>

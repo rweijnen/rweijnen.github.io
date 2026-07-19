@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SAN on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/san/</link><description>Recent content in SAN on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 18 Oct 2010 16:12:43 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/san/index.xml" rel="self" type="application/rss+xml"/><item><title>Error while creating large Datastore on VMWare vSphere 4.1</title><link>https://remkoweijnen.nl/blog/2010/10/18/error-while-creating-large-datastore-on-vmware-vsphere-4-1/</link><pubDate>Mon, 18 Oct 2010 16:12:43 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/18/error-while-creating-large-datastore-on-vmware-vsphere-4-1/</guid><description>&lt;p&gt;I was trying to create a (very) large Datastore on VMWare vSphere 4.1 but although VMWare correctly identifies the LUN on my SAN it refuses to create the Datastore and gives me this error:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/createdatastoreerror1.webp" class="glightbox" data-type="image" data-gallery="post-669"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/createdatastoreerror1-small.webp" alt="Call HostDatastoreSystem.QueryVmfsDatastoreCreateOptions for object ha-datastoresystem on ESX failed." width="430" height="227" /&gt;&lt;/a&gt;&lt;br&gt;
+The complete error text is&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,Q2FsbCAiSG9zdERhdGFzdG9yZVN5c3RlbS5RdWVyeVZtZnNEYXRhc3RvcmVDcmVhdGVPcHRpb25zIiBmb3Igb2JqZWN0ICJoYS1kYXRhc3RvcmVzeXN0ZW0iIG9uIEVTWCAiPElQIG9mIEVTWD4iIGZhaWxlZC4="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;Call &amp;#34;HostDatastoreSystem.QueryVmfsDatastoreCreateOptions&amp;#34; for object &amp;#34;ha-datastoresystem&amp;#34; on ESX &amp;#34;&amp;lt;IP of ESX&amp;gt;&amp;#34; failed.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Default username password HP 8/20q FC San Switch</title><link>https://remkoweijnen.nl/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/</link><pubDate>Mon, 18 Oct 2010 10:18:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/</guid><description>&lt;p&gt;Again a note that is mainly for myself since I tend to forget these kind of things and always spend much time to look it up...&lt;/p&gt;
+&lt;p&gt;Default settings for the HP 8/20q FC SAN Switch are:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,dXNlcm5hbWU6IGFkbWluCgpwYXNzd29yZDogcGFzc3dvcmQKCmRlZmF1bHQgaXA6IDEwLjAuMC4x"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;username: admin
+
+password: password
+
+default ip: 10.0.0.1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>HP Simple SAN Connection Manager (SSCM)</title><link>https://remkoweijnen.nl/blog/2010/10/14/hp-simple-san-connection-manager-sccm/</link><pubDate>Thu, 14 Oct 2010 14:42:50 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/14/hp-simple-san-connection-manager-sccm/</guid><description>&lt;p&gt;If you are looking for the HP Simple SAN Connection Manager Software (aka HP SSCM) then you&amp;rsquo;ve come to the right place. HP seems to be really good at hiding their software on the web but I found it.&lt;/p&gt;
+&lt;p&gt;Go to &lt;a href="http://www.software.hp.com/kiosk" target="_blank"&gt;&lt;a href="http://www.software.hp.com/kiosk"&gt;http://www.software.hp.com/kiosk&lt;/a&gt;&lt;/a&gt; and user the following credentials to access:&lt;/p&gt;</description></item></channel></rss>

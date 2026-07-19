@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Fibre Channel on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/fibre-channel/</link><description>Recent content in Fibre Channel on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 18 Oct 2010 10:18:08 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/fibre-channel/index.xml" rel="self" type="application/rss+xml"/><item><title>Default username password HP 8/20q FC San Switch</title><link>https://remkoweijnen.nl/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/</link><pubDate>Mon, 18 Oct 2010 10:18:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/</guid><description>&lt;p&gt;Again a note that is mainly for myself since I tend to forget these kind of things and always spend much time to look it up...&lt;/p&gt;
+&lt;p&gt;Default settings for the HP 8/20q FC SAN Switch are:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,dXNlcm5hbWU6IGFkbWluCgpwYXNzd29yZDogcGFzc3dvcmQKCmRlZmF1bHQgaXA6IDEwLjAuMC4x"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;username: admin
+
+password: password
+
+default ip: 10.0.0.1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

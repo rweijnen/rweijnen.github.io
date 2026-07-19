@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Split on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/split/</link><description>Recent content in Split on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 13 Mar 2017 15:28:13 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/split/index.xml" rel="self" type="application/rss+xml"/><item><title>Split a string by dollar sign ($) in PowerShell</title><link>https://remkoweijnen.nl/blog/2017/03/13/split-string-dollar-sign-powershell/</link><pubDate>Mon, 13 Mar 2017 15:28:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2017/03/13/split-string-dollar-sign-powershell/</guid><description>&lt;p&gt;Just a very quick post (more like a note to self) but I wanted to split a string with the $ sign in PowerShell:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,J29uZSR0d28kdGhyZWUkZm91ciRmaXZlJyAtc3BsaXQgJyQn"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;&amp;#39;one$two$three$four$five&amp;#39; -split &amp;#39;$&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Took me a little while to realize that this doesn&amp;rsquo;t work as the &lt;a href="https://msdn.microsoft.com/en-us/powershell/reference/3.0/microsoft.powershell.core/about/about_split"&gt;split&lt;/a&gt; operator in Windows PowerShell uses a regular expression in the delimiter, rather than a simple character.&lt;/p&gt;</description></item></channel></rss>

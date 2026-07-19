@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Exact Globe on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/exact-globe/</link><description>Recent content in Exact Globe on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 11 Nov 2009 17:47:28 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/exact-globe/index.xml" rel="self" type="application/rss+xml"/><item><title>The case of the Unattended Install</title><link>https://remkoweijnen.nl/blog/2009/11/11/the-case-of-the-unattended-install/</link><pubDate>Wed, 11 Nov 2009 17:47:28 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/11/the-case-of-the-unattended-install/</guid><description>&lt;p&gt;I needed to do an unattended install of an application (in this case Exact Globe 2003) on Citrix. In this case the application provides a special executable, WSetup.exe for an unattended install.&lt;/p&gt;
+&lt;p&gt;WSetup takes several parameters, the most important ones are:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,L0k6IEluc3RhbGxhdGlvbiBQYXRoCi9TOiBJbnN0YWxsIFR5cGUKL0lNOiBJbnN0YWxsYXRpb24gTW9kZQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;/I: Installation Path
+/S: Install Type
+/IM: Installation Mode&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;So this appeared to be an easy task, however when testing the Deployment the /I parameter seemed to be ignored and the whole thing was installed in C:\Program Files.&lt;/p&gt;
+&lt;p&gt;I analyzed what WSetup.exe does with my favorite tool, Ida Pro and at first all seemed ok. WSetup determines the default location of the Program Files Directory by reading the ProgramFilesDir registry key (which is of course C:\Program Files).&lt;/p&gt;</description></item></channel></rss>

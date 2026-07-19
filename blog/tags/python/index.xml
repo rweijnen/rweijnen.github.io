@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/python/</link><description>Recent content in Python on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 05 Nov 2007 23:10:29 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>Encrypt RDP password in Python</title><link>https://remkoweijnen.nl/blog/2007/11/05/encrypt-rdp-password-in-python/</link><pubDate>Mon, 05 Nov 2007 23:10:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/05/encrypt-rdp-password-in-python/</guid><description>&lt;p&gt;Dirk Schmitz send me his Python version of encrypting the RDP Password:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;python&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".py" href="data:text/plain;charset=utf-8;base64,aW1wb3J0IHdpbjMyY3J5cHQKaW1wb3J0IGJpbmFzY2lpCgpwd2RIYXNoID0gd2luMzJjcnlwdC5DcnlwdFByb3RlY3REYXRhKHUiTVlQQVNTV09SRCIsdSdwc3cnLE5vbmUsTm9uZSxOb25lLDApCnByaW50IGJpbmFzY2lpLmhleGxpZnkocHdkSGFzaCk="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-python"&gt;&lt;code class="language-python"&gt;import win32crypt
+import binascii
+
+pwdHash = win32crypt.CryptProtectData(u&amp;#34;MYPASSWORD&amp;#34;,u&amp;#39;psw&amp;#39;,None,None,None,0)
+print binascii.hexlify(pwdHash)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;br&gt;Read the original article here: &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;/2007/10/18/how-rdp-passwords-are-encrypted/&lt;/a&gt;&lt;/p&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;5 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;Arvid Requate&lt;/span&gt; &lt;time datetime="2010-11-14"&gt;Nov 14, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;Thank's, this really worked well, after a bit of fiddling (donation will be given asap). For Python 2.7 I had to remove the unicode conversion, otherwise the RDP server would not get the proper password. Interestingly your updated post about 512-byte padding and appending a '0'-character to obtain a 1329 'password 51'-hash did not work for me yet. Did you need the padding as a bugfix or did you suggest it merely as an imrovement to become fully compatible to the MS encoding format? (/2008/03/02/how-rdp-passwords-are-encrypted-2/).&lt;/p&gt;</description></item></channel></rss>

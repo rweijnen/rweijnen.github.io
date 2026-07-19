@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HashTable on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/hashtable/</link><description>Recent content in HashTable on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 29 Jul 2014 15:03:08 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/hashtable/index.xml" rel="self" type="application/rss+xml"/><item><title>Handling ini files in PowerShell</title><link>https://remkoweijnen.nl/blog/2014/07/29/handling-ini-files-powershell/</link><pubDate>Tue, 29 Jul 2014 15:03:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2014/07/29/handling-ini-files-powershell/</guid><description>&lt;p&gt;&lt;img title="Ini File" style="float: right; margin: 0px 0px 20px; display: inline" alt="Ini File Icon" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/6949cd83ad2250b7.png" width="60" align="right" height="60" /&gt;This morning Aaron Parker was wondering if Hash Tables could be used to work with ini files:&lt;/p&gt; &lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2014/07/image8.webp" class="glightbox thickbox" data-type="image" data-gallery="post-3527"&gt;&lt;img loading="lazy" decoding="async" title="Aaron Parker | Twitter | @stealthpuppy" style="display: inline" alt="Aaron Parker | @stealthpuppy | @remkoweijnen @msh_dave need to see if this approach works for editing INI files" src="https://remkoweijnen.nl/blog/wp-content/uploads/2014/07/image_thumb8.webp" width="320" height="132" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;I thought it was a great idea because in Hash Tables you can use the . operator to get or set a Hash Table entry. But I wondered what to do with sections in ini files. Then I got the idea to use nested Hash Tables for that.&lt;/p&gt; &lt;p&gt;The result is two functions, one to read an ini file into a nested Hash Table and one function to write it back to an ini file.&lt;/p&gt;</description></item><item><title>Sorting a hashtable by byte value in PowerShell</title><link>https://remkoweijnen.nl/blog/2014/07/22/sorting-hashtable-byte-value-powershell/</link><pubDate>Tue, 22 Jul 2014 12:03:28 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2014/07/22/sorting-hashtable-byte-value-powershell/</guid><description>&lt;p&gt;&lt;img style="float: right; display: inline" src="https://remkoweijnen.nl/blog/wp-content/uploads/recovered/1518ccd4bd4bfcb2.jpg" width="96" align="right" height="96" /&gt;In a PowerShell script I needed to sort a hash table by byte value (not alphabetically, lowercase parameters will be listed after uppercase ones). An example for this requirement is the &lt;a href="http://docs.aws.amazon.com/AWSECommerceService/latest/DG/rest-signature.html" target="_blank"&gt;Amazon Product Advertising API&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;Consider the following hashtable as an example:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;Example Hash Table &lt;span class="codelang"&gt;&amp;middot; powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="example-hash-table.ps1" href="data:text/plain;charset=utf-8;base64,JHBhcmFtcyA9IEB7fQokcGFyYW1zLkFkZCgiQXNzb2NpYXRlVGFnIiwgImR1bW15IikKJHBhcmFtcy5BZGQoIkFXU0FjY2Vzc0tleUlkIiwgIkFLSUFJT1NGT0ROTjdFWEFNUExFIikKJHBhcmFtcy5BZGQoIklkVHlwZSIsICIwNjc5NzIyNzY5IikKJHBhcmFtcy5BZGQoIk9wZXJhdGlvbiIsICJJdGVtTG9va3VwIik="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;$params = @{}
+$params.Add(&amp;#34;AssociateTag&amp;#34;, &amp;#34;dummy&amp;#34;)
+$params.Add(&amp;#34;AWSAccessKeyId&amp;#34;, &amp;#34;AKIAIOSFODNN7EXAMPLE&amp;#34;)
+$params.Add(&amp;#34;IdType&amp;#34;, &amp;#34;0679722769&amp;#34;)
+$params.Add(&amp;#34;Operation&amp;#34;, &amp;#34;ItemLookup&amp;#34;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;If we use the Sort-Object to order the list (note that we need to use the &lt;a href="http://technet.microsoft.com/en-us/library/ee692803.aspx" target="_blank"&gt;GetEnumerator&lt;/a&gt; method):&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;Sort Hash Table &lt;span class="codelang"&gt;&amp;middot; powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="sort-hash-table.ps1" href="data:text/plain;charset=utf-8;base64,JHBhcmFtcy5HZXRFbnVtZXJhdG9yKCkgfCBTb3J0LU9iamVjdCBOYW1l"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;$params.GetEnumerator() | Sort-Object Name&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;We will get the following result:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;Sort Results &lt;span class="codelang"&gt;&amp;middot; powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="sort-results.ps1" href="data:text/plain;charset=utf-8;base64,TmFtZSAgICAgICAgICAgICAgICAgICAgICAgICAgIFZhbHVlCi0tLS0gICAgICAgICAgICAgICAgICAgICAgICAgICAtLS0tLQpBc3NvY2lhdGVUYWcgICAgICAgICAgICAgICAgICAgZHVtbXkKQVdTQWNjZXNzS2V5SWQgICAgICAgICAgICAgICAgIEFLSUFJT1NGT0ROTjdFWEFNUExFCklkVHlwZSAgICAgICAgICAgICAgICAgICAgICAgICAwNjc5NzIyNzY5Ck9wZXJhdGlvbiAgICAgICAgICAgICAgICAgICAgICBJdGVtTG9va3Vw"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;Name Value
+---- -----
+AssociateTag dummy
+AWSAccessKeyId AKIAIOSFODNN7EXAMPLE
+IdType 0679722769
+Operation ItemLookup&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;If you use the &lt;code&gt;-CaseSensitive&lt;/code&gt; switch the resulting order will remain the same.&lt;/p&gt;</description></item></channel></rss>

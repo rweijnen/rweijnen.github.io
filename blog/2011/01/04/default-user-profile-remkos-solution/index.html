@@ -1,0 +1,337 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Default User Profile: Remko’s solution &#183; Remko's Blog</title><meta name=description content="Where the Default User Profile really lives in the registry ProfileList key, and why HKEY_USERS\.Default is not it, for Citrix and Terminal Server builds."><link rel=canonical href=https://remkoweijnen.nl/blog/2011/01/04/default-user-profile-remkos-solution/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="article"><meta property="og:title" content="Default User Profile: Remko’s solution"><meta property="og:description" content="Where the Default User Profile really lives in the registry ProfileList key, and why HKEY_USERS\.Default is not it, for Citrix and Terminal Server builds."><meta property="og:url" content="https://remkoweijnen.nl/blog/2011/01/04/default-user-profile-remkos-solution/"><meta property="og:image" content="https://remkoweijnen.nl/blog/wp-content/uploads/2011/01/usersdefault.webp"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Default User Profile: Remko’s solution"><meta name=twitter:description content="Where the Default User Profile really lives in the registry ProfileList key, and why HKEY_USERS\.Default is not it, for Citrix and Terminal Server builds."><meta name=twitter:image content="https://remkoweijnen.nl/blog/wp-content/uploads/2011/01/usersdefault.webp"><meta property="article:published_time" content="2011-01-04T15:46:18Z"><meta property="article:modified_time" content="2011-01-04T15:46:18Z"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Remko Weijnen"},"dateModified":"2011-01-04T15:46:18Z","datePublished":"2011-01-04T15:46:18Z","description":"Where the Default User Profile really lives in the registry ProfileList key, and why HKEY_USERS\\.Default is not it, for Citrix and Terminal Server builds.","headline":"Default User Profile: Remko’s solution","image":["https://remkoweijnen.nl/blog/wp-content/uploads/2011/01/usersdefault.webp"],"mainEntityOfPage":{"@id":"https://remkoweijnen.nl/blog/2011/01/04/default-user-profile-remkos-solution/","@type":"WebPage"},"publisher":{"@type":"Person","name":"Remko Weijnen"},"url":"https://remkoweijnen.nl/blog/2011/01/04/default-user-profile-remkos-solution/"}</script><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"><link rel=stylesheet href="/blog/css/prism-vsc-dark-plus.css?v=355807597"><link rel=stylesheet href=/blog/css/glightbox.min.css></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><article class=article><div class=pf-meta aria-hidden=true><span data-pagefind-filter=category>Altiris</span><span data-pagefind-filter=category>Citrix</span><span data-pagefind-filter=category>Remote Desktop Services</span><span data-pagefind-filter=category>Windows 2003</span><span data-pagefind-filter=category>Windows 2008</span><span data-pagefind-filter=category>Windows 2008 R2</span><span data-pagefind-filter=category>Windows 7</span><span data-pagefind-filter=category>Windows XP</span>
+<span data-pagefind-meta=category>Altiris</span>
+<span data-pagefind-filter=tag>Default User Profile</span><span data-pagefind-filter=tag>Registry</span><span data-pagefind-filter=tag>Terminal Server</span><span data-pagefind-filter=tag>Citrix</span><span data-pagefind-filter=tag>User Profiles</span><span data-pagefind-filter=tag>Windows</span>
+<span data-pagefind-filter=year>2011</span>
+<span data-pagefind-meta=date>2011-01-04</span></div><div class=crumb><a href=/blog/>~/blog</a><span class=sl>/</span><a href=/blog/categories/altiris/>altiris</a><span class=sl>/</span></div><h1 data-pagefind-meta=title>Default User Profile: Remko’s solution</h1><div class=byline><time datetime=2011-01-04>Jan 4, 2011</time>
+<span class=dot>&#183;</span><span>5 min read</span></div><div class=post-content data-pagefind-body><p>If you are implementing a Citrix, Terminal Server or even just a plain Client-Server environment you will need to create a Default User Profile at some point.</p><p>The Default User Profile can be thought of as the initial registry settings that are used when a new profile is created.</p><p>Many people think that the Default User Profile is available in regedit via HKEY_USERS.Default but this is NOT the Default User Profile.</p><p><a href=/blog/wp-content/uploads/2011/01/usersdefault.webp class=glightbox data-type=image data-gallery=post-1066><img loading=lazy decoding=async src=/blog/wp-content/uploads/2011/01/usersdefault-small.webp alt=UsersDefault width=430 height=165></a></p><p>The .Default key is loaded before you logon, so it&rsquo;s usefull to save the language and keyboard settings that apply before logging on. Many OEM vendors also set a background image here to set a &ldquo;logon wallpaper&rdquo;.</p><p>The location of the Default User Profile is set in the registry under HKLM\Software\Microsoft\Windows NT\CurrentVersion\ProfileList:</p><p><a href=/blog/wp-content/uploads/2011/01/profilelist.webp class=glightbox data-type=image data-gallery=post-1066><img loading=lazy decoding=async src=/blog/wp-content/uploads/2011/01/profilelist-small.webp alt=ProfileList width=430 height=173></a></p><p>Note that on Windows Vista and higher OS the Default key containts the full path but on Windows 2003/XP you need to assemble the path by combining the values of ProfilesDirectory and DefaultUserProfile:</p><p><a href=/blog/wp-content/uploads/2011/01/profilelist2003xp.webp class=glightbox data-type=image data-gallery=post-1066><img loading=lazy decoding=async src=/blog/wp-content/uploads/2011/01/profilelist2003xp-small.webp alt=ProfileList2003XP width=430 height=134></a></p><p>But how do we <em>create</em> a Default User Profile?</p><p>The traditional method is that you logon as a certain user, make you changes and the copy the profile using the Copy To button in the User Profiles page of the Advanced System Properties:</p><img loading=lazy decoding=async src=/blog/wp-content/uploads/2011/01/userprofilescopyto.webp alt=UserProfilesCopyTo width=390 height=407><p>However this is a lot of manual work that you need to do all over again if you go to a new OS of even another environment (especially if you move on from project to project like me).</p><p>Note that you can of course <em>copy</em> the Default User Profile from one machine to another but you can&rsquo;t keep track of changes or easily see the contents.</p><p>That&rsquo;s why I use another way: I create .reg files with all the Default Settings I need.</p><p>I use a little know feature of reg files: <em>you can add comments using the semi colon (;)</em></p><p>You can also deletee keys or values in .reg files using the minus sign (-).</p><p>In the .reg file I use HKEY_USERS#DefUser to reference HKEY_CURRENT_USER.</p><p>A typical Default User Profile .reg file looks like this:</p><div class=codecard><div class=codehead><span class=codefile><span class=codelang>ini</span></span>
+<span class=codetools data-pagefind-ignore><button class=codebtn type=button data-copy>Copy</button>
+<a class=codebtn download=.ini href="data:;charset=utf-8,Windows%20Registry%20Editor%20Version%205.00%0A%0A;%20This%20file%20adds%20Default%20settings%20to%20the%20Default%20user%20profile%0A;%20Author:%20Remko%20Weijnen%20(r%20dot%20weijnen%20at%20gmail.com)%0A;%0A;%20v0.3%2013-10-2009%20Adjustments%20for%202008%0A%0A;%20V0.2%2030-09-2008%20Modifications:%0A;%20Disable%20Printer%20Notifications%0A;%5BHKEY_USERS%5C%23DefUser%5CPrinters%5CSettings%5D%0A;%22EnableBalloonNotificationsRemote%22=dword:00000000%0A%0A%0A%5BHKEY_USERS%5C%23DefUser%5D%0A%0A;%20MUI%0A%5BHKEY_USERS%5C%23DefUser%5CControl%20Panel%5CDesktop%5D%0A%22MUILanguagePending%22=%2200000413%22%0A%22MultiUILanguageId%22=%2200000413%22%0A%0A;%20Regional%20Settings%20(Dutch,%20Netherlands)%0A%5BHKEY_USERS%5C%23DefUser%5CControl%20Panel%5CInternational%5D%0A%22iCountry%22=%2231%22%0A%22iCurrDigits%22=%222%22%0A%22iCurrency%22=%222%22%0A%22iDate%22=%221%22%0A%22iDigits%22=%222%22%0A%22iLZero%22=%221%22%0A%22iMeasure%22=%220%22%0A%22iNegCurr%22=%2211%22%0A%22iTime%22=%221%22%0A%22iTLZero%22=%220%22%0A%22Locale%22=%2200000413%22%0A%22s1159%22=%22%22%0A%22s2359%22=%22%22%0A%22sCountry%22=%22Netherlands%22%0A%22sCurrency%22=%22%E2%95%9F%22%0A%22sDate%22=%22-%22%0A%22sDecimal%22=%22,%22%0A%22sLanguage%22=%22NLD%22%0A%22sList%22=%22;%22%0A%22sLongDate%22=%22dddd%20d%20MMMM%20yyyy%22%0A%22sShortDate%22=%22d-M-yyyy%22%0A%22sThousand%22=%22.%22%0A%22sTime%22=%22:%22%0A%22DefaultBlindDialFlag%22=hex:00%0A%22sTimeFormat%22=%22H:mm:ss%22%0A%22iTimePrefix%22=%220%22%0A%22sMonDecimalSep%22=%22,%22%0A%22sMonThousandSep%22=%22.%22%0A%22iNegNumber%22=%221%22%0A%22sNativeDigits%22=%220123456789%22%0A%22NumShape%22=%221%22%0A%22iCalendarType%22=%221%22%0A%22iFirstDayOfWeek%22=%220%22%0A%22iFirstWeekOfYear%22=%222%22%0A%22sGrouping%22=%223;0%22%0A%22sMonGrouping%22=%223;0%22%0A%22sPositiveSign%22=%22%22%0A%22sNegativeSign%22=%22-%22%0A%0A%0A;%20Regional%20and%20Language%20Options%20%7C%20Location%0A%5BHKEY_USERS%5C%23DefUser%5CControl%20Panel%5CInternational%5CGeo%5D%0A%22Nation%22=%22176%22%0A%0A%5BHKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CIMEtoggle%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CIMEtoggle%5Cscancode%5D%0A%0A;%20Remove%20existing%0A%5B-HKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CPreload%5D%0A%0A;%20Language%20Dutch%0A%5BHKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CPreload%5D%0A%221%22=%2200000413%22%0A%0A;%20Remove%20existing%0A%5B-HKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CSubstitutes%5D%0A%0A;%20Dutch%20Language%20but%20US%20International%20Keyboard!%0A%5BHKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CSubstitutes%5D%0A%2200000413%22=%2200020409%22%0A%0A%5BHKEY_USERS%5C%23DefUser%5CKeyboard%20Layout%5CToggle%5D%0A%22Hotkey%22=%223%22%0A%22Language%20Hotkey%22=%223%22%0A%22Layout%20Hotkey%22=%223%22%0A%0A;%20Disable%20Printer%20Notifications%0A%5BHKEY_USERS%5C%23DefUser%5CPrinters%5CSettings%5D%0A%22EnableBalloonNotificationsRemote%22=dword:00000000%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CClock%5D%0A%22iFormat%22=%221%22%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5D%0A%22Disable%20Thread%20Input%20Manager%22=dword:00000001%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CAssemblies%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CCompartment%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CLangBar%5D%0A%22ExtraIconsOnMinimized%22=dword:00000001%0A%22ShowStatus%22=dword:00000004%0A%22Transparency%22=dword:000000ff%0A%22Label%22=dword:00000001%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CMSUTB%5D%0A%22Left%22=dword:000003ca%0A%22Top%22=dword:00000000%0A%22Vertical%22=dword:00000000%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CSapilayr%5D%0A%22ProfileInitialized%22=dword:00000001%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5C%7BDCBD6FA8-032F-11D3-B5B1-00C04FC324A1%7D%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5C%7BDCBD6FA8-032F-11D3-B5B1-00C04FC324A1%7D%5CLanguageProfile%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5C%7BDCBD6FA8-032F-11D3-B5B1-00C04FC324A1%7D%5CLanguageProfile%5C0x00000409%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5C%7BDCBD6FA8-032F-11D3-B5B1-00C04FC324A1%7D%5CLanguageProfile%5C0x00000409%5C%7B09EA4E4B-46CE-4469-B450-0DE76A435BBB%7D%5D%0A%22Enable%22=dword:00000000%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5C%7BDCBD6FA8-032F-11D3-B5B1-00C04FC324A1%7D%5CLanguageProfile%5C0x00000413%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CCTF%5CTIP%5C%7BDCBD6FA8-032F-11D3-B5B1-00C04FC324A1%7D%5CLanguageProfile%5C0x00000413%5C%7B09EA4E4B-46CE-4469-B450-0DE76A435BBB%7D%5D%0A%22Enable%22=dword:00000000%0A%0A;%20Reuse%20windows%20for%20launching%20shortcuts%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CInternet%20Explorer%5CMain%5D%0A%22AlwaysShowMenus%22=dword:00000001%0A%22AllowWindowReuse%22=dword:00000000%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CInternet%20Explorer%5CMain%5CFeatureControl%5D%0A%0A;%20Allow%20active%20content%20to%20run%20in%20files%20on%20My%20Computer%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CInternet%20Explorer%5CMain%5CFeatureControl%5CFEATURE_LOCALMACHINE_LOCKDOWN%5D%0A%22iexplore.exe%22=dword:00000000%0A%0A;%20Allow%20active%20content%20to%20run%20from%20CDs%20to%20run%20on%20My%20Computer%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CInternet%20Explorer%5CMain%5CFeatureControl%5CFEATURE_LOCALMACHINE_LOCKDOWN%5CSettings%5D%0A%22LOCALMACHINE_CD_UNLOCK%22=dword:00000001%0A%0A;%20Phishing%20filter%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CInternet%20Explorer%5CPhishingFilter%5D%0A%22Enabled%22=dword:00000000%0A%0A;%20Open%20Server%20Manager%20at%20logon%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CServerManager%5D%0A%22DoNotOpenServerManagerAtLogon%22=dword:00000001%0A%0A;%20Office%20UI%20Language%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CShared%5D%0A%22OfficeUILanguage%22=dword:00000413%0A%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CControls%20Folder%5D%0A%22Presentation%20LCID%22=dword:00000409%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5D%0A%0A;%20Shell%20settings%20(4th%20bit%20from%20the%20right:%200%20=%20Classic%20Start%20Menu,%202%20=%20New%20Start%20Menu)%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5D%0A%22ShellState%22=hex:24,00,00,00,33,08,00,00,00,00,00,00,00,00,00,00,00,00,00,00,%5C%0A%20%2001,00,00,00,0d,00,00,00,00,00,00,00,00,00,00,00%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CAdvanced%5D%0A%22WebViewBarricade%22=dword:00000001%0A%22Start_ShowControlPanel%22=dword:00000002%0A%22Start_AdminToolsRoot%22=dword:00000002%0A%22StartMenuAdminTools%22=%22NO%22%0A%22Start_ShowMyDocs%22=dword:00000000%0A%22Start_ShowRecentDocs%22=dword:00000000%0A%22Start_ShowNetPlaces%22=dword:00000000%0A%22Start_ShowPrinters%22=dword:00000001%0A%22Hidden%22=dword:00000000%0A%22HideFileExt%22=dword:00000001%0A%22ServerAdminUI%22=dword:00000001%0A%22ShowCompColor%22=dword:00000001%0A%22DontPrettyPath%22=dword:00000000%0A%22ShowInfoTip%22=dword:00000001%0A%22HideIcons%22=dword:00000000%0A%22MapNetDrvBtn%22=dword:00000000%0A%22WebView%22=dword:00000000%0A%22Filter%22=dword:00000000%0A%22SuperHidden%22=dword:00000001%0A%22SeparateProcess%22=dword:00000000%0A%22StartMenuInit%22=dword:00000002%0A%22StartButtonBalloonTip%22=dword:00000002%0A%22TaskbarSizeMove%22=dword:00000000%0A%22TaskbarGlomming%22=dword:00000000%0A%22StartMenuFavorites%22=dword:00000000%0A%22StartMenuLogoff%22=dword:00000001%0A%22StartMenuRun%22=dword:00000001%0A%22StartMenuChange%22=dword:00000001%0A%22CascadeControlPanel%22=%22NO%22%0A%22CascadeMyDocuments%22=%22NO%22%0A%22CascadeMyPictures%22=%22NO%22%0A%22CascadeNetworkConnections%22=%22NO%22%0A%22CascadePrinters%22=%22NO%22%0A%22StartMenuScrollPrograms%22=%22NO%22%0A%22IntelliMenus%22=dword:00000000%0A%22ListviewAlphaSelect%22=dword:00000000%0A%22TaskbarAnimations%22=dword:00000000%0A%22ListviewWatermark%22=dword:00000000%0A%22ListviewShadow%22=dword:00000000%0A%22ShowSuperHidden%22=dword:00000000%0A%0A;%20Desktop%20Icons%20(New%20Start%20Menu)%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CHideDesktopIcons%5CNewStartPanel%5D%0A;%20Documents%20Folder:%0A%22%7B59031a47-3f72-44a7-89c5-5595fe6b30ee%7D%22=dword:00000001%0A;%20My%20Computer:%0A%22%7B20D04FE0-3AEA-1069-A2D8-08002B30309D%7D%22=dword:00000000%0A;%20Network:%0A%22%7BF02C1A0D-BE21-4350-88B0-7367FC96EF3C%7D%22=dword:00000000%0A;%20Recycle%20Bin:%0A%22%7BF02C1A0D-BE21-4350-88B0-7367FC96EF3C%7D%22=dword:00000000%0A;%20Control%20Panel%0A%22%7B5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0%7D%22=dword:00000001%0A%0A;%20This%20contains%20ao%20Taskbar%20settings%20(bit%209%20controls%20the%20clock)%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CStuckRects2%5D%0A%22Settings%22=hex:28,00,00,00,ff,ff,ff,ff,02,00,00,00,03,00,00,00,3c,00,00,00,1e,%5C%0A%20%2000,00,00,fe,ff,ff,ff,e4,02,00,00,02,04,00,00,02,03,00,00%0A%0A;%20Empty%20the%20Pinned%20Items%20list%20in%20the%20Start%20menu%20(Vista/2008%20with%20New%20Start%20menu)%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CStartPage%5D%0A%22Favorites%22=hex:ff%0A%0A;%20Visuals%20Effects%20%7C%20Best%20Performance%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5D%0A%22VisualFXSetting%22=dword:00000002%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CAnimateMinMax%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CComboBoxAnimation%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CCursorShadow%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CDragFullWindows%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CDropShadow%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CFontSmoothing%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CListBoxSmoothScrolling%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CListviewAlphaSelect%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CListviewShadow%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CListviewWatermark%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CMenuAnimation%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CSelectionFade%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CTaskbarAnimations%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CThemes%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CTooltipAnimation%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CCurrentVersion%5CExplorer%5CVisualEffects%5CWebView%5D%0A%0A;%20Change%20nr%20of%20property%20bags%20that%20are%20remembered%20(Remember%20Folder%20View%20settings%20per%20folder)%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CShellNoRoam%5D%0A%22BagMRU%20Size%22=dword:00001F40%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CShellNoRoam%5CBags%5D%0A%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CShellNoRoam%5CBags%5CAll%20Folders%5D%0A%0A;%20Force%20default%20explorer%20view%20to%20Details%20(mode%20=%204)%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%5CShellNoRoam%5CBags%5CAll%20Folders%5CShell%5D%0A%22Mode%22=dword:00000004%0A%22WFlags%22=dword:00000000%0A%22Status%22=dword:00000001%0A%22Address%22=dword:ffffffff%0A%22Vid%22=%22%7B137E7700-3573-11CF-AE69-08002B2E1262%7D%22%0A%0A;%20Disable%20the%20Welcome%20wizard%20for%20Administrators%0A%5BHKEY_USERS%5C%23DefUser%5CSoftware%5CMicrosoft%5CWindows%20NT%5CCurrentVersion%5CSetup%5CWelcome%5D%0A%22srvwiz%22=dword:00000000">Download</a></span></div><div class=codebody><pre class=language-ini><code class=language-ini>Windows Registry Editor Version 5.00
+
+; This file adds Default settings to the Default user profile
+; Author: Remko Weijnen (r dot weijnen at gmail.com)
+;
+; v0.3 13-10-2009 Adjustments for 2008
+
+; V0.2 30-09-2008 Modifications:
+; Disable Printer Notifications
+;[HKEY_USERS\#DefUser\Printers\Settings]
+;&#34;EnableBalloonNotificationsRemote&#34;=dword:00000000
+
+
+[HKEY_USERS\#DefUser]
+
+; MUI
+[HKEY_USERS\#DefUser\Control Panel\Desktop]
+&#34;MUILanguagePending&#34;=&#34;00000413&#34;
+&#34;MultiUILanguageId&#34;=&#34;00000413&#34;
+
+; Regional Settings (Dutch, Netherlands)
+[HKEY_USERS\#DefUser\Control Panel\International]
+&#34;iCountry&#34;=&#34;31&#34;
+&#34;iCurrDigits&#34;=&#34;2&#34;
+&#34;iCurrency&#34;=&#34;2&#34;
+&#34;iDate&#34;=&#34;1&#34;
+&#34;iDigits&#34;=&#34;2&#34;
+&#34;iLZero&#34;=&#34;1&#34;
+&#34;iMeasure&#34;=&#34;0&#34;
+&#34;iNegCurr&#34;=&#34;11&#34;
+&#34;iTime&#34;=&#34;1&#34;
+&#34;iTLZero&#34;=&#34;0&#34;
+&#34;Locale&#34;=&#34;00000413&#34;
+&#34;s1159&#34;=&#34;&#34;
+&#34;s2359&#34;=&#34;&#34;
+&#34;sCountry&#34;=&#34;Netherlands&#34;
+&#34;sCurrency&#34;=&#34;╟&#34;
+&#34;sDate&#34;=&#34;-&#34;
+&#34;sDecimal&#34;=&#34;,&#34;
+&#34;sLanguage&#34;=&#34;NLD&#34;
+&#34;sList&#34;=&#34;;&#34;
+&#34;sLongDate&#34;=&#34;dddd d MMMM yyyy&#34;
+&#34;sShortDate&#34;=&#34;d-M-yyyy&#34;
+&#34;sThousand&#34;=&#34;.&#34;
+&#34;sTime&#34;=&#34;:&#34;
+&#34;DefaultBlindDialFlag&#34;=hex:00
+&#34;sTimeFormat&#34;=&#34;H:mm:ss&#34;
+&#34;iTimePrefix&#34;=&#34;0&#34;
+&#34;sMonDecimalSep&#34;=&#34;,&#34;
+&#34;sMonThousandSep&#34;=&#34;.&#34;
+&#34;iNegNumber&#34;=&#34;1&#34;
+&#34;sNativeDigits&#34;=&#34;0123456789&#34;
+&#34;NumShape&#34;=&#34;1&#34;
+&#34;iCalendarType&#34;=&#34;1&#34;
+&#34;iFirstDayOfWeek&#34;=&#34;0&#34;
+&#34;iFirstWeekOfYear&#34;=&#34;2&#34;
+&#34;sGrouping&#34;=&#34;3;0&#34;
+&#34;sMonGrouping&#34;=&#34;3;0&#34;
+&#34;sPositiveSign&#34;=&#34;&#34;
+&#34;sNegativeSign&#34;=&#34;-&#34;
+
+
+; Regional and Language Options | Location
+[HKEY_USERS\#DefUser\Control Panel\International\Geo]
+&#34;Nation&#34;=&#34;176&#34;
+
+[HKEY_USERS\#DefUser\Keyboard Layout]
+
+[HKEY_USERS\#DefUser\Keyboard Layout\IMEtoggle]
+
+[HKEY_USERS\#DefUser\Keyboard Layout\IMEtoggle\scancode]
+
+; Remove existing
+[-HKEY_USERS\#DefUser\Keyboard Layout\Preload]
+
+; Language Dutch
+[HKEY_USERS\#DefUser\Keyboard Layout\Preload]
+&#34;1&#34;=&#34;00000413&#34;
+
+; Remove existing
+[-HKEY_USERS\#DefUser\Keyboard Layout\Substitutes]
+
+; Dutch Language but US International Keyboard!
+[HKEY_USERS\#DefUser\Keyboard Layout\Substitutes]
+&#34;00000413&#34;=&#34;00020409&#34;
+
+[HKEY_USERS\#DefUser\Keyboard Layout\Toggle]
+&#34;Hotkey&#34;=&#34;3&#34;
+&#34;Language Hotkey&#34;=&#34;3&#34;
+&#34;Layout Hotkey&#34;=&#34;3&#34;
+
+; Disable Printer Notifications
+[HKEY_USERS\#DefUser\Printers\Settings]
+&#34;EnableBalloonNotificationsRemote&#34;=dword:00000000
+
+[HKEY_USERS\#DefUser\Software]
+
+[HKEY_USERS\#DefUser\Software\Microsoft]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Clock]
+&#34;iFormat&#34;=&#34;1&#34;
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF]
+&#34;Disable Thread Input Manager&#34;=dword:00000001
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\Assemblies]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\Compartment]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\LangBar]
+&#34;ExtraIconsOnMinimized&#34;=dword:00000001
+&#34;ShowStatus&#34;=dword:00000004
+&#34;Transparency&#34;=dword:000000ff
+&#34;Label&#34;=dword:00000001
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\MSUTB]
+&#34;Left&#34;=dword:000003ca
+&#34;Top&#34;=dword:00000000
+&#34;Vertical&#34;=dword:00000000
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\Sapilayr]
+&#34;ProfileInitialized&#34;=dword:00000001
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP\{DCBD6FA8-032F-11D3-B5B1-00C04FC324A1}]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP\{DCBD6FA8-032F-11D3-B5B1-00C04FC324A1}\LanguageProfile]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP\{DCBD6FA8-032F-11D3-B5B1-00C04FC324A1}\LanguageProfile\0x00000409]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP\{DCBD6FA8-032F-11D3-B5B1-00C04FC324A1}\LanguageProfile\0x00000409\{09EA4E4B-46CE-4469-B450-0DE76A435BBB}]
+&#34;Enable&#34;=dword:00000000
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP\{DCBD6FA8-032F-11D3-B5B1-00C04FC324A1}\LanguageProfile\0x00000413]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\CTF\TIP\{DCBD6FA8-032F-11D3-B5B1-00C04FC324A1}\LanguageProfile\0x00000413\{09EA4E4B-46CE-4469-B450-0DE76A435BBB}]
+&#34;Enable&#34;=dword:00000000
+
+; Reuse windows for launching shortcuts
+[HKEY_USERS\#DefUser\Software\Microsoft\Internet Explorer\Main]
+&#34;AlwaysShowMenus&#34;=dword:00000001
+&#34;AllowWindowReuse&#34;=dword:00000000
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Internet Explorer\Main\FeatureControl]
+
+; Allow active content to run in files on My Computer
+[HKEY_USERS\#DefUser\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_LOCALMACHINE_LOCKDOWN]
+&#34;iexplore.exe&#34;=dword:00000000
+
+; Allow active content to run from CDs to run on My Computer
+[HKEY_USERS\#DefUser\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_LOCALMACHINE_LOCKDOWN\Settings]
+&#34;LOCALMACHINE_CD_UNLOCK&#34;=dword:00000001
+
+; Phishing filter
+[HKEY_USERS\#DefUser\Software\Microsoft\Internet Explorer\PhishingFilter]
+&#34;Enabled&#34;=dword:00000000
+
+; Open Server Manager at logon
+[HKEY_USERS\#DefUser\Software\Microsoft\ServerManager]
+&#34;DoNotOpenServerManagerAtLogon&#34;=dword:00000001
+
+; Office UI Language
+[HKEY_USERS\#DefUser\Software\Microsoft\Shared]
+&#34;OfficeUILanguage&#34;=dword:00000413
+
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Controls Folder]
+&#34;Presentation LCID&#34;=dword:00000409
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer]
+
+; Shell settings (4th bit from the right: 0 = Classic Start Menu, 2 = New Start Menu)
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer]
+&#34;ShellState&#34;=hex:24,00,00,00,33,08,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+  01,00,00,00,0d,00,00,00,00,00,00,00,00,00,00,00
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+&#34;WebViewBarricade&#34;=dword:00000001
+&#34;Start_ShowControlPanel&#34;=dword:00000002
+&#34;Start_AdminToolsRoot&#34;=dword:00000002
+&#34;StartMenuAdminTools&#34;=&#34;NO&#34;
+&#34;Start_ShowMyDocs&#34;=dword:00000000
+&#34;Start_ShowRecentDocs&#34;=dword:00000000
+&#34;Start_ShowNetPlaces&#34;=dword:00000000
+&#34;Start_ShowPrinters&#34;=dword:00000001
+&#34;Hidden&#34;=dword:00000000
+&#34;HideFileExt&#34;=dword:00000001
+&#34;ServerAdminUI&#34;=dword:00000001
+&#34;ShowCompColor&#34;=dword:00000001
+&#34;DontPrettyPath&#34;=dword:00000000
+&#34;ShowInfoTip&#34;=dword:00000001
+&#34;HideIcons&#34;=dword:00000000
+&#34;MapNetDrvBtn&#34;=dword:00000000
+&#34;WebView&#34;=dword:00000000
+&#34;Filter&#34;=dword:00000000
+&#34;SuperHidden&#34;=dword:00000001
+&#34;SeparateProcess&#34;=dword:00000000
+&#34;StartMenuInit&#34;=dword:00000002
+&#34;StartButtonBalloonTip&#34;=dword:00000002
+&#34;TaskbarSizeMove&#34;=dword:00000000
+&#34;TaskbarGlomming&#34;=dword:00000000
+&#34;StartMenuFavorites&#34;=dword:00000000
+&#34;StartMenuLogoff&#34;=dword:00000001
+&#34;StartMenuRun&#34;=dword:00000001
+&#34;StartMenuChange&#34;=dword:00000001
+&#34;CascadeControlPanel&#34;=&#34;NO&#34;
+&#34;CascadeMyDocuments&#34;=&#34;NO&#34;
+&#34;CascadeMyPictures&#34;=&#34;NO&#34;
+&#34;CascadeNetworkConnections&#34;=&#34;NO&#34;
+&#34;CascadePrinters&#34;=&#34;NO&#34;
+&#34;StartMenuScrollPrograms&#34;=&#34;NO&#34;
+&#34;IntelliMenus&#34;=dword:00000000
+&#34;ListviewAlphaSelect&#34;=dword:00000000
+&#34;TaskbarAnimations&#34;=dword:00000000
+&#34;ListviewWatermark&#34;=dword:00000000
+&#34;ListviewShadow&#34;=dword:00000000
+&#34;ShowSuperHidden&#34;=dword:00000000
+
+; Desktop Icons (New Start Menu)
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel]
+; Documents Folder:
+&#34;{59031a47-3f72-44a7-89c5-5595fe6b30ee}&#34;=dword:00000001
+; My Computer:
+&#34;{20D04FE0-3AEA-1069-A2D8-08002B30309D}&#34;=dword:00000000
+; Network:
+&#34;{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}&#34;=dword:00000000
+; Recycle Bin:
+&#34;{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}&#34;=dword:00000000
+; Control Panel
+&#34;{5399E694-6CE5-4D6C-8FCE-1D8870FDCBA0}&#34;=dword:00000001
+
+; This contains ao Taskbar settings (bit 9 controls the clock)
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects2]
+&#34;Settings&#34;=hex:28,00,00,00,ff,ff,ff,ff,02,00,00,00,03,00,00,00,3c,00,00,00,1e,\
+  00,00,00,fe,ff,ff,ff,e4,02,00,00,02,04,00,00,02,03,00,00
+
+; Empty the Pinned Items list in the Start menu (Vista/2008 with New Start menu)
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
+&#34;Favorites&#34;=hex:ff
+
+; Visuals Effects | Best Performance
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects]
+&#34;VisualFXSetting&#34;=dword:00000002
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\CursorShadow]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DragFullWindows]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\DropShadow]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListBoxSmoothScrolling]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewAlphaSelect]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewShadow]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ListviewWatermark]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\SelectionFade]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\Themes]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\WebView]
+
+; Change nr of property bags that are remembered (Remember Folder View settings per folder)
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\ShellNoRoam]
+&#34;BagMRU Size&#34;=dword:00001F40
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\ShellNoRoam\Bags]
+
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\ShellNoRoam\Bags\All Folders]
+
+; Force default explorer view to Details (mode = 4)
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows\ShellNoRoam\Bags\All Folders\Shell]
+&#34;Mode&#34;=dword:00000004
+&#34;WFlags&#34;=dword:00000000
+&#34;Status&#34;=dword:00000001
+&#34;Address&#34;=dword:ffffffff
+&#34;Vid&#34;=&#34;{137E7700-3573-11CF-AE69-08002B2E1262}&#34;
+
+; Disable the Welcome wizard for Administrators
+[HKEY_USERS\#DefUser\Software\Microsoft\Windows NT\CurrentVersion\Setup\Welcome]
+&#34;srvwiz&#34;=dword:00000000</code></pre></div></div><p>I have created a vbscript that mounts the Default User Profile (under HKEY_USERS#DefUser), imports the regfile (given as parameter) and unmounts the key again.</p><p>Script and sample .reg file are available in the download below!</p><p><a class=download href=/blog/files/DefUser.zip>DefUser.zip</a></p></div><div class=author-foot><img class=avatar-img src=/blog/img/remko-avatar.png alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=avatar style=display:none aria-hidden=true>RW</span><div class=who><div class=side-h>> written by</div><div class=name>Remko Weijnen</div><p>I work on Windows internals, application delivery, security, reverse engineering, automation and AI — building tools, debugging strange behaviour and taking systems apart to understand how they work.</p><div class=links><a href=https://github.com/rweijnen rel=me>GitHub</a>
+<a href=https://www.linkedin.com/in/remkoweijnen/ rel=me>LinkedIn</a></div></div></div><section class=comments><h2>5 Comments</h2><ol class=comment-list><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href="http://topsy.com/www.remkoweijnen.nl/blog/2011/01/04/default-user-profile-remkos-solution/?utm_source=pingback&amp;amp;utm_campaign=L2" rel="nofollow ugc">Tweets die vermelden Default User Profile: Remko’s solution | Remko Weijnen's Blog (Remko's Blog) -- Topsy.com</a></span> <time datetime=2011-01-04>Jan 4, 2011</time></div><div class=comment-body><p>[...] Dit blogartikel was vermeld op Twitter door Michel Roth. Michel Roth heeft gezegd: Great, real-life solution to manage the Default User Profile via a script: http://bit.ly/e8WSAy [...]</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author>liliactr</span> <time datetime=2011-02-06>Feb 6, 2011</time></div><div class=comment-body><p>how we will use this reg file?</p></div></li><li class="comment depth-1"><div class=comment-meta><span class=comment-author><a href=/blog/ rel="nofollow ugc">Remko</a></span> <time datetime=2011-02-06>Feb 6, 2011</time></div><div class=comment-body><p>Use the scripts that are included in the download!</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author>Tumar Krunet</span> <time datetime=2011-07-26>Jul 26, 2011</time></div><div class=comment-body><p>I do the change with one of the profile. Now the computer make the grinding noise all the time. How do make go away please?</p></div></li><li class="comment depth-0"><div class=comment-meta><span class=comment-author><a href=http://www.renevdlinden.nl/wordpress/2011/02/01/windows-default-user-profile/ rel="nofollow ugc">R e n e &amp;#039; s B l o g &amp;raquo; Windows default user Profile</a></span> <time datetime=2013-04-16>Apr 16, 2013</time></div><div class=comment-body><p>[...] Link [...]</p></div></li></ol></section></article><aside class=rail><div class=side-modules><div class="side-mod toc-mod" id=tocMod hidden><div class=side-h>On this page</div><nav class=toc-list id=tocList></nav></div><div class=side-mod><div class=side-h>More on Altiris</div><div class=related-list><a class=related-item href=/blog/2011/04/29/apply-ip-configuration-from-a-database/><span class=rt>Apply IP Configuration from a Database</span>
+<span class=rm>2011 &#183; 2 min</span>
+</a><a class=related-item href=/blog/2011/03/22/tips-for-using-sysprep-with-altiris/><span class=rt>Tips for using SysPrep with Altiris</span>
+<span class=rm>2011 &#183; 4 min</span>
+</a><a class=related-item href=/blog/2011/03/18/add-vmxnet3-driver-to-windows-pe-pxe-image/><span class=rt>Add VMXNET3 driver to Windows PE PXE Image</span>
+<span class=rm>2011 &#183; 1 min</span>
+</a><a class=related-all href=/blog/categories/altiris/>All Altiris posts &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/>Enumerating Session Processes with NtQuerySystemInformation</a><div class=random-meta id=randomMeta>2011 &#183; Delphi</div><script type=application/json id=randomPool>[{"c":"Delphi","t":"Enumerating Session Processes with NtQuerySystemInformation","u":"/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/","y":"2011"},{"c":"Delphi","t":"Determine the System Page Size","u":"/blog/2011/01/24/determine-the-system-page-size/","y":"2011"},{"c":"Packaging","t":"Packaging an ActiveX Component: Easy?","u":"/blog/2010/12/20/packaging-an-activex-component/","y":"2010"},{"c":"Delphi","t":"Setting ChildCount in a Virtual Tree","u":"/blog/2010/06/08/setting-childcount-in-a-virtual-tree/","y":"2010"},{"c":"Windows 10","t":"No internet access from Edge and other Microsoft apps","u":"/blog/2019/10/16/no-internet-access-from-edge-and-other-microsoft-apps/","y":"2019"},{"c":"VMware","t":"Cannot complete customization when cloning from Template","u":"/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/","y":"2010"},{"c":"General","t":"Wordpress monthly archives broken","u":"/blog/2011/01/01/wordpress-monthly-archives-broken/","y":"2011"},{"c":"Delphi","t":"Did you make a SasLibEx enquiry? And... news!","u":"/blog/2010/02/22/did-you-make-a-saslibex-enquiry-and-news/","y":"2010"},{"c":"General","t":"Windows XP x64 Terminal Server Patch part 2 (optional)","u":"/blog/2009/01/16/windows-xp-x64-terminal-server-patch-part-2-optional/","y":"2009"},{"c":"Active Directory","t":"Check if a useraccount exists with PowerShell","u":"/blog/2011/09/02/check-if-a-useraccount-exists-with-powershell/","y":"2011"},{"c":"Programming","t":"New Terminal Server API's in Vista SP1","u":"/blog/2007/10/30/new-terminal-server-apis-in-vista-sp1/","y":"2007"},{"c":"Delphi","t":"Terminal Server Internals","u":"/blog/2008/11/19/terminal-server-internals/","y":"2008"},{"c":"Vista","t":"Getting Back the Classic Event Viewer in Vista and Windows 7","u":"/blog/2009/11/26/getting-back-the-classic-event-viewer-in-vista-and-windows-7/","y":"2009"},{"c":"Application Compatibility","t":"Redirect Registry by Modifying .NET Executable","u":"/blog/2013/05/30/redirect-registry-by-modifying-net-executable/","y":"2013"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/prism.min.js?v=662175932"></script><script src=/blog/js/glightbox.min.js></script><script>window.GLightbox&&GLightbox({selector:".glightbox",loop:!0})</script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

@@ -1,0 +1,500 @@
+<!doctype html><html lang=en data-theme=light><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Archives &#183; Remko's Blog</title><meta name=description content="About Virtualization, VDI, SBC, Application Compatibility and anything else I feel like"><link rel=canonical href=https://remkoweijnen.nl/blog/archives/><meta property="og:site_name" content="Remko's Blog"><meta property="og:type" content="website"><meta property="og:title" content="Archives"><meta property="og:description" content="About Virtualization, VDI, SBC, Application Compatibility and anything else I feel like"><meta property="og:url" content="https://remkoweijnen.nl/blog/archives/"><meta property="og:image" content="https://remkoweijnen.nl/blog/img/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Remko's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Archives"><meta name=twitter:description content="About Virtualization, VDI, SBC, Application Compatibility and anything else I feel like"><meta name=twitter:image content="https://remkoweijnen.nl/blog/img/og-default.png"><script>window.RW_BASE="/blog"</script><script>(function(){try{var t,e=localStorage.getItem("rw-theme")||"system";e==="system"&&(e=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"),document.documentElement.dataset.theme=e,t=localStorage.getItem("rw-font")||"100",document.documentElement.style.setProperty("--font-scale",t+"%"),localStorage.getItem("rw-contrast")==="on"&&(document.documentElement.dataset.contrast="high"),localStorage.getItem("rw-motion")==="on"&&(document.documentElement.dataset.motion="reduce")}catch{document.documentElement.dataset.theme="light"}})()</script><link rel=preload href=/blog/fonts/IBMPlexMono-Regular.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/blog/fonts/IBMPlexMono-SemiBold.woff2 as=font type=font/woff2 crossorigin><link rel=icon type=image/png sizes=32x32 href=/blog/favicon-32.png><link rel=icon type=image/png sizes=16x16 href=/blog/favicon-16.png><link rel=apple-touch-icon href=/blog/favicon-180.png><link rel=stylesheet href="/blog/css/main.css?v=2870615630"></head><body class=is-post><div class=topbar><header class=masthead><a class=brand href=/blog/><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt="Remko Weijnen" onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class=logo-badge style=display:none aria-hidden=true>r│w</span>
+<span class=name>remkoweijnen.nl<span class=slash>/</span>blog</span></a><div class=spacer></div><nav class=nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><button class="searchbtn js-search-open" aria-label=Search aria-haspopup=dialog>
+<svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg><span>Search posts</span><span class=kbd>/</span>
+</button>
+<button class="iconbtn cog" id=cogBtn aria-label=Settings><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.49 7.49.0 000-1.88l2-1.57a.5.5.0 00.12-.61l-1.9-3.29a.5.5.0 00-.59-.22l-2.39 1a7 7 0 00-1.62-.94l-.36-2.54A.5.5.0 0013.9 2h-3.8a.5.5.0 00-.49.42l-.36 2.54a7 7 0 00-1.62.94l-2.39-1a.5.5.0 00-.59.22L2.75 8.41a.5.5.0 00.12.61l2 1.57a7.49 7.49.0 000 1.88l-2 1.57a.5.5.0 00-.12.61l1.9 3.29a.5.5.0 00.59.22l2.39-1a7 7 0 001.62.94l.36 2.54a.5.5.0 00.49.42h3.8a.5.5.0 00.49-.42l.36-2.54a7 7 0 001.62-.94l2.39 1a.5.5.0 00.59-.22l1.9-3.29a.5.5.0 00-.12-.61zM12 15.5A3.5 3.5.0 1115.5 12 3.5 3.5.0 0112 15.5z"/></svg></button>
+<button class="iconbtn m-only js-search-open" aria-label=Search><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg></button>
+<button class="iconbtn m-only" id=hamBtn aria-label=Menu style=flex-direction:column;gap:3px>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span>
+<span style=width:16px;height:2px;background:currentColor;border-radius:1px></span></button></header></div><div class=drawer-backdrop id=drawerBackdrop></div><aside class=drawer id=drawer aria-label=Menu><div class=d-top><a class=brand href=/blog/ style=gap:8px><img src=/blog/img/rw-logo-hd.png width=161 height=176 alt onerror='this.style.display="none",this.nextElementSibling.style.display="flex"'>
+<span class="logo-badge sm" style=display:none aria-hidden=true>r│w</span>
+<span class=name style=font-size:14px;top:-2px>Remko Weijnen</span>
+</a><button class=d-close id=drawerClose aria-label=Close>&#215;</button></div><a class="d-search js-search-open" href=/blog/search/><span style="width:14px;height:14px;border:1.6px solid;border-radius:50%"></span> Search posts&mldr;</a><nav class=d-nav><a href=/blog/>Home</a>
+<a href=/blog/tools/>Tools</a>
+<a href=/blog/about/>About</a></nav><div class=d-row><span class=rail-h style=margin:0>Appearance</span><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=d-div></div><div class=rail-h>Topics</div><div class=chips><a class=chip href=/blog/categories/general/>General <span class=n>91</span></a><a class=chip href=/blog/categories/citrix/>Citrix <span class=n>87</span></a><a class=chip href=/blog/categories/programming/>Programming <span class=n>80</span></a><a class=chip href=/blog/categories/remote-desktop-services/>Remote Desktop Services <span class=n>69</span></a><a class=chip href=/blog/categories/delphi/>Delphi <span class=n>63</span></a><a class=chip href=/blog/categories/powershell/>PowerShell <span class=n>58</span></a></div><div class=rail-h>Archive</div><div style=display:flex;gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:13.5px;color:var(--nav)><a href=/blog/archives/#2023>2023 <span style=color:var(--muted)>1</span></a><a href=/blog/archives/#2022>2022 <span style=color:var(--muted)>5</span></a><a href=/blog/archives/#2019>2019 <span style=color:var(--muted)>1</span></a>
+<a href=/blog/archives/ style=color:var(--accent)>all &rarr;</a></div></aside><div class=settings-backdrop id=setBackdrop></div><div class=settings-pop id=setPop role=dialog aria-label=Settings><div class=grp><h4>Appearance</h4><div class=seg data-seg=theme><button data-val=light>Light</button><button data-val=dark>Dark</button><button data-val=system>System</button></div></div><div class=grp><h4>Text size</h4><div class=seg data-seg=font><button data-val=90>A</button><button data-val=100>A</button><button data-val=115>A</button></div></div><div class=grp><h4>Accessibility</h4><div class=opt><span>High contrast</span><div class=seg data-seg=contrast><button data-val=off>Off</button><button data-val=on>On</button></div></div><div class=opt><span>Reduce motion</span><div class=seg data-seg=motion><button data-val=off>Off</button><button data-val=on>On</button></div></div></div><div class=foot>&#8627; saved to this device</div></div><div class=ov-backdrop id=ovBackdrop aria-hidden=true><div class=ov-panel role=dialog aria-modal=true aria-label=Search><div class=ov-in><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4-4"/></svg>
+<input id=ovInput type=text autocomplete=off autocapitalize=off spellcheck=false enterkeyhint=search placeholder="Search posts&mldr;">
+<button class=ov-esc id=ovEsc aria-label="Close search">esc</button></div><div class=ov-body id=ovBody></div><div class=ov-foot><div class=keys><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> navigate</span>
+<span><kbd>&crarr;</kbd> open</span>
+<button type=button class=ov-all id=ovAll><kbd>shift</kbd><kbd>&crarr;</kbd> all results</button></div><span>Search by Pagefind</span></div></div></div><main><div class="wrap post-grid"><div class=col><h1 class=page-title>Archives</h1><p class=muted>433 posts since 2007.</p><section class=archive-group><h2 class=archive-year id=2023>2023</h2><ul class=archive-list><li><time datetime=2023-02-27 data-fmt=md>Feb 27</time>
+<a href=/blog/2023/02/27/quip-hangs-with-waiting-cursor/>Quip hangs with waiting cursor</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2022>2022</h2><ul class=archive-list><li><time datetime=2022-10-18 data-fmt=md>Oct 18</time>
+<a href=/blog/2022/10/18/get-registry-key-name-from-a-handle/>Get registry key name from a handle</a></li><li><time datetime=2022-10-17 data-fmt=md>Oct 17</time>
+<a href=/blog/2022/10/17/downloading-a-video-from-the-web-without-browser-extension/>Downloading a Video from the Web without Browser Extension</a></li><li><time datetime=2022-10-11 data-fmt=md>Oct 11</time>
+<a href=/blog/2022/10/11/get-rid-of-the-office-2019-licensing-nag-screen/>Get Rid of the Office 2019 Licensing Nag Screen</a></li><li><time datetime=2022-06-17 data-fmt=md>Jun 17</time>
+<a href=/blog/2022/06/17/the-aws-access-key-id-you-provided-does-not-exist-in-our-records-using-aws-powershell-cmdlets/>The AWS Access Key Id you provided does not exist in our records using AWS PowerShell Cmdlets</a></li><li><time datetime=2022-06-15 data-fmt=md>Jun 15</time>
+<a href=/blog/2022/06/15/ubuntu-crash-when-pasting-files-from-vmware/>Ubuntu crash when pasting files from VMware</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2019>2019</h2><ul class=archive-list><li><time datetime=2019-10-16 data-fmt=md>Oct 16</time>
+<a href=/blog/2019/10/16/no-internet-access-from-edge-and-other-microsoft-apps/>No internet access from Edge and other Microsoft apps</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2018>2018</h2><ul class=archive-list><li><time datetime=2018-03-22 data-fmt=md>Mar 22</time>
+<a href=/blog/2018/03/22/desktopappconverter-error-e_manifest_use_default_value_failed/>DesktopAppConverter : error 'E_MANIFEST_USE_DEFAULT_VALUE_FAILED</a></li><li><time datetime=2018-01-19 data-fmt=md>Jan 19</time>
+<a href=/blog/2018/01/19/signtool-sign-returns-error-0x800700c1/>signtool sign returns error 0x800700C1</a></li><li><time datetime=2018-01-18 data-fmt=md>Jan 18</time>
+<a href=/blog/2018/01/18/case-crashing-task-scheduler/>Case of the Crashing Task Scheduler</a></li><li><time datetime=2018-01-16 data-fmt=md>Jan 16</time>
+<a href=/blog/2018/01/16/use-comma-publisher-field-using-desktop-app-converter/>How to use a comma in the Publisher field when using the Desktop App Converter</a></li><li><time datetime=2018-01-16 data-fmt=md>Jan 16</time>
+<a href=/blog/2018/01/16/remove-windows-old-folder/>How to remove Windows.old folder</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2017>2017</h2><ul class=archive-list><li><time datetime=2017-12-20 data-fmt=md>Dec 20</time>
+<a href=/blog/2017/12/20/sign-appx-packages-powershell/>Sign APPX packages with PowerShell</a></li><li><time datetime=2017-12-18 data-fmt=md>Dec 18</time>
+<a href=/blog/2017/12/18/rad-studio-tokyo-10-2-2-data-collection/>RAD Studio Tokyo 10.2(.2) Data Collection</a></li><li><time datetime=2017-12-13 data-fmt=md>Dec 13</time>
+<a href=/blog/2017/12/13/change-netscaler-password-hash-sha1-sha512/>Change NetScaler Password Hash from SHA1 to SHA512</a></li><li><time datetime=2017-04-04 data-fmt=md>Apr 4</time>
+<a href=/blog/2017/04/04/get-windows-10-version-number-powershell/>Get Windows 10 Version Number with PowerShell</a></li><li><time datetime=2017-03-23 data-fmt=md>Mar 23</time>
+<a href=/blog/2017/03/23/where-does-the-citrix-linux-vda-store-settings/>Where does the Citrix Linux VDA store settings?</a></li><li><time datetime=2017-03-14 data-fmt=md>Mar 14</time>
+<a href=/blog/2017/03/14/forbes-com-cookies-ads/>On forbes.com, Cookies and Ads</a></li><li><time datetime=2017-03-14 data-fmt=md>Mar 14</time>
+<a href=/blog/2017/03/14/modifying-net-application/>Modifying a .NET Application</a></li><li><time datetime=2017-03-13 data-fmt=md>Mar 13</time>
+<a href=/blog/2017/03/13/convert-executable-powershell/>Convert Executable to PowerShell</a></li><li><time datetime=2017-03-13 data-fmt=md>Mar 13</time>
+<a href=/blog/2017/03/13/split-string-dollar-sign-powershell/>Split a string by dollar sign ($) in PowerShell</a></li><li><time datetime=2017-02-20 data-fmt=md>Feb 20</time>
+<a href=/blog/2017/02/20/google-earth-fix-xenapp-rdsh-horizon/>Google Earth fix for XenApp, RDSH & Horizon</a></li><li><time datetime=2017-02-10 data-fmt=md>Feb 10</time>
+<a href=/blog/2017/02/10/show-client-ip-address-when-using-netscaler-as-a-reverse-proxy/>Show Client IP Address when using NetScaler as a Reverse Proxy</a></li><li><time datetime=2017-02-07 data-fmt=md>Feb 7</time>
+<a href=/blog/2017/02/07/blog-improvements/>Blog improvements</a></li><li><time datetime=2017-02-07 data-fmt=md>Feb 7</time>
+<a href=/blog/2017/02/07/3745/>Citrix Receiver Unknown client error 1110</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2016>2016</h2><ul class=archive-list><li><time datetime=2016-05-17 data-fmt=md>May 17</time>
+<a href=/blog/2016/05/17/enable-developer-mode-on-vw-discover-pro-with-vcds/>Enable Developer mode on VW Discover Pro with VCDS</a></li><li><time datetime=2016-05-14 data-fmt=md>May 14</time>
+<a href=/blog/2016/05/14/shodan-search-engine-for-iot-or-hackers-delight/>Shodan, search engine for IoT or hackers delight?</a></li><li><time datetime=2016-05-09 data-fmt=md>May 9</time>
+<a href=/blog/2016/05/09/invalid-file-handle-when-trying-to-delete-a-file/>Invalid file handle when trying to delete a file</a></li><li><time datetime=2016-03-30 data-fmt=md>Mar 30</time>
+<a href=/blog/2016/03/30/citrix-pvs-ram-cache-size-performance-counters/>Citrix PVS RAM cache size Performance Counters</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2015>2015</h2><ul class=archive-list><li><time datetime=2015-10-14 data-fmt=md>Oct 14</time>
+<a href=/blog/2015/10/14/upload-ovfova-to-vcloud-director-with-powershell/>Upload ovf/ova to vCloud Director with PowerShell</a></li><li><time datetime=2015-10-05 data-fmt=md>Oct 5</time>
+<a href=/blog/2015/10/05/deploy-vcsa-6-to-vcloud-director-or-vcloud-air/>Deploy VCSA 6 to vCloud Director or vCloud Air</a></li><li><time datetime=2015-09-21 data-fmt=md>Sep 21</time>
+<a href=/blog/2015/09/21/update-amd-display-driver-under-bootcamp/>Update AMD Display Driver under BootCamp</a></li><li><time datetime=2015-01-28 data-fmt=md>Jan 28</time>
+<a href=/blog/2015/01/28/synchronizing-citrix-sharefile-with-powershell/>Synchronizing Citrix ShareFile with PowerShell</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2014>2014</h2><ul class=archive-list><li><time datetime=2014-08-28 data-fmt=md>Aug 28</time>
+<a href=/blog/2014/08/28/twitter-analytics-adblock-plus/>Twitter Analytics and AdBlock Plus</a></li><li><time datetime=2014-07-29 data-fmt=md>Jul 29</time>
+<a href=/blog/2014/07/29/handling-ini-files-powershell/>Handling ini files in PowerShell</a></li><li><time datetime=2014-07-22 data-fmt=md>Jul 22</time>
+<a href=/blog/2014/07/22/sorting-hashtable-byte-value-powershell/>Sorting a hashtable by byte value in PowerShell</a></li><li><time datetime=2014-07-18 data-fmt=md>Jul 18</time>
+<a href=/blog/2014/07/18/get-actual-cpu-clock-speed-powershell/>Get Actual CPU Clock Speed with PowerShell</a></li><li><time datetime=2014-07-18 data-fmt=md>Jul 18</time>
+<a href=/blog/2014/07/18/set-alert-parameters-visual-studio-authoring-extensions/>Set alert parameters with Visual Studio Authoring Extensions</a></li><li><time datetime=2014-07-16 data-fmt=md>Jul 16</time>
+<a href=/blog/2014/07/16/cannot-connect-to-itunes-store-after-enabling-https-scanning-in-sophos-utm/>Cannot connect to iTunes Store after enabling https scanning in Sophos UTM</a></li><li><time datetime=2014-07-13 data-fmt=md>Jul 13</time>
+<a href=/blog/2014/07/13/non-existent-schema-type-snmpsystem-snmpvarbindsschema-error-scom/>non-existent schema type 'Snmp!System.SnmpVarBindsSchema' error in SCOM</a></li><li><time datetime=2014-07-13 data-fmt=md>Jul 13</time>
+<a href=/blog/2014/07/13/where-to-find-system-networkmanagement-monitoring-mp/>Where to find System.NetworkManagement.Monitoring.mp?</a></li><li><time datetime=2014-07-08 data-fmt=md>Jul 8</time>
+<a href=/blog/2014/07/08/error-msb4018-when-building-a-visual-studio-authoring-extensions/>Error MSB4018 when building a Management Pack with Visual Studio Authoring Extensions</a></li><li><time datetime=2014-05-09 data-fmt=md>May 9</time>
+<a href=/blog/2014/05/09/3448/>Read the MSI Uninstall GUID from an MSI File with PowerShell</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2013>2013</h2><ul class=archive-list><li><time datetime=2013-11-25 data-fmt=md>Nov 25</time>
+<a href=/blog/2013/11/25/dumping-passwords-in-a-vmware-vmem-file/>Dumping passwords in a VMware .vmem file</a></li><li><time datetime=2013-10-29 data-fmt=md>Oct 29</time>
+<a href=/blog/2013/10/29/my-presentation-at-e2evc-in-rome/>My presentation at E2EVC in Rome</a></li><li><time datetime=2013-10-23 data-fmt=md>Oct 23</time>
+<a href=/blog/2013/10/23/error-1603-when-installing-microsoft-app-v-5-0-sp1-client/>Error 1603 when installing Microsoft App-V 5.0 SP1 client</a></li><li><time datetime=2013-09-27 data-fmt=md>Sep 27</time>
+<a href=/blog/2013/09/27/convert-citrix-license-server-vpx-to-ovf/>Convert Citrix License Server VPX to OVF</a></li><li><time datetime=2013-09-24 data-fmt=md>Sep 24</time>
+<a href=/blog/2013/09/24/run-a-process-when-citrix-receiver-exits/>Run a Process when Citrix Receiver Exits</a></li><li><time datetime=2013-09-13 data-fmt=md>Sep 13</time>
+<a href=/blog/2013/09/13/the-publisher-could-not-be-verified-when-launching-an-application-with-res-workspace-manger/>The publisher could not be verified when launching an application with RES Workspace Manager</a></li><li><time datetime=2013-08-15 data-fmt=md>Aug 15</time>
+<a href=/blog/2013/08/15/rd-gateway-connection-fails-on-windows-7/>RD Gateway connection fails on Windows 7</a></li><li><time datetime=2013-08-10 data-fmt=md>Aug 10</time>
+<a href=/blog/2013/08/10/magic-filter-preview/>Magic Filter Preview</a></li><li><time datetime=2013-08-08 data-fmt=md>Aug 8</time>
+<a href=/blog/2013/08/08/pnagent-icon-data-algorithm/>PNAgent Icon Data Algorithm</a></li><li><time datetime=2013-08-05 data-fmt=md>Aug 5</time>
+<a href=/blog/2013/08/05/clickonce-applications-in-enterprise-environments/>ClickOnce Applications in Enterprise Environments</a></li><li><time datetime=2013-06-13 data-fmt=md>Jun 13</time>
+<a href=/blog/2013/06/13/debugging-tools-for-windows-direct-download/>Debugging Tools for Windows Direct Download</a></li><li><time datetime=2013-06-05 data-fmt=md>Jun 5</time>
+<a href=/blog/2013/06/05/hdmi-output-in-black-white/>HDMI Output in Black & White</a></li><li><time datetime=2013-05-30 data-fmt=md>May 30</time>
+<a href=/blog/2013/05/30/redirect-registry-by-modifying-net-executable/>Redirect Registry by Modifying .NET Executable</a></li><li><time datetime=2013-05-23 data-fmt=md>May 23</time>
+<a href=/blog/2013/05/23/application-compatibility-fixing-to-the-extreme/>Application Compatibility Fixing to the Extreme?</a></li><li><time datetime=2013-05-22 data-fmt=md>May 22</time>
+<a href=/blog/2013/05/22/programmatically-set-excel-linkedcell-property-with-vba/>Programmatically set Excel LinkedCell property with VBA</a></li><li><time datetime=2013-04-14 data-fmt=md>Apr 14</time>
+<a href=/blog/2013/04/14/timestamp-column-in-ios-sqlite-database/>Timestamp column in iOS SQLite database</a></li><li><time datetime=2013-04-14 data-fmt=md>Apr 14</time>
+<a href=/blog/2013/04/14/activate-xds-with-vcds-on-passat-b7/>Activate XDS with VCDS on Passat B7</a></li><li><time datetime=2013-04-08 data-fmt=md>Apr 8</time>
+<a href=/blog/2013/04/08/decrypting-dell-vworkspace-pit-files/>Decrypting Dell vWorkspace .pit files</a></li><li><time datetime=2013-04-05 data-fmt=md>Apr 5</time>
+<a href=/blog/2013/04/05/rc4-encryption-in-powershell/>RC4 Encryption in PowerShell</a></li><li><time datetime=2013-04-05 data-fmt=md>Apr 5</time>
+<a href=/blog/2013/04/05/convert-bin-to-hex-and-hex-to-bin-in-powershell/>Convert Bin to Hex and Hex to Bin in PowerShell</a></li><li><time datetime=2013-03-19 data-fmt=md>Mar 19</time>
+<a href=/blog/2013/03/19/scriptable-citrix-password-encoder/>Scriptable Citrix Password Encoder</a></li><li><time datetime=2013-03-19 data-fmt=md>Mar 19</time>
+<a href=/blog/2013/03/19/java-has-discovered-application-components-that-could-indicate-a-security-concern/>Java has discovered application components that could indicate a security concern</a></li><li><time datetime=2013-03-13 data-fmt=md>Mar 13</time>
+<a href=/blog/2013/03/13/mscomm32-ocx-returns-error-80040112/>MSCOMM32.OCX returns error 80040112</a></li><li><time datetime=2013-03-13 data-fmt=md>Mar 13</time>
+<a href=/blog/2013/03/13/returning-a-string-from-unmanaged-dll-to-net/>Returning a string from unmanaged dll to .net</a></li><li><time datetime=2013-03-11 data-fmt=md>Mar 11</time>
+<a href=/blog/2013/03/11/the-case-of-the-com-port-redirection/>The case of the COM Port Redirection</a></li><li><time datetime=2013-02-19 data-fmt=md>Feb 19</time>
+<a href=/blog/2013/02/19/cannot-create-shell-notification-icon-error-during-unattended-install/>Cannot create shell notification icon error during unattended install</a></li><li><time datetime=2013-01-25 data-fmt=md>Jan 25</time>
+<a href=/blog/2013/01/25/the-case-of-the-missing-audio/>The case of the missing audio</a></li><li><time datetime=2013-01-15 data-fmt=md>Jan 15</time>
+<a href=/blog/2013/01/15/return-username-instead-of-computername-in-a-thinapp/>Return username instead of computername in a ThinApp</a></li><li><time datetime=2013-01-14 data-fmt=md>Jan 14</time>
+<a href=/blog/2013/01/14/cannot-redeclare-class-snoopy/>Cannot redeclare class Snoopy</a></li><li><time datetime=2013-01-03 data-fmt=md>Jan 3</time>
+<a href=/blog/2013/01/03/wordpress-and-the-cookie-monster/>Wordpress and the Cookie Monster</a></li><li><time datetime=2013-01-02 data-fmt=md>Jan 2</time>
+<a href=/blog/2013/01/02/change-tab-order-in-an-executable/>Change Tab Order in an Executable</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2012>2012</h2><ul class=archive-list><li><time datetime=2012-12-28 data-fmt=md>Dec 28</time>
+<a href=/blog/2012/12/28/trick-to-export-private-key-from-certificate-request/>Trick to Export Private Key from Certificate Request</a></li><li><time datetime=2012-12-18 data-fmt=md>Dec 18</time>
+<a href=/blog/2012/12/18/change-ops-picture-with-vcds/>Change OPS picture with VCDS</a></li><li><time datetime=2012-12-11 data-fmt=md>Dec 11</time>
+<a href=/blog/2012/12/11/office-2010-very-slow-when-thinapped/>Office 2010 very slow when ThinApped</a></li><li><time datetime=2012-12-07 data-fmt=md>Dec 7</time>
+<a href=/blog/2012/12/07/license-check-fails-on-citrix-xenapp/>License Check fails on Citrix XenApp</a></li><li><time datetime=2012-12-07 data-fmt=md>Dec 7</time>
+<a href=/blog/2012/12/07/parse-res-building-blocks-with-powershell/>Parse RES Building Blocks with PowerShell</a></li><li><time datetime=2012-12-06 data-fmt=md>Dec 6</time>
+<a href=/blog/2012/12/06/application-hangs-when-scanning-in-citrix-xenapp/>Application Hangs when Scanning in Citrix XenApp</a></li><li><time datetime=2012-12-06 data-fmt=md>Dec 6</time>
+<a href=/blog/2012/12/06/return-username-instead-of-computername-to-applications/>Return username instead of computername to Applications</a></li><li><time datetime=2012-12-05 data-fmt=md>Dec 5</time>
+<a href=/blog/2012/12/05/replacing-wfp-protected-files/>Replacing WFP Protected files</a></li><li><time datetime=2012-12-04 data-fmt=md>Dec 4</time>
+<a href=/blog/2012/12/04/file-not-found-error-when-scanning-using-twain-redirection-in-citrix-xenapp/>File not found error when scanning using Twain Redirection in Citrix XenApp</a></li><li><time datetime=2012-11-30 data-fmt=md>Nov 30</time>
+<a href=/blog/2012/11/30/screen-flickering-with-powerpoint-2010-on-citrix-xenapp/>Screen flickering with PowerPoint 2010 on Citrix XenApp</a></li><li><time datetime=2012-11-30 data-fmt=md>Nov 30</time>
+<a href=/blog/2012/11/30/application-causes-screen-flickering-in-citrix-xenapp-session/>Application causes Screen Flickering in Citrix XenApp Session</a></li><li><time datetime=2012-11-28 data-fmt=md>Nov 28</time>
+<a href=/blog/2012/11/28/get-process-id-of-a-running-service/>Get Process Id of a running Service</a></li><li><time datetime=2012-10-25 data-fmt=md>Oct 25</time>
+<a href=/blog/2012/10/25/query-administrator-account-name-with-powershell/>Query Administrator Account Name with PowerShell</a></li><li><time datetime=2012-10-13 data-fmt=md>Oct 13</time>
+<a href=/blog/2012/10/13/convert-an-ip-address-to-an-integer-in-c-in-host-byte-ordering/>Convert an IP Address to an Integer in C# in host byte ordering</a></li><li><time datetime=2012-10-12 data-fmt=md>Oct 12</time>
+<a href=/blog/2012/10/12/warning-cs0618-system-net-ipaddress-address-is-obsolete/>warning CS0618: 'System.Net.IPAddress.Address' is obsolete</a></li><li><time datetime=2012-08-23 data-fmt=md>Aug 23</time>
+<a href=/blog/2012/08/23/citrix-license-server-crash/>Citrix License Server Crash</a></li><li><time datetime=2012-08-22 data-fmt=md>Aug 22</time>
+<a href=/blog/2012/08/22/calling-a-function-inside-another-assembly-in-net/>Calling a function inside another assembly in .NET</a></li><li><time datetime=2012-08-21 data-fmt=md>Aug 21</time>
+<a href=/blog/2012/08/21/error-1787-when-logging-in-with-domain-account/>Error 1787 when logging in with domain account</a></li><li><time datetime=2012-08-04 data-fmt=md>Aug 4</time>
+<a href=/blog/2012/08/04/modify-vb-executable-to-force-taskbar-button/>Modify VB Executable to force Taskbar Button</a></li><li><time datetime=2012-07-19 data-fmt=md>Jul 19</time>
+<a href=/blog/2012/07/19/my-network-places-internals/>My Network Places Internals</a></li><li><time datetime=2012-07-18 data-fmt=md>Jul 18</time>
+<a href=/blog/2012/07/18/could-not-load-file-or-assembly-system-configuration/>Could not load file or assembly 'System.Configuration'</a></li><li><time datetime=2012-06-08 data-fmt=md>Jun 8</time>
+<a href=/blog/2012/06/08/excel-2010-multi-threaded-calculation/>Excel 2010 multi-threaded calculation</a></li><li><time datetime=2012-05-29 data-fmt=md>May 29</time>
+<a href=/blog/2012/05/29/decoding-citrix-ima-datastore-password/>Decoding Citrix IMA Datastore Password</a></li><li><time datetime=2012-05-21 data-fmt=md>May 21</time>
+<a href=/blog/2012/05/21/defaultpassword-dumper/>DefaultPassword Dumper</a></li><li><time datetime=2012-05-17 data-fmt=md>May 17</time>
+<a href=/blog/2012/05/17/citrix-launcher-progress-update-1/>Citrix Launcher Progress Update 1</a></li><li><time datetime=2012-05-13 data-fmt=md>May 13</time>
+<a href=/blog/2012/05/13/encoding-and-decoding-citrix-passwords/>Encoding and Decoding Citrix Passwords</a></li><li><time datetime=2012-05-10 data-fmt=md>May 10</time>
+<a href=/blog/2012/05/10/setup-was-unable-to-verify-drive-c-while-installing-windows-nt4-terminal-server-on-vmware/>Setup was unable to verify drive C while installing Windows NT4 Terminal server on VMWare</a></li><li><time datetime=2012-05-10 data-fmt=md>May 10</time>
+<a href=/blog/2012/05/10/bit-shifting-in-powershell/>Bit Shifting in PowerShell</a></li><li><time datetime=2012-03-29 data-fmt=md>Mar 29</time>
+<a href=/blog/2012/03/29/cookie-error-on-citrix-xenapp/>Cookie Error on Citrix XenApp</a></li><li><time datetime=2012-03-27 data-fmt=md>Mar 27</time>
+<a href=/blog/2012/03/27/reset-root-password-on-linux-virtual-appliance/>Reset Root Password on Linux Virtual Appliance</a></li><li><time datetime=2012-03-15 data-fmt=md>Mar 15</time>
+<a href=/blog/2012/03/15/create-active-directory-group-with-powershell/>Create Active Directory Group with PowerShell</a></li><li><time datetime=2012-03-15 data-fmt=md>Mar 15</time>
+<a href=/blog/2012/03/15/authorizationmanager-check-failed-when-starting-powershell/>AuthorizationManager check failed when starting PowerShell</a></li><li><time datetime=2012-03-14 data-fmt=md>Mar 14</time>
+<a href=/blog/2012/03/14/imprivata-fails-to-logon-with-special-characters-in-the-password/>Imprivata fails to logon with special characters in the password</a></li><li><time datetime=2012-03-13 data-fmt=md>Mar 13</time>
+<a href=/blog/2012/03/13/track-who-created-the-treatas-registry-key/>Track who created the TreatAs registry key</a></li><li><time datetime=2012-03-12 data-fmt=md>Mar 12</time>
+<a href=/blog/2012/03/12/lync-client-password-recovery/>Lync Client Password Recovery</a></li><li><time datetime=2012-03-09 data-fmt=md>Mar 9</time>
+<a href=/blog/2012/03/09/edit-document-requires-a-windows-sharepoint-services-compatible-application/>Edit Document requires a Windows SharePoint Services-compatible application</a></li><li><time datetime=2012-03-07 data-fmt=md>Mar 7</time>
+<a href=/blog/2012/03/07/running-multiple-instances-of-lync-howto/>Running multiple instances of Lync (howto)</a></li><li><time datetime=2012-03-06 data-fmt=md>Mar 6</time>
+<a href=/blog/2012/03/06/run-multiple-instances-of-lync-2010poc/>Run multiple instances of Lync 2010–POC</a></li><li><time datetime=2012-03-06 data-fmt=md>Mar 6</time>
+<a href=/blog/2012/03/06/powershell-script-to-read-agent-guid-from-automation-manager/>PowerShell script to read Agent Guid from Automation Manager</a></li><li><time datetime=2012-03-06 data-fmt=md>Mar 6</time>
+<a href=/blog/2012/03/06/powershell-regex-fun/>PowerShell RegEx Fun</a></li><li><time datetime=2012-03-01 data-fmt=md>Mar 1</time>
+<a href=/blog/2012/03/01/windows-8-comes-with-free-hardwaresoftware-inventory-tool/>Windows 8 comes with free hardware/software inventory tool</a></li><li><time datetime=2012-02-29 data-fmt=md>Feb 29</time>
+<a href=/blog/2012/02/29/undocumented-commandline-switches-for-windows-8-cp/>Undocumented commandline switches for Windows 8 CP</a></li><li><time datetime=2012-02-29 data-fmt=md>Feb 29</time>
+<a href=/blog/2012/02/29/convert-mcli-output-into-powershell-objects/>Convert MCli output into PowerShell Objects</a></li><li><time datetime=2012-02-24 data-fmt=md>Feb 24</time>
+<a href=/blog/2012/02/24/switching-to-the-services-session/>Switching to the Services Session</a></li><li><time datetime=2012-02-22 data-fmt=md>Feb 22</time>
+<a href=/blog/2012/02/22/where-to-download-traceview/>Where to download TraceView</a></li><li><time datetime=2012-02-21 data-fmt=md>Feb 21</time>
+<a href=/blog/2012/02/21/shutdown-option-on-the-logonscreen-with-imprivata-onesign/>Shutdown option on the logonscreen with Imprivata Onesign</a></li><li><time datetime=2012-02-20 data-fmt=md>Feb 20</time>
+<a href=/blog/2012/02/20/session-freeze-when-starting-excel/>Session freeze when starting Excel</a></li><li><time datetime=2012-02-17 data-fmt=md>Feb 17</time>
+<a href=/blog/2012/02/17/change-cddvd-drive-letter-with-res-automation-manager/>Change CD/DVD drive letter with RES Automation Manager</a></li><li><time datetime=2012-02-14 data-fmt=md>Feb 14</time>
+<a href=/blog/2012/02/14/script-to-get-computer-ou/>Script to Get Computer OU</a></li><li><time datetime=2012-02-13 data-fmt=md>Feb 13</time>
+<a href=/blog/2012/02/13/scripting-citrix-online-plugin-settings/>Scripting Citrix Online Plugin Settings</a></li><li><time datetime=2012-02-12 data-fmt=md>Feb 12</time>
+<a href=/blog/2012/02/12/the-xlsploit-explained/>The XLSploit explained</a></li><li><time datetime=2012-02-10 data-fmt=md>Feb 10</time>
+<a href=/blog/2012/02/10/hibernation-fails-in-windows-7/>Hibernation fails in Windows 7</a></li><li><time datetime=2012-02-10 data-fmt=md>Feb 10</time>
+<a href=/blog/2012/02/10/speed-up-windows-7-resume-by-20/>Speed up Windows 7 Resume by 20%</a></li><li><time datetime=2012-01-31 data-fmt=md>Jan 31</time>
+<a href=/blog/2012/01/31/harmony-client/>Harmony Client crashes upon exit</a></li><li><time datetime=2012-01-27 data-fmt=md>Jan 27</time>
+<a href=/blog/2012/01/27/bypassing-res-application-security/>Bypassing RES/Appsense Application Security</a></li><li><time datetime=2012-01-21 data-fmt=md>Jan 21</time>
+<a href=/blog/2012/01/21/from-jailbreak-to-jailbreak-part-2/>From Jailbreak to Jailbreak part 2</a></li><li><time datetime=2012-01-18 data-fmt=md>Jan 18</time>
+<a href=/blog/2012/01/18/get-the-location-of-an-advertised-shortcut/>Get the location of an advertised shortcut</a></li><li><time datetime=2012-01-16 data-fmt=md>Jan 16</time>
+<a href=/blog/2012/01/16/take-ownership-of-a-registry-key-in-powershell/>Take ownership of a registry key in PowerShell</a></li><li><time datetime=2012-01-04 data-fmt=md>Jan 4</time>
+<a href=/blog/2012/01/04/the-case-of-the-slow-xerox-universal-print-driver/>The case of the Slow Xerox Universal Print Driver</a></li><li><time datetime=2012-01-04 data-fmt=md>Jan 4</time>
+<a href=/blog/2012/01/04/from-jailbreak-to-jailbreak/>From Jailbreak to Jailbreak</a></li><li><time datetime=2012-01-03 data-fmt=md>Jan 3</time>
+<a href=/blog/2012/01/03/error-372-in-thinapped-visual-basic-application/>Error 372 in Thinapped Visual Basic Application</a></li><li><time datetime=2012-01-02 data-fmt=md>Jan 2</time>
+<a href=/blog/2012/01/02/system-process-pid-4-is-listening-on-port-80/>System Process PID 4 is listening on port 80</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2011>2011</h2><ul class=archive-list><li><time datetime=2011-12-14 data-fmt=md>Dec 14</time>
+<a href=/blog/2011/12/14/ntvdm-encountered-a-hard-error/>NTVDM encountered a hard error</a></li><li><time datetime=2011-12-13 data-fmt=md>Dec 13</time>
+<a href=/blog/2011/12/13/automatic-coming-home-on-passat-b7/>Automatic Coming Home on Passat B7</a></li><li><time datetime=2011-12-13 data-fmt=md>Dec 13</time>
+<a href=/blog/2011/12/13/citrix-online-plug-in-received-a-corrupt-ica-file/>Citrix online plug-in received a corrupt ICA File</a></li><li><time datetime=2011-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2011/12/09/mcafee-anti-virus-unlock-user-interface-password/>McAfee Anti Virus Unlock User Interface Password</a></li><li><time datetime=2011-12-04 data-fmt=md>Dec 4</time>
+<a href=/blog/2011/12/04/remember-driver-seat-heater-level/>Remember Driver Seat Heater Level</a></li><li><time datetime=2011-12-02 data-fmt=md>Dec 2</time>
+<a href=/blog/2011/12/02/read-maximum-password-age-with-powershell/>Read Maximum Password Age with PowerShell</a></li><li><time datetime=2011-12-02 data-fmt=md>Dec 2</time>
+<a href=/blog/2011/12/02/embedding-images-in-html/>Embedding images in HTML</a></li><li><time datetime=2011-12-01 data-fmt=md>Dec 1</time>
+<a href=/blog/2011/12/01/convert-iadslargeinteger-to-int64-in-powershell/>Convert IADsLargeInteger to Int64 in PowerShell</a></li><li><time datetime=2011-12-01 data-fmt=md>Dec 1</time>
+<a href=/blog/2011/12/01/dutch-citrix-user-group-launched/>Dutch Citrix User Group Launched</a></li><li><time datetime=2011-11-15 data-fmt=md>Nov 15</time>
+<a href=/blog/2011/11/15/determining-if-battery-backed-write-cache-is-installed/>Determining if Battery Backed Write Cache is installed</a></li><li><time datetime=2011-11-13 data-fmt=md>Nov 13</time>
+<a href=/blog/2011/11/13/installing-dell-wireless-5530-hspa-mini-pc-2/>Installing Dell Wireless 5530 HSPA Mini PC #2</a></li><li><time datetime=2011-11-08 data-fmt=md>Nov 8</time>
+<a href=/blog/2011/11/08/set-homefolder-permissions-with-powershell/>Set homefolder permissions with PowerShell</a></li><li><time datetime=2011-11-04 data-fmt=md>Nov 4</time>
+<a href=/blog/2011/11/04/construct-aqs-date-range-with-powershell/>Construct AQS date range with PowerShell</a></li><li><time datetime=2011-10-21 data-fmt=md>Oct 21</time>
+<a href=/blog/2011/10/21/remote-registry-from-32-to-64-bit/>Remote Registry from 32 to 64 bit</a></li><li><time datetime=2011-10-18 data-fmt=md>Oct 18</time>
+<a href=/blog/2011/10/18/prevent-additional-ip-addresses-from-being-registered-in-dns/>Prevent additional IP addresses from being registered in DNS</a></li><li><time datetime=2011-10-12 data-fmt=md>Oct 12</time>
+<a href=/blog/2011/10/12/analysing-binaries-with-binwalk/>Analysing binaries with Binwalk</a></li><li><time datetime=2011-10-04 data-fmt=md>Oct 4</time>
+<a href=/blog/2011/10/04/exchange-move-mailbox-experiences-part-5/>Exchange Move Mailbox Experiences Part 5</a></li><li><time datetime=2011-10-04 data-fmt=md>Oct 4</time>
+<a href=/blog/2011/10/04/exchange-move-mailbox-experiences-part-4/>Exchange Move Mailbox Experiences Part 4</a></li><li><time datetime=2011-09-28 data-fmt=md>Sep 28</time>
+<a href=/blog/2011/09/28/exchange-move-mailbox-experiences-part-3/>Exchange Move Mailbox Experiences Part 3</a></li><li><time datetime=2011-09-28 data-fmt=md>Sep 28</time>
+<a href=/blog/2011/09/28/inline-arrays-in-powershell/>Inline arrays in PowerShell</a></li><li><time datetime=2011-09-27 data-fmt=md>Sep 27</time>
+<a href=/blog/2011/09/27/rns-510-startup-logomy-thoughts/>RNS 510 Startup Logo–My thoughts</a></li><li><time datetime=2011-09-27 data-fmt=md>Sep 27</time>
+<a href=/blog/2011/09/27/exchange-move-mailbox-experiences-part-2/>Exchange Move Mailbox Experiences Part 2</a></li><li><time datetime=2011-09-21 data-fmt=md>Sep 21</time>
+<a href=/blog/2011/09/21/exchange-move-mailbox-experiences-part-1/>Exchange Move Mailbox Experiences Part 1</a></li><li><time datetime=2011-09-20 data-fmt=md>Sep 20</time>
+<a href=/blog/2011/09/20/rns-510-editor/>RNS 510 Editor</a></li><li><time datetime=2011-09-06 data-fmt=md>Sep 6</time>
+<a href=/blog/2011/09/06/oracle-client-install-fails-with-nullpointerexception/>Oracle Client install fails with NullPointerException</a></li><li><time datetime=2011-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2011/09/02/rns510-firmware-has-new-startup-logos/>RNS510 firmware has new startup logo’s</a></li><li><time datetime=2011-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2011/09/02/settings-ntfs-permissions-by-sid-in-powershell/>Settings NTFS Permissions by SID in PowerShell</a></li><li><time datetime=2011-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2011/09/02/check-if-a-useraccount-exists-with-powershell/>Check if a useraccount exists with PowerShell</a></li><li><time datetime=2011-08-31 data-fmt=md>Aug 31</time>
+<a href=/blog/2011/08/31/changing-the-rns-510-startup-logo/>Changing the RNS 510 startup logo</a></li><li><time datetime=2011-08-26 data-fmt=md>Aug 26</time>
+<a href=/blog/2011/08/26/rns-315-enable-the-hidden-bluetooth-carkit/>RNS 315: Enable the hidden bluetooth carkit</a></li><li><time datetime=2011-08-26 data-fmt=md>Aug 26</time>
+<a href=/blog/2011/08/26/rns-315-enable-developer-mode/>RNS 315 Enable Developer Mode</a></li><li><time datetime=2011-08-17 data-fmt=md>Aug 17</time>
+<a href=/blog/2011/08/17/cannot-achieve-exchange-server-authentication/>Cannot achieve Exchange Server authentication</a></li><li><time datetime=2011-08-16 data-fmt=md>Aug 16</time>
+<a href=/blog/2011/08/16/getuserobjectinformation-fails-with-access-denied/>GetUserObjectInformation fails with Access Denied</a></li><li><time datetime=2011-08-16 data-fmt=md>Aug 16</time>
+<a href=/blog/2011/08/16/get-smallest-exchange-database-in-powershell/>Get smallest Exchange Database in PowerShell</a></li><li><time datetime=2011-08-15 data-fmt=md>Aug 15</time>
+<a href=/blog/2011/08/15/set-exchange-product-key-with-powershell/>Set Exchange Product Key with PowerShell</a></li><li><time datetime=2011-08-11 data-fmt=md>Aug 11</time>
+<a href=/blog/2011/08/11/gettokeninformation-with-tokenlinkedtoken-returns-error-1312/>GetTokenInformation with TokenLinkedToken returns error 1312</a></li><li><time datetime=2011-08-11 data-fmt=md>Aug 11</time>
+<a href=/blog/2011/08/11/programmatically-check-if-user-account-control-is-enabled/>Programmatically Check if User Account Control is Enabled</a></li><li><time datetime=2011-08-10 data-fmt=md>Aug 10</time>
+<a href=/blog/2011/08/10/powershell-script-to-set-exchange-static-rpc-ports/>PowerShell script to set Exchange Static RPC Ports</a></li><li><time datetime=2011-07-05 data-fmt=md>Jul 5</time>
+<a href=/blog/2011/07/05/exchange-2010-install-adtopologyservice-0x800706d/>Exchange 2010 Install-ADTopologyService 0x800706D</a></li><li><time datetime=2011-07-01 data-fmt=md>Jul 1</time>
+<a href=/blog/2011/07/01/virtualized-mac-os-x-freezes/>Virtualized Mac OS X Freezes</a></li><li><time datetime=2011-06-28 data-fmt=md>Jun 28</time>
+<a href=/blog/2011/06/28/w3-total-cache-influences-wp-postviews-counter/>W3 Total Cache influences WP-PostViews counter</a></li><li><time datetime=2011-06-27 data-fmt=md>Jun 27</time>
+<a href=/blog/2011/06/27/ad-internals-display-rid-allocation-pools/>AD Internals: Display RID Allocation Pools</a></li><li><time datetime=2011-06-27 data-fmt=md>Jun 27</time>
+<a href=/blog/2011/06/27/the-case-of-the-duplicate-sids/>The case of the duplicate SID’s</a></li><li><time datetime=2011-06-24 data-fmt=md>Jun 24</time>
+<a href=/blog/2011/06/24/exchange-2010-well-known-object-entry-install-error/>Exchange 2010 well-known object entry install error</a></li><li><time datetime=2011-06-24 data-fmt=md>Jun 24</time>
+<a href=/blog/2011/06/24/reading-the-otherwellknownobjects-attribute-with-powershell/>Reading the otherWellKnownObjects attribute with PowerShell</a></li><li><time datetime=2011-06-21 data-fmt=md>Jun 21</time>
+<a href=/blog/2011/06/21/delphi-tsavedialog-doesnt-work-on-windows-pe/>Delphi TSaveDialog doesn’t work on Windows PE</a></li><li><time datetime=2011-06-18 data-fmt=md>Jun 18</time>
+<a href=/blog/2011/06/18/switch-sata-operation-mode/>Switch SATA Operation Mode</a></li><li><time datetime=2011-06-14 data-fmt=md>Jun 14</time>
+<a href=/blog/2011/06/14/crack-wep-encryption/>Crack WEP Encryption</a></li><li><time datetime=2011-05-27 data-fmt=md>May 27</time>
+<a href=/blog/2011/05/27/installing-dell-wireless-5530-hspa-mini-pci/>Installing Dell Wireless 5530 HSPA Mini PCI</a></li><li><time datetime=2011-05-27 data-fmt=md>May 27</time>
+<a href=/blog/2011/05/27/determining-stack-size/>Determining stack size</a></li><li><time datetime=2011-05-20 data-fmt=md>May 20</time>
+<a href=/blog/2011/05/20/rns-510-checksum-calculator/>RNS 510 Checksum Calculator</a></li><li><time datetime=2011-05-20 data-fmt=md>May 20</time>
+<a href=/blog/2011/05/20/renaming-and-hiding-object-in-powerpoint/>Renaming and hiding object in PowerPoint</a></li><li><time datetime=2011-05-20 data-fmt=md>May 20</time>
+<a href=/blog/2011/05/20/using-i-clickr-when-you-have-no-wifi-connection/>Using i-Clickr when you have no WiFi Connection</a></li><li><time datetime=2011-05-18 data-fmt=md>May 18</time>
+<a href=/blog/2011/05/18/how-outlook-and-exchange-handle-timezones/>How Outlook and Exchange handle Timezones</a></li><li><time datetime=2011-05-18 data-fmt=md>May 18</time>
+<a href=/blog/2011/05/18/stuff-from-an-ancien-past/>Stuff from an ancient past</a></li><li><time datetime=2011-05-17 data-fmt=md>May 17</time>
+<a href=/blog/2011/05/17/programmatically-determine-if-we-run-server-core/>Programmatically determine if we run server core</a></li><li><time datetime=2011-05-04 data-fmt=md>May 4</time>
+<a href=/blog/2011/05/04/vw-rns-510-navigation-startup-pictures/>VW RNS 510 Navigation Startup Pictures</a></li><li><time datetime=2011-05-03 data-fmt=md>May 3</time>
+<a href=/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/>Deleting scheduled Altiris tasks from SQL</a></li><li><time datetime=2011-05-02 data-fmt=md>May 2</time>
+<a href=/blog/2011/05/02/ssl-certificates-in-termsrv-dll/>SSL Certificates in termsrv.dll</a></li><li><time datetime=2011-05-02 data-fmt=md>May 2</time>
+<a href=/blog/2011/05/02/extremely-slow-virtual-machines-on-hp-smart-array-p410/>Extremely slow Virtual Machines on HP Smart Array P410</a></li><li><time datetime=2011-04-29 data-fmt=md>Apr 29</time>
+<a href=/blog/2011/04/29/apply-ip-configuration-from-a-database/>Apply IP Configuration from a Database</a></li><li><time datetime=2011-04-28 data-fmt=md>Apr 28</time>
+<a href=/blog/2011/04/28/hp-smart-array-controller-previous-lockup-code-0xab/>HP Smart Array controller previous lockup code 0xAB</a></li><li><time datetime=2011-04-13 data-fmt=md>Apr 13</time>
+<a href=/blog/2011/04/13/post-ratings-rant/>Post Ratings Rant</a></li><li><time datetime=2011-04-13 data-fmt=md>Apr 13</time>
+<a href=/blog/2011/04/13/wordpress-redirects-to-wp-admininstall-php/>Wordpress redirects to wp-admin/install.php</a></li><li><time datetime=2011-03-27 data-fmt=md>Mar 27</time>
+<a href=/blog/2011/03/27/windows-2003-server-standard-memory-patch/>Windows 2003 Server Standard memory patch</a></li><li><time datetime=2011-03-27 data-fmt=md>Mar 27</time>
+<a href=/blog/2011/03/27/dup2-patcher-update/>dUP2 Patcher update</a></li><li><time datetime=2011-03-22 data-fmt=md>Mar 22</time>
+<a href=/blog/2011/03/22/tips-for-using-sysprep-with-altiris/>Tips for using SysPrep with Altiris</a></li><li><time datetime=2011-03-18 data-fmt=md>Mar 18</time>
+<a href=/blog/2011/03/18/add-vmxnet3-driver-to-windows-pe-pxe-image/>Add VMXNET3 driver to Windows PE PXE Image</a></li><li><time datetime=2011-03-17 data-fmt=md>Mar 17</time>
+<a href=/blog/2011/03/17/compiling-drivers-for-altiris-linux-pxe-image-part-2/>Compiling Drivers for Altiris Linux PXE Image Part 2</a></li><li><time datetime=2011-03-17 data-fmt=md>Mar 17</time>
+<a href=/blog/2011/03/17/compiling-drivers-for-altiris-linux-pxe-image-part-1/>Compiling Drivers for Altiris Linux PXE Image Part 1</a></li><li><time datetime=2011-03-15 data-fmt=md>Mar 15</time>
+<a href=/blog/2011/03/15/stop-0x0000005d-when-booting-windows-pe/>STOP: 0x0000005D when booting Windows PE</a></li><li><time datetime=2011-03-14 data-fmt=md>Mar 14</time>
+<a href=/blog/2011/03/14/windows-2003-align-os-disk/>Windows 2003 align OS disk</a></li><li><time datetime=2011-03-14 data-fmt=md>Mar 14</time>
+<a href=/blog/2011/03/14/booting-a-virtual-machine-from-usb-drive/>Booting a Virtual Machine from USB Drive</a></li><li><time datetime=2011-03-11 data-fmt=md>Mar 11</time>
+<a href=/blog/2011/03/11/aes-ni-benchmarks/>AES-NI Benchmarks</a></li><li><time datetime=2011-03-10 data-fmt=md>Mar 10</time>
+<a href=/blog/2011/03/10/office-communicator-2007-r2-crashes-after-sign-on/>Office Communicator 2007 R2 crashes after sign on</a></li><li><time datetime=2011-03-10 data-fmt=md>Mar 10</time>
+<a href=/blog/2011/03/10/office-2010-cannot-remove-registry-key/>Office 2010 cannot remove registry key</a></li><li><time datetime=2011-03-03 data-fmt=md>Mar 3</time>
+<a href=/blog/2011/03/03/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-3-implementation-details/>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 3 (implementation details)</a></li><li><time datetime=2011-03-02 data-fmt=md>Mar 2</time>
+<a href=/blog/2011/03/02/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-2-problems-and-workarounds/>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 2 (problems and workarounds)</a></li><li><time datetime=2011-02-28 data-fmt=md>Feb 28</time>
+<a href=/blog/2011/02/28/autologon-user-on-windows-xp2003-using-autoreconnect-pipe-part-1-theory/>Autologon user on Windows XP/2003 using AutoReconnect pipe - part 1 (theory)</a></li><li><time datetime=2011-02-14 data-fmt=md>Feb 14</time>
+<a href=/blog/2011/02/14/the-case-of-the-intermittent-hangs/>The case of the intermittent hangs</a></li><li><time datetime=2011-02-08 data-fmt=md>Feb 8</time>
+<a href=/blog/2011/02/08/windows-xp-cmd-prompt-patch/>Windows XP Cmd Prompt Patch</a></li><li><time datetime=2011-02-08 data-fmt=md>Feb 8</time>
+<a href=/blog/2011/02/08/the-case-of-the-citrix-ready-printer-driver/>The Case of the Citrix Ready Printer Driver</a></li><li><time datetime=2011-02-04 data-fmt=md>Feb 4</time>
+<a href=/blog/2011/02/04/script-to-install-snmp/>Script to install SNMP</a></li><li><time datetime=2011-02-04 data-fmt=md>Feb 4</time>
+<a href=/blog/2011/02/04/restart-altiris-client-agent-service-tool/>Restart Altiris Client Agent Service Tool</a></li><li><time datetime=2011-02-02 data-fmt=md>Feb 2</time>
+<a href=/blog/2011/02/02/move-wsus-content-folder/>Move WSUS content folder</a></li><li><time datetime=2011-02-01 data-fmt=md>Feb 1</time>
+<a href=/blog/2011/02/01/get-last-char-of-the-computername-in-powershell/>Get last char of the computername in PowerShell</a></li><li><time datetime=2011-01-31 data-fmt=md>Jan 31</time>
+<a href=/blog/2011/01/31/powershell-script-to-add-reboot-scheduled-task-for-citrix/>PowerShell Script to add reboot scheduled task for Citrix</a></li><li><time datetime=2011-01-31 data-fmt=md>Jan 31</time>
+<a href=/blog/2011/01/31/using-synctoy-in-data-migrations/>Using Synctoy in Data Migrations</a></li><li><time datetime=2011-01-30 data-fmt=md>Jan 30</time>
+<a href=/blog/2011/01/30/using-fast-user-switching-on-domain-xp-computers/>Using Fast User Switching on domain XP computers</a></li><li><time datetime=2011-01-29 data-fmt=md>Jan 29</time>
+<a href=/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/>Querying a user token under 64 bit version of 2003/XP</a></li><li><time datetime=2011-01-29 data-fmt=md>Jan 29</time>
+<a href=/blog/2011/01/29/making-string-indexof-case-insensitive/>Making String.IndexOf case insensitive</a></li><li><time datetime=2011-01-28 data-fmt=md>Jan 28</time>
+<a href=/blog/2011/01/28/powershell-script-to-raise-citrix-video-memory/>PowerShell Script to raise Citrix Video Memory</a></li><li><time datetime=2011-01-27 data-fmt=md>Jan 27</time>
+<a href=/blog/2011/01/27/saving-password-in-office-communicator/>Saving Password in Office Communicator</a></li><li><time datetime=2011-01-27 data-fmt=md>Jan 27</time>
+<a href=/blog/2011/01/27/enabling-privileges-for-wmi-in-powershell/>Enabling Privileges for WMI in PowerShell</a></li><li><time datetime=2011-01-25 data-fmt=md>Jan 25</time>
+<a href=/blog/2011/01/25/script-to-install-all-print-drivers-on-citrix-or-terminal-server/>Script to install all print drivers on Citrix or Terminal Server</a></li><li><time datetime=2011-01-25 data-fmt=md>Jan 25</time>
+<a href=/blog/2011/01/25/adding-a-hidden-exchange-mailbox-to-outlook/>Adding a hidden Exchange mailbox to Outlook</a></li><li><time datetime=2011-01-24 data-fmt=md>Jan 24</time>
+<a href=/blog/2011/01/24/determine-the-system-page-size/>Determine the System Page Size</a></li><li><time datetime=2011-01-24 data-fmt=md>Jan 24</time>
+<a href=/blog/2011/01/24/the-case-of-the-ups-discovery-not-working/>The case of the UPS discovery not working</a></li><li><time datetime=2011-01-20 data-fmt=md>Jan 20</time>
+<a href=/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/>Enumerating Session Processes with NtQuerySystemInformation</a></li><li><time datetime=2011-01-19 data-fmt=md>Jan 19</time>
+<a href=/blog/2011/01/19/saslibex-screencast/>SasLibEx Screencast</a></li><li><time datetime=2011-01-18 data-fmt=md>Jan 18</time>
+<a href=/blog/2011/01/18/recursive-groups-2/>Recursive Groups #2</a></li><li><time datetime=2011-01-18 data-fmt=md>Jan 18</time>
+<a href=/blog/2011/01/18/kofax-vrs-unattended-install/>Kofax VRS Unattended Install</a></li><li><time datetime=2011-01-18 data-fmt=md>Jan 18</time>
+<a href=/blog/2011/01/18/recursive-group-membership-in-powershell/>Recursive group Membership in Powershell</a></li><li><time datetime=2011-01-17 data-fmt=md>Jan 17</time>
+<a href=/blog/2011/01/17/the-case-of-the-annotations-toolbar/>The case of the Annotations Toolbar</a></li><li><time datetime=2011-01-17 data-fmt=md>Jan 17</time>
+<a href=/blog/2011/01/17/another-packaging-challenge/>Another packaging challenge</a></li><li><time datetime=2011-01-16 data-fmt=md>Jan 16</time>
+<a href=/blog/2011/01/16/troubleshoot-correctfilepath-shim/>Troubleshoot CorrectFilePath shim</a></li><li><time datetime=2011-01-14 data-fmt=md>Jan 14</time>
+<a href=/blog/2011/01/14/convert-drive-bitmask-to-drive-letter/>Convert Drive Bitmask to Drive Letter</a></li><li><time datetime=2011-01-12 data-fmt=md>Jan 12</time>
+<a href=/blog/2011/01/12/self-signing-word-macros/>Self Signing Word Macro’s</a></li><li><time datetime=2011-01-11 data-fmt=md>Jan 11</time>
+<a href=/blog/2011/01/11/java-webapplication-certificates-and-citrix/>Java Webapplication, certificates and Citrix</a></li><li><time datetime=2011-01-09 data-fmt=md>Jan 9</time>
+<a href=/blog/2011/01/09/new-categories/>New Categories</a></li><li><time datetime=2011-01-07 data-fmt=md>Jan 7</time>
+<a href=/blog/2011/01/07/fixing-applications-the-next-step/>Fixing Applications: The Next Step</a></li><li><time datetime=2011-01-07 data-fmt=md>Jan 7</time>
+<a href=/blog/2011/01/07/paging-file-and-memory-dump/>Paging file and Memory Dump</a></li><li><time datetime=2011-01-07 data-fmt=md>Jan 7</time>
+<a href=/blog/2011/01/07/another-oracle-error/>Another Oracle Error</a></li><li><time datetime=2011-01-06 data-fmt=md>Jan 6</time>
+<a href=/blog/2011/01/06/redirect-global-object-to-local-objects-aka-fix-that-bad-app/>Redirect Global Object to Local Objects (aka fix that bad app!)</a></li><li><time datetime=2011-01-04 data-fmt=md>Jan 4</time>
+<a href=/blog/2011/01/04/default-user-profile-remkos-solution/>Default User Profile: Remko’s solution</a></li><li><time datetime=2011-01-03 data-fmt=md>Jan 3</time>
+<a href=/blog/2011/01/03/modify-internet-explorer-8-mui-pack-to-install-a-single-language/>Modify Internet Explorer 8 MUI Pack to install a single language</a></li><li><time datetime=2011-01-03 data-fmt=md>Jan 3</time>
+<a href=/blog/2011/01/03/cannot-access-files-but-need-the-origin/>Cannot Access Files, But Need the Origin?</a></li><li><time datetime=2011-01-01 data-fmt=md>Jan 1</time>
+<a href=/blog/2011/01/01/wordpress-monthly-archives-broken/>Wordpress monthly archives broken</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2010>2010</h2><ul class=archive-list><li><time datetime=2010-12-29 data-fmt=md>Dec 29</time>
+<a href=/blog/2010/12/29/unattended-installation-of-ibm-websphere-mq/>Unattended Installation of IBM WebSphere MQ</a></li><li><time datetime=2010-12-28 data-fmt=md>Dec 28</time>
+<a href=/blog/2010/12/28/using-the-correctfilepaths-shim-with-visual-basic-applications/>Using the CorrectFilePaths Shim with Visual Basic Applications</a></li><li><time datetime=2010-12-28 data-fmt=md>Dec 28</time>
+<a href=/blog/2010/12/28/using-the-correctfilepaths-shim-to-redirect-an-ini-file-to-a-writable-location/>Using the CorrectFilePaths shim to redirect an ini file to a writable location</a></li><li><time datetime=2010-12-27 data-fmt=md>Dec 27</time>
+<a href=/blog/2010/12/27/unattended-installation-of-the-oracle-client/>Unattended Installation of the Oracle Client</a></li><li><time datetime=2010-12-27 data-fmt=md>Dec 27</time>
+<a href=/blog/2010/12/27/terminal-server-remote-keyboard-layout/>Terminal Server Remote Keyboard Layout</a></li><li><time datetime=2010-12-24 data-fmt=md>Dec 24</time>
+<a href=/blog/2010/12/24/unattended-installation-of-ibm-system-i-access-for-windows/>Unattended Installation of IBM System i Access for Windows</a></li><li><time datetime=2010-12-24 data-fmt=md>Dec 24</time>
+<a href=/blog/2010/12/24/master-return-codes-in-altiris/>Master Return codes in Altiris</a></li><li><time datetime=2010-12-22 data-fmt=md>Dec 22</time>
+<a href=/blog/2010/12/22/citrix-online-plugin-could-not-launch-the-requested-published-application/>Citrix Online Plugin could not launch the requested published application</a></li><li><time datetime=2010-12-20 data-fmt=md>Dec 20</time>
+<a href=/blog/2010/12/20/packaging-an-activex-component/>Packaging an ActiveX Component: Easy?</a></li><li><time datetime=2010-12-19 data-fmt=md>Dec 19</time>
+<a href=/blog/2010/12/19/desktop-icons-hide-show-prevent-rename-or-delete/>Desktop Icons, hide, show, prevent rename or delete</a></li><li><time datetime=2010-12-19 data-fmt=md>Dec 19</time>
+<a href=/blog/2010/12/19/default-explorer-view/>Default Explorer View</a></li><li><time datetime=2010-12-17 data-fmt=md>Dec 17</time>
+<a href=/blog/2010/12/17/packaging-an-application-auto-accept-the-eula/>Packaging an application – Auto Accept the EULA</a></li><li><time datetime=2010-12-15 data-fmt=md>Dec 15</time>
+<a href=/blog/2010/12/15/international-karate/>International Karate+</a></li><li><time datetime=2010-12-15 data-fmt=md>Dec 15</time>
+<a href=/blog/2010/12/15/my-favorite-kb-article/>My favorite KB Article</a></li><li><time datetime=2010-12-15 data-fmt=md>Dec 15</time>
+<a href=/blog/2010/12/15/copying-files-larger-than-2gb-in-an-rdp-session/>Copying files larger than 2GB in an RDP Session</a></li><li><time datetime=2010-12-14 data-fmt=md>Dec 14</time>
+<a href=/blog/2010/12/14/packaging-an-application-that-uses-the-bde/>Packaging an Application that uses the BDE</a></li><li><time datetime=2010-12-13 data-fmt=md>Dec 13</time>
+<a href=/blog/2010/12/13/writing-environment-variables-to-the-registry-from-a-script/>Writing Environment Variables to the Registry from a Script</a></li><li><time datetime=2010-12-12 data-fmt=md>Dec 12</time>
+<a href=/blog/2010/12/12/where-is-lsa_object_attributes-defined/>Where is LSA_OBJECT_ATTRIBUTES defined?</a></li><li><time datetime=2010-12-12 data-fmt=md>Dec 12</time>
+<a href=/blog/2010/12/12/sql-query-to-get-the-full-path-of-an-altiris-job-3/>SQL Query to get the Full Path of an Altiris Job #3</a></li><li><time datetime=2010-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/>SQL Query to get the Full Path of an Altiris Job #2</a></li><li><time datetime=2010-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2010/12/09/cross-site-scripting-vulnerability-in-citrix-web-interface/>Cross-Site Scripting Vulnerability in Citrix Web Interface</a></li><li><time datetime=2010-12-07 data-fmt=md>Dec 7</time>
+<a href=/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/>SQL Query to get the Full Path of an Altiris Job</a></li><li><time datetime=2010-12-06 data-fmt=md>Dec 6</time>
+<a href=/blog/2010/12/06/bsod-with-stop-0x0000008e-when-installing-window-7-checked-build/>BSOD with STOP 0x0000008E when installing Window 7 Checked Build</a></li><li><time datetime=2010-11-26 data-fmt=md>Nov 26</time>
+<a href=/blog/2010/11/26/citrix-web-interface-starts-very-slowly/>Citrix Web Interface starts very slowly</a></li><li><time datetime=2010-11-26 data-fmt=md>Nov 26</time>
+<a href=/blog/2010/11/26/script-to-register-asp-net-in-iis/>Script to register ASP.NET in IIS</a></li><li><time datetime=2010-11-26 data-fmt=md>Nov 26</time>
+<a href=/blog/2010/11/26/unattended-visual-j-install-returns-error-4122/>Unattended Visual J# Install returns error 4122</a></li><li><time datetime=2010-11-25 data-fmt=md>Nov 25</time>
+<a href=/blog/2010/11/25/scripted-creation-of-server-manager-answer-files/>Scripted creation of Server Manager Answer Files</a></li><li><time datetime=2010-11-24 data-fmt=md>Nov 24</time>
+<a href=/blog/2010/11/24/disabling-java-autoupdate/>Disabling Java Autoupdate</a></li><li><time datetime=2010-11-23 data-fmt=md>Nov 23</time>
+<a href=/blog/2010/11/23/altiris-axsched-ignores-the-dsn-parameter/>Altiris AxSched ignores the DSN parameter</a></li><li><time datetime=2010-11-23 data-fmt=md>Nov 23</time>
+<a href=/blog/2010/11/23/why-is-my-scheduled-job-not-executed-in-altiris/>Why is my scheduled job not executed in Altiris?</a></li><li><time datetime=2010-11-23 data-fmt=md>Nov 23</time>
+<a href=/blog/2010/11/23/altiris-job-builder/>Altiris Job Builder</a></li><li><time datetime=2010-11-15 data-fmt=md>Nov 15</time>
+<a href=/blog/2010/11/15/citrix-and-java-jre-versions/>Citrix and Java JRE Versions</a></li><li><time datetime=2010-11-12 data-fmt=md>Nov 12</time>
+<a href=/blog/2010/11/12/wmi-query-to-win32_product-returns-error-0x80041010/>WMI query to Win32_Product returns error 0x80041010</a></li><li><time datetime=2010-11-12 data-fmt=md>Nov 12</time>
+<a href=/blog/2010/11/12/removing-single-sign-on-node-from-the-delivery-services-console/>Removing Single Sign on Node from the Delivery Services Console</a></li><li><time datetime=2010-11-12 data-fmt=md>Nov 12</time>
+<a href=/blog/2010/11/12/the-case-of-the-missing-xenapp-node-in-the-delivery-services-console/>The case of the missing XenApp Node in the Delivery Services Console</a></li><li><time datetime=2010-11-11 data-fmt=md>Nov 11</time>
+<a href=/blog/2010/11/11/programmatically-changing-the-driver-signing-options/>Programmatically Changing the Driver Signing options</a></li><li><time datetime=2010-11-08 data-fmt=md>Nov 8</time>
+<a href=/blog/2010/11/08/the-case-of-the-failing-exchange-2007-install/>The case of the failing Exchange 2007 Install</a></li><li><time datetime=2010-11-04 data-fmt=md>Nov 4</time>
+<a href=/blog/2010/11/04/performance-best-practices-for-vmware-vsphere-4-1/>Performance Best Practices for VMware vSphere 4.1</a></li><li><time datetime=2010-11-04 data-fmt=md>Nov 4</time>
+<a href=/blog/2010/11/04/programmatically-create-aligned-partitions/>Programmatically Create Aligned Partitions</a></li><li><time datetime=2010-11-04 data-fmt=md>Nov 4</time>
+<a href=/blog/2010/11/04/activate-multiple-altiris-licenses-at-once/>Activate Multiple Altiris Licenses at Once</a></li><li><time datetime=2010-11-03 data-fmt=md>Nov 3</time>
+<a href=/blog/2010/11/03/vm-not-joined-to-domain-after-deploying-from-template/>VM not joined to Domain after Deploying from Template</a></li><li><time datetime=2010-11-03 data-fmt=md>Nov 3</time>
+<a href=/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/>Cannot complete customization when cloning from Template</a></li><li><time datetime=2010-10-27 data-fmt=md>Oct 27</time>
+<a href=/blog/2010/10/27/the-case-of-the-vmware-vsphere-client/>The case of the VMware vSphere Client</a></li><li><time datetime=2010-10-26 data-fmt=md>Oct 26</time>
+<a href=/blog/2010/10/26/694/>The case of the failing Deployment Server Install</a></li><li><time datetime=2010-10-22 data-fmt=md>Oct 22</time>
+<a href=/blog/2010/10/22/automatically-accept-shadow-request/>Automatically Accept Shadow Request</a></li><li><time datetime=2010-10-20 data-fmt=md>Oct 20</time>
+<a href=/blog/2010/10/20/change-driveletter-commandline-tool/>Change Driveletter Commandline Tool</a></li><li><time datetime=2010-10-18 data-fmt=md>Oct 18</time>
+<a href=/blog/2010/10/18/error-while-creating-large-datastore-on-vmware-vsphere-4-1/>Error while creating large Datastore on VMWare vSphere 4.1</a></li><li><time datetime=2010-10-18 data-fmt=md>Oct 18</time>
+<a href=/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/>Default username password HP 8/20q FC San Switch</a></li><li><time datetime=2010-10-16 data-fmt=md>Oct 16</time>
+<a href=/blog/2010/10/16/slow-power-on-and-storage-operations-with-hp-smart-array-p410i-controller-on-vmware-vsphere-4-0/>Slow power on and storage operations with HP Smart Array P410i controller on VMWare vSphere 4.0</a></li><li><time datetime=2010-10-14 data-fmt=md>Oct 14</time>
+<a href=/blog/2010/10/14/hp-simple-san-connection-manager-sccm/>HP Simple SAN Connection Manager (SSCM)</a></li><li><time datetime=2010-10-14 data-fmt=md>Oct 14</time>
+<a href=/blog/2010/10/14/default-username-password-hp-storageworks-p2000/>Default username password HP Storageworks P2000</a></li><li><time datetime=2010-10-14 data-fmt=md>Oct 14</time>
+<a href=/blog/2010/10/14/where-to-download-hp-rapid-deployment-pack/>Where to download HP Rapid Deployment Pack</a></li><li><time datetime=2010-09-23 data-fmt=md>Sep 23</time>
+<a href=/blog/2010/09/23/silly-issue-with-dhcp-reservation-on-netgear-wndr3700-router/>silly issue with DHCP reservation on Netgear WNDR3700 router</a></li><li><time datetime=2010-09-15 data-fmt=md>Sep 15</time>
+<a href=/blog/2010/09/15/saslibex-2-0-release-announcement/>SasLibEx 2.0 Release Announcement</a></li><li><time datetime=2010-09-13 data-fmt=md>Sep 13</time>
+<a href=/blog/2010/09/13/certified/>Certified</a></li><li><time datetime=2010-09-12 data-fmt=md>Sep 12</time>
+<a href=/blog/2010/09/12/active-directory-properties-commandline-tool/>Active Directory Properties Commandline Tool</a></li><li><time datetime=2010-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2010/09/02/compatibility-issue-with-rad-studio-xe/>Compatibility Issue with RAD Studio XE</a></li><li><time datetime=2010-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2010/09/02/rad-studio-xe-destroys-rad-studio-2010/>RAD Studio XE destroys RAD Studio 2010?</a></li><li><time datetime=2010-08-30 data-fmt=md>Aug 30</time>
+<a href=/blog/2010/08/30/rad-studio-xe-has-been-released/>Rad Studio XE has been released</a></li><li><time datetime=2010-07-05 data-fmt=md>Jul 5</time>
+<a href=/blog/2010/07/05/detecting-a-citrix-published-application/>Detecting a Citrix Published Application</a></li><li><time datetime=2010-06-29 data-fmt=md>Jun 29</time>
+<a href=/blog/2010/06/29/rating-and-contact-options/>Rating and contact options</a></li><li><time datetime=2010-06-18 data-fmt=md>Jun 18</time>
+<a href=/blog/2010/06/18/fun-with-asm/>Fun with asm</a></li><li><time datetime=2010-06-17 data-fmt=md>Jun 17</time>
+<a href=/blog/2010/06/17/obtain-fully-qualified-domain-name-from-netbios-domain-name/>Obtain Fully Qualified Domain Name from Netbios Domain Name</a></li><li><time datetime=2010-06-15 data-fmt=md>Jun 15</time>
+<a href=/blog/2010/06/15/having-fun-with-windows-licensing/>Having fun with Windows Licensing</a></li><li><time datetime=2010-06-09 data-fmt=md>Jun 9</time>
+<a href=/blog/2010/06/09/memory-leaks-when-using-virtual-treeview-component/>Memory Leaks when using the Virtual TreeView Component</a></li><li><time datetime=2010-06-08 data-fmt=md>Jun 8</time>
+<a href=/blog/2010/06/08/setting-childcount-in-a-virtual-tree/>Setting ChildCount in a Virtual Tree</a></li><li><time datetime=2010-03-30 data-fmt=md>Mar 30</time>
+<a href=/blog/2010/03/30/random-active-directory-notes-4/>Random Active Directory Notes #4</a></li><li><time datetime=2010-03-28 data-fmt=md>Mar 28</time>
+<a href=/blog/2010/03/28/using-windows-resource-strings/>Using Windows Resource Strings</a></li><li><time datetime=2010-03-24 data-fmt=md>Mar 24</time>
+<a href=/blog/2010/03/24/using-windows-dialogs-from-delphi/>Using Windows Dialogs from Delphi</a></li><li><time datetime=2010-03-22 data-fmt=md>Mar 22</time>
+<a href=/blog/2010/03/22/random-active-directory-notes-3/>Random Active Directory Notes #3</a></li><li><time datetime=2010-03-12 data-fmt=md>Mar 12</time>
+<a href=/blog/2010/03/12/random-active-directory-notes-2/>Random Active Directory Notes #2</a></li><li><time datetime=2010-03-10 data-fmt=md>Mar 10</time>
+<a href=/blog/2010/03/10/random-active-directory-notes/>Random Active Directory Notes</a></li><li><time datetime=2010-03-10 data-fmt=md>Mar 10</time>
+<a href=/blog/2010/03/10/random-active-directory-notes-1/>Random Active Directory Notes #1</a></li><li><time datetime=2010-02-22 data-fmt=md>Feb 22</time>
+<a href=/blog/2010/02/22/did-you-make-a-saslibex-enquiry-and-news/>Did you make a SasLibEx enquiry? And... news!</a></li><li><time datetime=2010-02-17 data-fmt=md>Feb 17</time>
+<a href=/blog/2010/02/17/displaynotification-out-of-memory-error-when-starting-delphi-2010/>displayNotification: Out of memory error when starting Delphi 2010</a></li><li><time datetime=2010-02-10 data-fmt=md>Feb 10</time>
+<a href=/blog/2010/02/10/reading-accountexpires-attribute-from-active-directory-in-delphi/>Reading accountExpires attribute from Active Directory (in Delphi)</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2009>2009</h2><ul class=archive-list><li><time datetime=2009-12-03 data-fmt=md>Dec 3</time>
+<a href=/blog/2009/12/03/downloads-working-again/>Downloads working again</a></li><li><time datetime=2009-12-03 data-fmt=md>Dec 3</time>
+<a href=/blog/2009/12/03/citrix-workspace-control-not-working-on-hp-t5540/>Citrix Workspace Control not working on HP t5540</a></li><li><time datetime=2009-12-02 data-fmt=md>Dec 2</time>
+<a href=/blog/2009/12/02/404-error-on-downloads/>404 error on Downloads</a></li><li><time datetime=2009-11-26 data-fmt=md>Nov 26</time>
+<a href=/blog/2009/11/26/getting-back-the-classic-event-viewer-in-vista-and-windows-7/>Getting Back the Classic Event Viewer in Vista and Windows 7</a></li><li><time datetime=2009-11-25 data-fmt=md>Nov 25</time>
+<a href=/blog/2009/11/25/removing-the-uninstall-or-change-a-program-button-from-the-explorer-command-bar/>Removing the Uninstall or change a program button from the Explorer Command Bar</a></li><li><time datetime=2009-11-24 data-fmt=md>Nov 24</time>
+<a href=/blog/2009/11/24/powershell-2-0-changing-password-through-adsi-problem/>PowerShell 2.0: Changing password through ADSI problem</a></li><li><time datetime=2009-11-17 data-fmt=md>Nov 17</time>
+<a href=/blog/2009/11/17/unattended-install-of-the-citrix-xenapp-webinterface-5-2/>Unattended Install of the Citrix Xenapp WebInterface 5.2</a></li><li><time datetime=2009-11-16 data-fmt=md>Nov 16</time>
+<a href=/blog/2009/11/16/save-explorer-settings-without-logging-off/>Save Explorer settings without Logging off</a></li><li><time datetime=2009-11-16 data-fmt=md>Nov 16</time>
+<a href=/blog/2009/11/16/adding-a-printer-connection-with-an-alternative-driver/>Adding a Printer Connection with an alternative driver</a></li><li><time datetime=2009-11-11 data-fmt=md>Nov 11</time>
+<a href=/blog/2009/11/11/the-case-of-the-unattended-install/>The case of the Unattended Install</a></li><li><time datetime=2009-11-11 data-fmt=md>Nov 11</time>
+<a href=/blog/2009/11/11/removing-public-folder-replicas-in-exchange-2007/>Removing Public Folder Replicas in Exchange 2007</a></li><li><time datetime=2009-11-06 data-fmt=md>Nov 6</time>
+<a href=/blog/2009/11/06/small-launchrdp-update/>Small LaunchRDP Update</a></li><li><time datetime=2009-11-06 data-fmt=md>Nov 6</time>
+<a href=/blog/2009/11/06/slow-installation-because-of-certificate-checks/>Slow Installation because of Certificate Checks</a></li><li><time datetime=2009-11-05 data-fmt=md>Nov 5</time>
+<a href=/blog/2009/11/05/windows-installer-proxy-information-not-correctly-registered/>Windows Installer proxy information not correctly registered</a></li><li><time datetime=2009-09-18 data-fmt=md>Sep 18</time>
+<a href=/blog/2009/09/18/the-poor-mans-e-mail-archiving-solution/>The poor man's e-mail archiving solution</a></li><li><time datetime=2009-09-18 data-fmt=md>Sep 18</time>
+<a href=/blog/2009/09/18/vmware-workstation-and-virtual-pc-xp-mode-unrecoverable-error/>VMWare Workstation and Virtual PC XP Mode: unrecoverable error</a></li><li><time datetime=2009-07-21 data-fmt=md>Jul 21</time>
+<a href=/blog/2009/07/21/modifying-microsoft-updates-andor-hotfixes-2/>Modifying Microsoft Updates and/or hotfixes 2</a></li><li><time datetime=2009-06-23 data-fmt=md>Jun 23</time>
+<a href=/blog/2009/06/23/patch-vistas-kernel-to-address-more-than-4-gb-of-memory/>Patch Vista's Kernel to Address more than 4 GB of Memory</a></li><li><time datetime=2009-06-15 data-fmt=md>Jun 15</time>
+<a href=/blog/2009/06/15/dell-systems-build-and-update-utility-dvd/>Dell Systems Build and Update Utility DVD</a></li><li><time datetime=2009-06-12 data-fmt=md>Jun 12</time>
+<a href=/blog/2009/06/12/delegated-management-console/>Delegated Management Console</a></li><li><time datetime=2009-06-12 data-fmt=md>Jun 12</time>
+<a href=/blog/2009/06/12/citrix-desktop-switcher/>Citrix Desktop Switcher</a></li><li><time datetime=2009-06-12 data-fmt=md>Jun 12</time>
+<a href=/blog/2009/06/12/the-messaging-interface-has-returned-an-unknown-error/>The messaging interface has returned an unknown error</a></li><li><time datetime=2009-05-12 data-fmt=md>May 12</time>
+<a href=/blog/2009/05/12/modifying-microsoft-updates-andor-hotfixes/>Modifying Microsoft Updates and/or hotfixes</a></li><li><time datetime=2009-04-16 data-fmt=md>Apr 16</time>
+<a href=/blog/2009/04/16/unable-to-get-system-pte-individual-lock-consumer-information-error-when-using-sysptes-4-in-windbg/>Unable to get System PTE individual lock consumer information error when using !sysptes 4 in WinDbg</a></li><li><time datetime=2009-04-07 data-fmt=md>Apr 7</time>
+<a href=/blog/2009/04/07/saslibex-updates/>SasLibEx updates</a></li><li><time datetime=2009-03-30 data-fmt=md>Mar 30</time>
+<a href=/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/>Sending WM_KEYDOWN or WM_KEYUP</a></li><li><time datetime=2009-03-30 data-fmt=md>Mar 30</time>
+<a href=/blog/2009/03/30/sending-ctrl-alt-del-simulate-sas-in-windows-vista/>Sending Ctrl-Alt-Del / Simulate SAS in Windows Vista</a></li><li><time datetime=2009-03-20 data-fmt=md>Mar 20</time>
+<a href=/blog/2009/03/20/reading-physical-memory-size-from-the-registry/>Reading physical memory size from the registry</a></li><li><time datetime=2009-02-25 data-fmt=md>Feb 25</time>
+<a href=/blog/2009/02/25/preventing-domain-group-policies-from-applying/>Preventing Domain Group Policies from Applying</a></li><li><time datetime=2009-02-25 data-fmt=md>Feb 25</time>
+<a href=/blog/2009/02/25/tsadminex-features-part-3/>TSAdminEx Features Part 3</a></li><li><time datetime=2009-02-24 data-fmt=md>Feb 24</time>
+<a href=/blog/2009/02/24/tsadminex-features-part-2/>TSAdminEx Features Part 2</a></li><li><time datetime=2009-02-23 data-fmt=md>Feb 23</time>
+<a href=/blog/2009/02/23/tsadminex-features-part-1/>TSAdminEx Features Part 1</a></li><li><time datetime=2009-02-20 data-fmt=md>Feb 20</time>
+<a href=/blog/2009/02/20/tsadminex-beta-release/>TSAdminEx Beta release</a></li><li><time datetime=2009-02-03 data-fmt=md>Feb 3</time>
+<a href=/blog/2009/02/03/accessing-kernel-objects-in-other-sessions-part-2/>Accessing kernel objects in other sessions part 2</a></li><li><time datetime=2009-01-27 data-fmt=md>Jan 27</time>
+<a href=/blog/2009/01/27/accessing-kernel-objects-in-other-sessions/>Accessing kernel objects in other sessions part 1</a></li><li><time datetime=2009-01-16 data-fmt=md>Jan 16</time>
+<a href=/blog/2009/01/16/windows-xp-x64-terminal-server-patch-part-2-optional/>Windows XP x64 Terminal Server Patch part 2 (optional)</a></li><li><time datetime=2009-01-08 data-fmt=md>Jan 8</time>
+<a href=/blog/2009/01/08/download-for-tech-track-1/>Download for Tech-Track #1</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2008>2008</h2><ul class=archive-list><li><time datetime=2008-12-23 data-fmt=md>Dec 23</time>
+<a href=/blog/2008/12/23/locking-a-workstation-part-2/>Locking a workstation - part 2</a></li><li><time datetime=2008-12-19 data-fmt=md>Dec 19</time>
+<a href=/blog/2008/12/19/windows-xp-x64-terminal-server-patch-part-1-mandatory/>Windows XP X64 Terminal Server patch part 1 (mandatory)</a></li><li><time datetime=2008-12-19 data-fmt=md>Dec 19</time>
+<a href=/blog/2008/12/19/globally-disable-flash-player-autoupdate/>Globally disable Flash Player autoupdate</a></li><li><time datetime=2008-12-13 data-fmt=md>Dec 13</time>
+<a href=/blog/2008/12/13/locking-a-workstation-part-1/>Locking a workstation - part 1</a></li><li><time datetime=2008-12-10 data-fmt=md>Dec 10</time>
+<a href=/blog/2008/12/10/converting-a-volume-name-to-a-device-name/>Converting a volume name to a device name</a></li><li><time datetime=2008-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2008/12/09/commandline-tool-to-change-drive-letter-assignment/>Commandline tool to change drive letter assignment</a></li><li><time datetime=2008-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2008/12/09/windows-2003-x64-terminal-server-patch/>Windows 2003 X64 Terminal Server Patch</a></li><li><time datetime=2008-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2008/12/09/new-universal-patch-method/>New Universal Patch Method</a></li><li><time datetime=2008-11-26 data-fmt=md>Nov 26</time>
+<a href=/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-2/>Executing a Fast User Switch programmatically - part 2</a></li><li><time datetime=2008-11-26 data-fmt=md>Nov 26</time>
+<a href=/blog/2008/11/26/executing-a-fast-user-switch-programmatically-part-1/>Executing a Fast User Switch programmatically - part 1</a></li><li><time datetime=2008-11-19 data-fmt=md>Nov 19</time>
+<a href=/blog/2008/11/19/terminal-server-internals/>Terminal Server Internals</a></li><li><time datetime=2008-11-12 data-fmt=md>Nov 12</time>
+<a href=/blog/2008/11/12/switch-between-java-versions/>Switch between Java Versions</a></li><li><time datetime=2008-11-02 data-fmt=md>Nov 2</time>
+<a href=/blog/2008/11/02/rdp-session-with-local-taskbar-visible/>RDP Session with Local Taskbar visible</a></li><li><time datetime=2008-10-24 data-fmt=md>Oct 24</time>
+<a href=/blog/2008/10/24/microsoft-tech-ed-it-professionals-2008/>Microsoft Tech-Ed IT Professionals 2008</a></li><li><time datetime=2008-10-23 data-fmt=md>Oct 23</time>
+<a href=/blog/2008/10/23/application-crashes-while-opening-helpfile/>Application crashes while opening helpfile</a></li><li><time datetime=2008-10-21 data-fmt=md>Oct 21</time>
+<a href=/blog/2008/10/21/patch-windows-2008-terminal-server-to-allow-more-than-2-concurrent-sessions/>Patch Windows 2008 Terminal Server to allow more than 2 concurrent sessions</a></li><li><time datetime=2008-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2008/09/02/prevent-rename-or-removal-of-the-my-documents-icon-on-the-desktop/>Prevent rename or removal of the My Documents icon on the desktop</a></li><li><time datetime=2008-09-02 data-fmt=md>Sep 2</time>
+<a href=/blog/2008/09/02/applications-tab-in-taskmanager-is-empty-2/>Applications tab in taskmanager is empty #2</a></li><li><time datetime=2008-09-01 data-fmt=md>Sep 1</time>
+<a href=/blog/2008/09/01/applications-tab-in-taskmanager-is-empty/>Applications tab in taskmanager is empty</a></li><li><time datetime=2008-08-31 data-fmt=md>Aug 31</time>
+<a href=/blog/2008/08/31/patch-windows-2003-terminal-server-to-allow-more-than-2-concurrent-sessions/>Patch Windows 2003 Terminal Server to allow more than 2 concurrent sessions</a></li><li><time datetime=2008-08-20 data-fmt=md>Aug 20</time>
+<a href=/blog/2008/08/20/remkos-downloads/>Remko's download's</a></li><li><time datetime=2008-08-12 data-fmt=md>Aug 12</time>
+<a href=/blog/2008/08/12/registry-editing-has-been-disabled-by-your-administrator/>Registry editing has been disabled by your administrator (not anymore!)</a></li><li><time datetime=2008-06-23 data-fmt=md>Jun 23</time>
+<a href=/blog/2008/06/23/error-26009-could-not-access-the-datastore-using-the-dsn-file/>Unattended Citrix Installation: Could not Access the datastore using the DSN file</a></li><li><time datetime=2008-06-22 data-fmt=md>Jun 22</time>
+<a href=/blog/2008/06/22/resuming-microsofts-akami-download-manager/>Resuming Microsoft's (Akami) Download Manager</a></li><li><time datetime=2008-06-17 data-fmt=md>Jun 17</time>
+<a href=/blog/2008/06/17/configuring-ibm-raid-controller-with-altiris/>Configuring IBM Raid controller with Altiris</a></li><li><time datetime=2008-06-14 data-fmt=md>Jun 14</time>
+<a href=/blog/2008/06/14/mutiple-concurrent-terminal-session-on-vista-sp1/>Multiple Concurrent Terminal Server Sessions On Vista SP1</a></li><li><time datetime=2008-06-13 data-fmt=md>Jun 13</time>
+<a href=/blog/2008/06/13/terminal-server-ping-tool/>Terminal Server Ping Tool</a></li><li><time datetime=2008-06-09 data-fmt=md>Jun 9</time>
+<a href=/blog/2008/06/09/script-to-logoff-all-terminal-server-sessions/>Script to logoff all Terminal Server sessions</a></li><li><time datetime=2008-05-02 data-fmt=md>May 2</time>
+<a href=/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/>Encrypting RDP Passwords in VB.NET</a></li><li><time datetime=2008-05-01 data-fmt=md>May 1</time>
+<a href=/blog/2008/05/01/working-with-bitfields-in-delphi/>Working with bitfields in Delphi</a></li><li><time datetime=2008-04-06 data-fmt=md>Apr 6</time>
+<a href=/blog/2008/04/06/using-windows-server-2008-as-a-super-workstation-os/>Using Windows Server 2008 as a SUPER workstation OS</a></li><li><time datetime=2008-04-04 data-fmt=md>Apr 4</time>
+<a href=/blog/2008/04/04/how-to-deactivate-internet-explorer-enhanced-security-configuration-in-windows-server-2008/>How to deactivate Internet Explorer Enhanced Security Configuration in Windows Server 2008?</a></li><li><time datetime=2008-04-04 data-fmt=md>Apr 4</time>
+<a href=/blog/2008/04/04/how-to-install-powershell-in-server-2008/>How to install Powershell in Server 2008?</a></li><li><time datetime=2008-03-26 data-fmt=md>Mar 26</time>
+<a href=/blog/2008/03/26/microsoft-remote-server-administration-tools-released/>Microsoft Remote Server Administration Tools released</a></li><li><time datetime=2008-03-03 data-fmt=md>Mar 3</time>
+<a href=/blog/2008/03/03/new-home-for-jedi-apilib-and-jedi-security-library/>New home for Jedi Apilib and Jedi Security Library</a></li><li><time datetime=2008-03-02 data-fmt=md>Mar 2</time>
+<a href=/blog/2008/03/02/how-rdp-passwords-are-encrypted-2/>How rdp passwords are encrypted 2</a></li><li><time datetime=2008-03-02 data-fmt=md>Mar 2</time>
+<a href=/blog/2008/03/02/vista-sp1-changes-to-terminal-server-api/>Vista SP1 changes to Terminal Server API</a></li><li><time datetime=2008-03-02 data-fmt=md>Mar 2</time>
+<a href=/blog/2008/03/02/supporting-for-in-loop-in-tobjectlist-descendants/>Supporting for in loop in TObjectList descendants</a></li><li><time datetime=2008-01-27 data-fmt=md>Jan 27</time>
+<a href=/blog/2008/01/27/test-2/>TSAdminEx Progress</a></li><li><time datetime=2008-01-25 data-fmt=md>Jan 25</time>
+<a href=/blog/2008/01/25/softpedia/>Softpedia</a></li><li><time datetime=2008-01-25 data-fmt=md>Jan 25</time>
+<a href=/blog/2008/01/25/using-wtswaitsystemevent/>Using WTSWaitSystemEvent</a></li></ul></section><section class=archive-group><h2 class=archive-year id=2007>2007</h2><ul class=archive-list><li><time datetime=2007-12-19 data-fmt=md>Dec 19</time>
+<a href=/blog/2007/12/19/why-tsadmin-crashes-on-windows-vista/>Why TSAdmin crashes on Windows Vista</a></li><li><time datetime=2007-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2007/12/09/undocumented-apis-from-utildll/>Undocumented API's from Utildll</a></li><li><time datetime=2007-12-09 data-fmt=md>Dec 9</time>
+<a href=/blog/2007/12/09/ida-49-released-as-freeware/>IDA 4.9 released as freeware</a></li><li><time datetime=2007-11-24 data-fmt=md>Nov 24</time>
+<a href=/blog/2007/11/24/delphi-and-terminal-server-aware/>Delphi and Terminal Server Aware</a></li><li><time datetime=2007-11-21 data-fmt=md>Nov 21</time>
+<a href=/blog/2007/11/21/even-more-undocumented-terminal-server-apis-uncovered/>Even more undocumented Terminal Server API's uncovered</a></li><li><time datetime=2007-11-21 data-fmt=md>Nov 21</time>
+<a href=/blog/2007/11/21/multiple-terminal-session-in-windows-vista/>Multiple Terminal Sessions in Windows Vista</a></li><li><time datetime=2007-11-09 data-fmt=md>Nov 9</time>
+<a href=/blog/2007/11/09/more-undocumented-terminal-server-apis/>More undocumented Terminal Server API's</a></li><li><time datetime=2007-11-09 data-fmt=md>Nov 9</time>
+<a href=/blog/2007/11/09/terminal-server-client-annoyances/>Terminal Server Client annoyances</a></li><li><time datetime=2007-11-08 data-fmt=md>Nov 8</time>
+<a href=/blog/2007/11/08/citrix-solutions-conference-2007/>Citrix Solutions Conference 2007</a></li><li><time datetime=2007-11-08 data-fmt=md>Nov 8</time>
+<a href=/blog/2007/11/08/how-to-launch-a-process-in-a-terminal-session-2/>How to launch a process in a Terminal Session #2</a></li><li><time datetime=2007-11-08 data-fmt=md>Nov 8</time>
+<a href=/blog/2007/11/08/jedi-apilib-and-jedi-windows-security-code-library/>JEDI Apilib and JEDI Windows Security Code Library</a></li><li><time datetime=2007-11-05 data-fmt=md>Nov 5</time>
+<a href=/blog/2007/11/05/encrypt-rdp-password-in-python/>Encrypt RDP password in Python</a></li><li><time datetime=2007-11-02 data-fmt=md>Nov 2</time>
+<a href=/blog/2007/11/02/post-views/>Post Views</a></li><li><time datetime=2007-11-01 data-fmt=md>Nov 1</time>
+<a href=/blog/2007/11/01/query-active-directory-from-excel/>Query Active Directory from Excel</a></li><li><time datetime=2007-11-01 data-fmt=md>Nov 1</time>
+<a href=/blog/2007/11/01/google-adds-imap-support-to-gmail/>Google adds IMAP support to GMail</a></li><li><time datetime=2007-10-31 data-fmt=md>Oct 31</time>
+<a href=/blog/2007/10/31/how-to-get-client-ip-address/>How to get Client IP Address?</a></li><li><time datetime=2007-10-30 data-fmt=md>Oct 30</time>
+<a href=/blog/2007/10/30/new-terminal-server-apis-in-vista-sp1/>New Terminal Server API's in Vista SP1</a></li><li><time datetime=2007-10-28 data-fmt=md>Oct 28</time>
+<a href=/blog/2007/10/28/script-to-clear-sql-transactions-logs/>Script to clear SQL Transactions logs</a></li><li><time datetime=2007-10-25 data-fmt=md>Oct 25</time>
+<a href=/blog/2007/10/25/rdp-clipboard-fix/>RDP Clipboard Fix</a></li><li><time datetime=2007-10-23 data-fmt=md>Oct 23</time>
+<a href=/blog/2007/10/23/tsadminex/>TSAdminEx</a></li><li><time datetime=2007-10-20 data-fmt=md>Oct 20</time>
+<a href=/blog/2007/10/20/how-to-launch-a-process-in-a-terminal-session/>How to launch a process in a Terminal Session</a></li><li><time datetime=2007-10-19 data-fmt=md>Oct 19</time>
+<a href=/blog/2007/10/19/a-referral-was-returned-from-the-server/>A referral was returned from the server</a></li><li><time datetime=2007-10-18 data-fmt=md>Oct 18</time>
+<a href=/blog/2007/10/18/how-rdp-passwords-are-encrypted/>How rdp passwords are encrypted</a></li><li><time datetime=2007-10-17 data-fmt=md>Oct 17</time>
+<a href=/blog/2007/10/17/launch-rdp-from-commandline/>Launch RDP from commandline</a></li><li><time datetime=2007-10-16 data-fmt=md>Oct 16</time>
+<a href=/blog/2007/10/16/toshiba-satellite-l40/>Atheros AR5007EG - Bad WLAN performance</a></li></ul></section></div><aside class=rail><div class=side-modules><div class=side-mod><div class=side-h>Archive</div><div class=arch-bars><a class=arch-bar href=/blog/archives/#2023><span class=yr>2023</span>
+<span class=bar style=--pct:1%></span>
+<span class=n>1</span>
+</a><a class=arch-bar href=/blog/archives/#2022><span class=yr>2022</span>
+<span class=bar style=--pct:4%></span>
+<span class=n>5</span>
+</a><a class=arch-bar href=/blog/archives/#2019><span class=yr>2019</span>
+<span class=bar style=--pct:1%></span>
+<span class=n>1</span>
+</a><a class=arch-bar href=/blog/archives/#2018><span class=yr>2018</span>
+<span class=bar style=--pct:4%></span>
+<span class=n>5</span>
+</a><a class=arch-bar href=/blog/archives/#2017><span class=yr>2017</span>
+<span class=bar style=--pct:11%></span>
+<span class=n>13</span>
+</a><a class=arch-bar href=/blog/archives/#2016><span class=yr>2016</span>
+<span class=bar style=--pct:3%></span>
+<span class=n>4</span>
+</a><a class=arch-bar href=/blog/archives/#2015><span class=yr>2015</span>
+<span class=bar style=--pct:3%></span>
+<span class=n>4</span>
+</a><a class=arch-bar href=/blog/archives/#2014><span class=yr>2014</span>
+<span class=bar style=--pct:8%></span>
+<span class=n>10</span>
+</a><a class=arch-bar href=/blog/archives/#2013><span class=yr>2013</span>
+<span class=bar style=--pct:26%></span>
+<span class=n>31</span>
+</a><a class=arch-bar href=/blog/archives/#2012><span class=yr>2012</span>
+<span class=bar style=--pct:53%></span>
+<span class=n>62</span>
+</a><a class=arch-bar href=/blog/archives/#2011><span class=yr>2011</span>
+<span class=bar style=--pct:100%></span>
+<span class=n>118</span>
+</a><a class=arch-bar href=/blog/archives/#2010><span class=yr>2010</span>
+<span class=bar style=--pct:64%></span>
+<span class=n>76</span>
+</a><a class=arch-bar href=/blog/archives/#2009><span class=yr>2009</span>
+<span class=bar style=--pct:31%></span>
+<span class=n>37</span>
+</a><a class=arch-bar href=/blog/archives/#2008><span class=yr>2008</span>
+<span class=bar style=--pct:35%></span>
+<span class=n>41</span>
+</a><a class=arch-bar href=/blog/archives/#2007><span class=yr>2007</span>
+<span class=bar style=--pct:21%></span>
+<span class=n>25</span></a></div></div><div class=side-mod><div class=side-h>Topics</div><div class=topics-inline><a href=/blog/categories/general/>General</a><span class=sep>/</span><a href=/blog/categories/citrix/>Citrix</a><span class=sep>/</span><a href=/blog/categories/programming/>Programming</a><span class=sep>/</span><a href=/blog/categories/remote-desktop-services/>Remote Desktop Services</a><span class=sep>/</span><a href=/blog/categories/delphi/>Delphi</a><span class=sep>/</span><a class=topics-all href=/blog/categories/>all 47 &rarr;</a></div></div><div class="side-mod random-mod" id=randomMod><div class="side-h random-h"><span>Random post</span><a class=reroll href=# id=rerollBtn aria-label="Show another random post">&#8635;</a></div><a class=random-link id=randomLink href=/blog/2013/05/30/redirect-registry-by-modifying-net-executable/>Redirect Registry by Modifying .NET Executable</a><div class=random-meta id=randomMeta>2013 &#183; Application Compatibility</div><script type=application/json id=randomPool>[{"c":"Application Compatibility","t":"Redirect Registry by Modifying .NET Executable","u":"/blog/2013/05/30/redirect-registry-by-modifying-net-executable/","y":"2013"},{"c":"PowerShell","t":"Query Administrator Account Name with PowerShell","u":"/blog/2012/10/25/query-administrator-account-name-with-powershell/","y":"2012"},{"c":"Citrix","t":"Screen flickering with PowerPoint 2010 on Citrix XenApp","u":"/blog/2012/11/30/screen-flickering-with-powerpoint-2010-on-citrix-xenapp/","y":"2012"},{"c":"VMware","t":"Cannot complete customization when cloning from Template","u":"/blog/2010/11/03/cannot-complete-customization-when-cloning-from-template/","y":"2010"},{"c":"Windows 10","t":"No internet access from Edge and other Microsoft apps","u":"/blog/2019/10/16/no-internet-access-from-edge-and-other-microsoft-apps/","y":"2019"},{"c":"Delphi","t":"Rad Studio XE has been released","u":"/blog/2010/08/30/rad-studio-xe-has-been-released/","y":"2010"},{"c":"PowerShell","t":"SSL Certificates in termsrv.dll","u":"/blog/2011/05/02/ssl-certificates-in-termsrv-dll/","y":"2011"},{"c":"Active Directory","t":"Reading accountExpires attribute from Active Directory (in Delphi)","u":"/blog/2010/02/10/reading-accountexpires-attribute-from-active-directory-in-delphi/","y":"2010"},{"c":"Delphi","t":"Working with bitfields in Delphi","u":"/blog/2008/05/01/working-with-bitfields-in-delphi/","y":"2008"},{"c":"Altiris","t":"Default User Profile: Remko’s solution","u":"/blog/2011/01/04/default-user-profile-remkos-solution/","y":"2011"},{"c":"General","t":"Remko's download's","u":"/blog/2008/08/20/remkos-downloads/","y":"2008"},{"c":"iPhone","t":"Using i-Clickr when you have no WiFi Connection","u":"/blog/2011/05/20/using-i-clickr-when-you-have-no-wifi-connection/","y":"2011"},{"c":"General","t":"On forbes.com, Cookies and Ads","u":"/blog/2017/03/14/forbes-com-cookies-ads/","y":"2017"},{"c":"Altiris","t":"SQL Query to get the Full Path of an Altiris Job #3","u":"/blog/2010/12/12/sql-query-to-get-the-full-path-of-an-altiris-job-3/","y":"2010"}]</script></div></div></aside></div></main><script defer src="/blog/js/theme.js?v=132703758"></script><script defer src="/blog/js/search.js?v=829448731"></script></body></html>

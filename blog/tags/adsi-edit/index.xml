@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ADSI Edit on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/adsi-edit/</link><description>Recent content in ADSI Edit on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 27 Jun 2011 15:37:04 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/adsi-edit/index.xml" rel="self" type="application/rss+xml"/><item><title>AD Internals: Display RID Allocation Pools</title><link>https://remkoweijnen.nl/blog/2011/06/27/ad-internals-display-rid-allocation-pools/</link><pubDate>Mon, 27 Jun 2011 15:37:04 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/06/27/ad-internals-display-rid-allocation-pools/</guid><description>&lt;p&gt;In my previous post I wrote about a problem I had with duplicate RID Allocation pools. &lt;/p&gt; &lt;p&gt;But how do we get more insight into these RID Allocation pools?&lt;/p&gt; &lt;p&gt;The DCDIAG tool can display this information per domain controleler using the following syntax&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;batch&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".bat" href="data:text/plain;charset=utf-8;base64,ZGNkaWFnIC9zOnNlcnZlciAvdiAvdGVzdDpyaWRtYW5hZ2Vy"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-batch"&gt;&lt;code class="language-batch"&gt;dcdiag /s:server /v /test:ridmanager&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Example output:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/06/image28.webp" class="glightbox" data-type="image" data-gallery="post-1950"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-right-width: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; padding-top: 0px" title="DCDiag Ridmanager Test" border="0" alt="DCDiag Ridmanager Test" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/06/image_thumb28.webp" width="419" height="85" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;But where in Active Directory is this information stored and can we display it for all Domain Controllers at once for larger environments?&lt;/p&gt;</description></item><item><title>The case of the failing Exchange 2007 Install</title><link>https://remkoweijnen.nl/blog/2010/11/08/the-case-of-the-failing-exchange-2007-install/</link><pubDate>Mon, 08 Nov 2010 20:56:24 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/08/the-case-of-the-failing-exchange-2007-install/</guid><description>&lt;p&gt;I was creating an unattended Exchange 2007 install job today and while testing it, it failed with the following error:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,QWN0aXZlIERpcmVjdG9yeSBvcGVyYXRpb24gZmFpbGVkIG9uIG5sLWRjMDAxLk1ZRE9NQUlOLkxBTi4gVGhlIG9iamVjdCAnQ049RGVmYXVsdCBHbG9iYWwgQWRkcmVzcyBMaXN0LENOPUFsbCBHbG9iYWwgQWRkcmVzcyBMaXN0cyxDTj1BZGRyZXNzIExpc3RzIENvbnRhaW5lcixDTj1NeSBPcmdhbmlzYXRpb24sQ049TWljcm9zb2Z0IEV4Y2hhbmdlLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9TVlET01BSU4sREM9TE9DQUwnIGFscmVhZHkgZXhpc3Rz"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;Active Directory operation failed on nl-dc001.MYDOMAIN.LAN. The object &amp;#39;CN=Default Global Address List,CN=All Global Address Lists,CN=Address Lists Container,CN=My Organisation,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=MYDOMAIN,DC=LOCAL&amp;#39; already exists&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;I opened the Exchange System Manager and expanded the Tree (Recipient | All Address Lists | All Global Address Lists) and I found 2 Global Address Lists but not the Default Global Address List:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/gal2.webp" alt="GAL2" width="268" height="308" /&gt;</description></item></channel></rss>

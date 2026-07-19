@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MaxPwdAge on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/maxpwdage/</link><description>Recent content in MaxPwdAge on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 02 Dec 2011 13:47:44 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/maxpwdage/index.xml" rel="self" type="application/rss+xml"/><item><title>Read Maximum Password Age with PowerShell</title><link>https://remkoweijnen.nl/blog/2011/12/02/read-maximum-password-age-with-powershell/</link><pubDate>Fri, 02 Dec 2011 13:47:44 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/12/02/read-maximum-password-age-with-powershell/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/image1.webp" class="glightbox" data-type="image" data-gallery="post-2212"&gt;&lt;img loading="lazy" decoding="async" style="margin: 0px 5px 0px 0px; display: inline; float: left" title="image" alt="image" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/image_thumb1.webp" width="33" height="39" /&gt;&lt;/a&gt;I needed to read out the Maximum Password age with a PowerShell script in a Windows 2003 domain.&lt;/p&gt; &lt;p&gt;Reading out the &lt;a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms676863(v=vs.85).aspx" target="_blank"&gt;maxPwdAge&lt;/a&gt; attribute is a trivial task&amp;#160; in PowerShell (I am re-using the function &lt;a href="https://remkoweijnen.nl/blog/2011/12/01/convert-iadslargeinteger-to-int64-in-powershell/" target="_blank"&gt;AdsLargeIntegerToInt64&lt;/a&gt;):&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;Read maxPwdAge &lt;span class="codelang"&gt;&amp;middot; powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download="read-maxpwdage.ps1" href="data:text/plain;charset=utf-8;base64,JGRvbWFpbiA9ICBOZXctT2JqZWN0IFN5c3RlbS5EaXJlY3RvcnlTZXJ2aWNlcy5EaXJlY3RvcnlFbnRyeQoKIyBSZWFkIG1heFB3ZEFnZSBhdHRyaWJ1dGUgYW5kIGNvbnZlcnQgdG8gSW50NjQKJG1heFB3ZEFnZSA9IEFkc0xhcmdlSW50ZWdlclRvSW42NCAkRG9tYWluLm1heFB3ZEFnZS5WYWx1ZQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;$domain = New-Object System.DirectoryServices.DirectoryEntry
+
+# Read maxPwdAge attribute and convert to Int64
+$maxPwdAge = AdsLargeIntegerToIn64 $Domain.maxPwdAge.Value&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;In my case this returns the value -78624000000000 but how do we interpret this? 
+ &lt;br /&gt;&lt;/p&gt;</description></item></channel></rss>

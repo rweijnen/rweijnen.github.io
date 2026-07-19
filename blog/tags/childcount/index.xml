@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ChildCount on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/childcount/</link><description>Recent content in ChildCount on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 08 Jun 2010 17:39:57 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/childcount/index.xml" rel="self" type="application/rss+xml"/><item><title>Setting ChildCount in a Virtual Tree</title><link>https://remkoweijnen.nl/blog/2010/06/08/setting-childcount-in-a-virtual-tree/</link><pubDate>Tue, 08 Jun 2010 17:39:57 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/08/setting-childcount-in-a-virtual-tree/</guid><description>&lt;p&gt;When working with the &lt;a href="http://www.soft-gems.net/index.php?option=com_content&amp;amp;task=view&amp;amp;id=12&amp;amp;Itemid=33" target="_blank"&gt;Virtual TreeView component&lt;/a&gt; the most optimized way of adding (or removing child nodes is by changing the ChildCount.&lt;/p&gt;
+&lt;p&gt;I often make the mistake of change the ChildCount of a Node using:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,Tm9kZV4uQ2hpbGRDb3VudCA6PSBDb3VudDs="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;Node^.ChildCount := Count;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;If you look into the source you will see why this will not work, the proper way is:&lt;/p&gt;</description></item></channel></rss>

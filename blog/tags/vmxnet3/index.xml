@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VMXNET3 on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/vmxnet3/</link><description>Recent content in VMXNET3 on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 17 Mar 2011 15:39:12 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/vmxnet3/index.xml" rel="self" type="application/rss+xml"/><item><title>Compiling Drivers for Altiris Linux PXE Image Part 2</title><link>https://remkoweijnen.nl/blog/2011/03/17/compiling-drivers-for-altiris-linux-pxe-image-part-2/</link><pubDate>Thu, 17 Mar 2011 15:39:12 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/03/17/compiling-drivers-for-altiris-linux-pxe-image-part-2/</guid><description>&lt;p&gt;In the &lt;a href="https://remkoweijnen.nl/blog/2011/03/17/compiling-drivers-for-altiris-linux-pxe-image-part-1/" target="_blank"&gt;previous part&lt;/a&gt; we have already setup the Ubuntu Virtual Machine and we did a build of the kernel image.&lt;/p&gt;
+&lt;p&gt;So now we can finally compile the driver, in my case I needed a driver for VMWare&amp;rsquo;s VMXNET3 Network Card.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&amp;amp;cmd=displayKC&amp;amp;externalId=1001805" target="_blank"&gt;VMXNET3&lt;/a&gt; is VMWare&amp;rsquo;s paravirtualized network driver and offers better performance with less host processing power compared to the default e1000 driver.&lt;/p&gt;
+&lt;p&gt;First we need the source for the driver, we can obtain this from the VMWare Tools either from a running Linux VM or like I did by transferring the file linux.iso from /vmimages/tools-isomages from the vSphere server.&lt;/p&gt;
+&lt;p&gt;In the iso file is a single file, VMWARETO.TGZ and after unpacking we get a folder called &lt;em&gt;vmware-tools-distrib&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;In &lt;em&gt;vmware-tools-distrib/lib/modules/source&lt;/em&gt; we find the vmxnet3.tar file that contains our sources. Copy the tar to the Virtual Machine and unpack it, then start a Terminal and cd to the directory where you unpacked the tar.&lt;/p&gt;
+&lt;p&gt;The first time I attempted a compile I received an error indicating that the file &lt;em&gt;autoconf.h&lt;/em&gt; could not be found. After I found this &lt;a href="https://bugs.launchpad.net/ubuntu/+source/linux/+bug/579813" target="_blank"&gt;bug report&lt;/a&gt; I was able to fix this by creating a link:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;bash&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sh" href="data:text/plain;charset=utf-8;base64,c3VkbyBsbiAtcyAvdXNyL3NyYy9saW51eC1oZWFkZXJzLTIuNi4zNS0yMi1nZW5lcmljL2luY2x1ZGUvZ2VuZXJhdGVkL2F1dG9jb25mLmggL3Vzci9zcmMvbGludXgtaGVhZGVycy0yLjYuMzUtMjItZ2VuZXJpYy9pbmNsdWRlL2xpbnV4L2F1dG9jb25mLmg="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-bash"&gt;&lt;code class="language-bash"&gt;sudo ln -s /usr/src/linux-headers-2.6.35-22-generic/include/generated/autoconf.h /usr/src/linux-headers-2.6.35-22-generic/include/linux/autoconf.h&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;We can compile the driver with the make command, referencing the kernel image we created earlier:&lt;/p&gt;</description></item></channel></rss>

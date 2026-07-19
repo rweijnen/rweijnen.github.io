@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Netgear on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/netgear/</link><description>Recent content in Netgear on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 23 Sep 2010 16:32:44 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/netgear/index.xml" rel="self" type="application/rss+xml"/><item><title>silly issue with DHCP reservation on Netgear WNDR3700 router</title><link>https://remkoweijnen.nl/blog/2010/09/23/silly-issue-with-dhcp-reservation-on-netgear-wndr3700-router/</link><pubDate>Thu, 23 Sep 2010 16:32:44 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/09/23/silly-issue-with-dhcp-reservation-on-netgear-wndr3700-router/</guid><description>&lt;p&gt;I recently bought a new router, a Netgear WNDR3700 and I noticed a silly bug. When you make a DHCP reservation in the webinterface it will present a list of existing clients which makes it easy to add them to the reservation list.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/09/netgearaddaddress.webp" class="glightbox" data-type="image" data-gallery="post-642"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/09/netgearaddaddress-small.webp" alt="NetGearAddAddress" width="430" height="285" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This seems to work fine at first but when I checked my IP with IPConfig I noticed that I received a different address. I checked the router&amp;rsquo;s log and saw this:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,W0RIQ1AgSVA6IDE5Mi4xNjguMi4yOV0gdG8gTUFDIGFkZHJlc3MgMDA6MjE6NWM6OWE6YTA6OTksIFRodXJzZGF5LCBTZXB0ZW1iZXIgMjMsMjAxMCAxNDowMzo1OQ=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;[DHCP IP: 192.168.2.29] to MAC address 00:21:5c:9a:a0:99, Thursday, September 23,2010 14:03:59&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;I noticed that the MAC address was lowercase here and not uppercase as in the webinterface. I changed the case in the webinterface and then it worked fine!&lt;/p&gt;</description></item></channel></rss>

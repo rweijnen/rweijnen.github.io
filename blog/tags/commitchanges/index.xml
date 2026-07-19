@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CommitChanges on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/commitchanges/</link><description>Recent content in CommitChanges on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 24 Nov 2009 11:50:08 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/commitchanges/index.xml" rel="self" type="application/rss+xml"/><item><title>PowerShell 2.0: Changing password through ADSI problem</title><link>https://remkoweijnen.nl/blog/2009/11/24/powershell-2-0-changing-password-through-adsi-problem/</link><pubDate>Tue, 24 Nov 2009 11:50:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/24/powershell-2-0-changing-password-through-adsi-problem/</guid><description>&lt;p&gt;I needed to do a mass password change on imported accounts and decided to do this with Powershell. For some reason (maybe because I am using PowerShell 2.0) I got an unexpected error when using the Password property or the SetPassword method (RandomPassword is a function I wrote that generates Random passwords the meet the Complexity Requirements):&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,JHVzZXIuUGFzc3dvcmQgPSBSYW5kb21QYXNzd29yZAokdXNlci5Db21taXRDaGFuZ2VzKCk="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;$user.Password = RandomPassword
+$user.CommitChanges()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

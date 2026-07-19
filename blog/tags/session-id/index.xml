@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Session Id on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/session-id/</link><description>Recent content in Session Id on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 18 Jun 2010 12:02:00 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/session-id/index.xml" rel="self" type="application/rss+xml"/><item><title>Fun with asm</title><link>https://remkoweijnen.nl/blog/2010/06/18/fun-with-asm/</link><pubDate>Fri, 18 Jun 2010 12:02:00 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/06/18/fun-with-asm/</guid><description>&lt;p&gt;Today just some fun stuff with ASM, probably not the most recommended way to do things but for sure the most geeky way :P&lt;/p&gt;
+&lt;p&gt;Get the Current Session Id:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,ZnVuY3Rpb24gR2V0Q3VycmVudFNlc3Npb25JZDogRFdPUkQ7CmFzbQogIG1vdiAgICAgZWF4LGZzOlskMDAwMDAwMThdOyAgIC8vIEdldCBURUIKICBtb3YgICAgIGVheCxbZWF4KyQzMF07ICAgICAgICAvLyBQUEVCCiAgbW92ICAgICBlYXgsW2VheCskMWQ0XTsgICAgICAgLy8gUEVCLlNlc3Npb25JZAplbmQ7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;function GetCurrentSessionId: DWORD;
+asm
+ mov eax,fs:[$00000018]; // Get TEB
+ mov eax,[eax&amp;#43;$30]; // PPEB
+ mov eax,[eax&amp;#43;$1d4]; // PEB.SessionId
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Get the Current Console Session Id:&lt;/p&gt;</description></item></channel></rss>

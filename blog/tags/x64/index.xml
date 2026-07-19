@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>X64 on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/x64/</link><description>Recent content in X64 on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 29 Jan 2011 22:17:52 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/x64/index.xml" rel="self" type="application/rss+xml"/><item><title>Querying a user token under 64 bit version of 2003/XP</title><link>https://remkoweijnen.nl/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/</link><pubDate>Sat, 29 Jan 2011 22:17:52 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/29/querying-a-user-token-under-64-bit-version-of-2003xp/</guid><description>&lt;p&gt;If you want to obtain a user&amp;rsquo;s token in a Terminal Server or Citrix session (eg to launch a process in a session) you can call the &lt;a href="http://msdn.microsoft.com/en-us/library/aa383840(v=vs.85).aspx"&gt;WTSQueryUserToken&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On the x64 versions of Windows XP and Server 2003 this function fails however and returns &lt;strong&gt;ERROR_INSUFFICIENT_BUFFER&lt;/strong&gt; (&amp;quot;&lt;em&gt;The data area passed to a system call is too small&lt;/em&gt;.&amp;quot;) when called from a 32 bit process.&lt;/p&gt;
+&lt;p&gt;Internally WTSQueryUserToken calls the undocumented function &lt;a href="http://msdn.microsoft.com/en-us/library/aa383827(v=vs.85).aspx"&gt;WinstationQueryInformationW&lt;/a&gt; with the &lt;strong&gt;WinStationUserToken&lt;/strong&gt; class (14) and passing a &lt;a href="http://msdn.microsoft.com/en-us/library/cc248658(PROT.10).aspx"&gt;WINSTATIONUSERTOKEN&lt;/a&gt; struct, filled with caller ProcessId and ThreadId.&lt;/p&gt;
+&lt;p&gt;But on x64 Windows the size of this structure is 24 bytes, while on 32 bit Windows the size of the structure is 12 bytes!&lt;/p&gt;</description></item><item><title>Enumerating Session Processes with NtQuerySystemInformation</title><link>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</link><pubDate>Thu, 20 Jan 2011 15:34:23 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/20/enumerating-session-process-with-ntquerysysteminformation/</guid><description>&lt;p&gt;As you may know, you can enumerate processes of a specific Terminal Server or Citrix session using the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724509(VS.85).aspx"&gt;NtQuerySystemInformation&lt;/a&gt; function.&lt;/p&gt;
+&lt;p&gt;On x86 system the code below works fine:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgU3RhdHVzIDogTlRTVEFUVVM7CiAgUmV0TGVuZ3RoIDogRFdPUkQ7CiAgU2Vzc2lvbkluZm8gOiAgU1lTVEVNX1NFU1NJT05fUFJPQ0VTU19JTkZPUk1BVElPTjsKICBDdXJyZW50UHJvY2VzcyA6IFBTeXN0ZW1Qcm9jZXNzZXM7CmJlZ2luCgogIFNlc3Npb25JbmZvLlNlc3Npb25JZCA6PSBTZXNzaW9uSWQ7CiAgU2Vzc2lvbkluZm8uQnVmZmVyIDo9IG5pbDsKICBTZXNzaW9uSW5mby5TaXplT2ZCdWYgOj0gMDsKCiAgU3RhdHVzIDo9IE50UXVlcnlTeXN0ZW1JbmZvcm1hdGlvbihTeXN0ZW1TZXNzaW9uUHJvY2Vzc2VzSW5mb3JtYXRpb24sIEBTZXNzaW9uSW5mbywgU2l6ZU9mKFNlc3Npb25JbmZvKSwgQFJldExlbmd0aCk7CiAgd2hpbGUgKFN0YXR1cyA9IFNUQVRVU19JTkZPX0xFTkdUSF9NSVNNQVRDSCkgZG8KICBiZWdpbgogICAgU2Vzc2lvbkluZm8uU2l6ZU9mQnVmIDo9IFJldExlbmd0aDsKICAgIFNlc3Npb25JbmZvLkJ1ZmZlciA6PSBHZXRNZW1vcnkoUmV0TGVuZ3RoKTsKICAgIHRyeQogICAgICBTdGF0dXMgOj0gTnRRdWVyeVN5c3RlbUluZm9ybWF0aW9uKFN5c3RlbVNlc3Npb25Qcm9jZXNzZXNJbmZvcm1hdGlvbiwgQFNlc3Npb25JbmZvLCBTaXplT2YoU2Vzc2lvbkluZm8pLCBAUmV0TGVuZ3RoKTsKICAgICAgaWYgTlRfU1VDQ0VTUyhTdGF0dXMpIHRoZW4KICAgICAgYmVnaW4KICAgICAgICBDdXJyZW50UHJvY2VzcyA6PSBTZXNzaW9uSW5mby5CdWZmZXI7CiAgICAgICAgd2hpbGUgVHJ1ZSBkbwogICAgICAgIGJlZ2luCiAgICAgICAgICAvLyBZb3VyIGNvZGUgaGVyZQoKICAgICAgICAgIGlmIChDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGEgPSAwKSB0aGVuCiAgICAgICAgICAgIEJyZWFrOwoKICAgICAgICAgIENhcmRpbmFsKEN1cnJlbnRQcm9jZXNzKSA6PSBDYXJkaW5hbChDdXJyZW50UHJvY2VzcykgKyBDdXJyZW50UHJvY2Vzc14uTmV4dEVudHJ5RGVsdGE7CiAgICAgICAgZW5kOwoKICAgICAgICBFeGl0OwogICAgICBlbmQ7CiAgICBmaW5hbGx5CiAgICAgIEZyZWVNZW1vcnkoU2Vzc2lvbkluZm8uQnVmZmVyKTsKICAgIGVuZDsKICBlbmQ7CgogIFNldExhc3RFcnJvcihSdGxOdFN0YXR1c1RvRG9zRXJyb3IoU3RhdHVzKSk7CiAgUmFpc2VMYXN0T1NFcnJvcjsKZW5kOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ Status : NTSTATUS;
+ RetLength : DWORD;
+ SessionInfo : SYSTEM_SESSION_PROCESS_INFORMATION;
+ CurrentProcess : PSystemProcesses;
+begin
+
+ SessionInfo.SessionId := SessionId;
+ SessionInfo.Buffer := nil;
+ SessionInfo.SizeOfBuf := 0;
+
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ while (Status = STATUS_INFO_LENGTH_MISMATCH) do
+ begin
+ SessionInfo.SizeOfBuf := RetLength;
+ SessionInfo.Buffer := GetMemory(RetLength);
+ try
+ Status := NtQuerySystemInformation(SystemSessionProcessesInformation, @SessionInfo, SizeOf(SessionInfo), @RetLength);
+ if NT_SUCCESS(Status) then
+ begin
+ CurrentProcess := SessionInfo.Buffer;
+ while True do
+ begin
+ // Your code here
+
+ if (CurrentProcess^.NextEntryDelta = 0) then
+ Break;
+
+ Cardinal(CurrentProcess) := Cardinal(CurrentProcess) &amp;#43; CurrentProcess^.NextEntryDelta;
+ end;
+
+ Exit;
+ end;
+ finally
+ FreeMemory(SessionInfo.Buffer);
+ end;
+ end;
+
+ SetLastError(RtlNtStatusToDosError(Status));
+ RaiseLastOSError;
+end;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;While this works fine on Windows XP and 2003 x86, it fails to work correctly on the x64 versions of Windows XP and 2003 (or maybe even higher).&lt;/p&gt;
+&lt;p&gt;The problem is that RetLength is always SizeOf(SYSTEM_SESSION_PROCESS_INFORMATION) and thus we are in an endless loop!&lt;/p&gt;</description></item><item><title>Unattended Visual J# Install returns error 4122</title><link>https://remkoweijnen.nl/blog/2010/11/26/unattended-visual-j-install-returns-error-4122/</link><pubDate>Fri, 26 Nov 2010 11:53:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/26/unattended-visual-j-install-returns-error-4122/</guid><description>&lt;p&gt;This means you are installing the wrong edition, eg x86 version on an x64 OS.&lt;/p&gt;
+&lt;p&gt;All available version are listed on the MSDN &lt;a href="http://msdn.microsoft.com/en-us/vjsharp/bb188598" target="_blank"&gt;Visual J# Redistributable Packages&lt;/a&gt; page.&lt;/p&gt;
+&lt;p&gt;Related: &lt;a title="The case of the VMware vSphere Client" href="https://remkoweijnen.nl/blog/2010/10/27/the-case-of-the-vmware-vsphere-client/"&gt;The case of the VMware vSphere Client&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Windows XP X64 Terminal Server patch part 1 (mandatory)</title><link>https://remkoweijnen.nl/blog/2008/12/19/windows-xp-x64-terminal-server-patch-part-1-mandatory/</link><pubDate>Fri, 19 Dec 2008 13:58:17 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/12/19/windows-xp-x64-terminal-server-patch-part-1-mandatory/</guid><description>&lt;p&gt;Windows XP X64 shares the same binaries with Windows 2003 X64, but Terminal Server has some restrictions on XP. This article shows you how to get rid of them and is based on cw2k ideas from the original Windows XP Terminal Server patch.&lt;/p&gt;
+&lt;p&gt;&lt;font color="brown"&gt;Version 1.1 contains bug#1 fix and is smaller (less bytes are changed).&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;1) &lt;strong&gt;Winlogon.exe&lt;/strong&gt; contains a function, called &lt;font color="blue"&gt;EnumerateMatchingUsers&lt;/font&gt; which in turn calls &lt;font color="blue"&gt;IsProfessionalTerminalServer&lt;/font&gt; function. We need to patch this function to return zero (false):&lt;/p&gt;
+&lt;p width="100%" style="border: 3px double #808080; overflow-x: scroll; white-space: nowrap; font-family: monospace"&gt; .text:0000000100042F77 IsProfessionalTerminalServer proc near &lt;span style="color: green"&gt;; CODE XREF: EnumerateMatchingUsers:loc_10002B44Bp&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77 &lt;/span&gt; &lt;span style="color: #8080ff"&gt;; DATA XREF: .pdata:00000001000D01DCo ...&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77 &lt;/span&gt; &lt;span style="color: green"&gt;VersionInformation&lt;/span&gt;&lt;span style="color: navy"&gt;= _OSVERSIONINFOW ptr&lt;/span&gt; &lt;span style="color: #008040"&gt;-138h&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77 &lt;/span&gt; &lt;span style="color: green"&gt;var_20&lt;/span&gt; &lt;span style="color: navy"&gt;= word ptr&lt;/span&gt; &lt;span style="color: #008040"&gt;-20h&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77 &lt;/span&gt; &lt;span style="color: green"&gt;var_ 1E&lt;/span&gt; &lt;span style="color: navy"&gt;= byte ptr&lt;/span&gt; &lt;span style="color: #008040"&gt;-1Eh&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77 &lt;/span&gt; &lt;span style="color: green"&gt;var_18&lt;/span&gt; &lt;span style="color: navy"&gt;= qword ptr&lt;/span&gt; &lt;span style="color: #008040"&gt;-18h&lt;/span&gt;&lt;span style="color: black"&gt;
+.text:0000000100042F77&lt;/span&gt;
+&lt;span style="background: white none repeat scroll 0% 50%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: blue"&gt;&lt;span style="color: black"&gt;.text:0000000100042F77&lt;/span&gt; 48 81 EC 58 01 00 00 &lt;span style="color: navy"&gt;sub rsp&lt;/span&gt;&lt;span style="color: navy"&gt;,&lt;/span&gt; &lt;span style="color: green"&gt;158h &lt;font color="red"&gt;=&amp;gt; 31 C0 C3 xor eax, eax; retn&lt;/font&gt;&lt;/span&gt;
+&lt;span style="color: black"&gt;.text:0000000100042F7E&lt;/span&gt; 48 8B 05 F3 3A 08 00 &lt;span style="color: navy"&gt;mov rax&lt;/span&gt;&lt;span style="color: navy"&gt;, cs:&lt;/span&gt;__security_cookie
+&lt;span style="color: black"&gt;.text:0000000100042F85&lt;/span&gt; 48 89 84 24 40 01 00 00 &lt;span style="color: navy"&gt;mov [rsp+&lt;/span&gt;&lt;span style="color: green"&gt;158h&lt;/span&gt;&lt;span style="color: navy"&gt;+&lt;/span&gt;&lt;span style="color: green"&gt;var_18&lt;/span&gt;&lt;span style="color: navy"&gt;]&lt;/span&gt;&lt;span style="color: navy"&gt;, rax&lt;/span&gt;
+&lt;span style="color: black"&gt;.text:0000000100042F8D&lt;/span&gt; 48 8D 4C 24 20 &lt;span style="color: navy"&gt;lea rcx&lt;/span&gt;&lt;span style="color: navy"&gt;, [rsp+&lt;/span&gt;&lt;span style="color: green"&gt;158h&lt;/span&gt;&lt;span style="color: navy"&gt;+&lt;/span&gt;&lt;span style="color: green"&gt;VersionInformation&lt;/span&gt;&lt;span style="color: navy"&gt;]&lt;/span&gt; ; void *
+&lt;span style="color: black"&gt;.text:0000000100042F92&lt;/span&gt; 33 D2 &lt;span style="color: navy"&gt;xor edx&lt;/span&gt;&lt;span style="color: navy"&gt;, edx&lt;/span&gt; ; int&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;</description></item><item><title>Windows 2003 X64 Terminal Server Patch</title><link>https://remkoweijnen.nl/blog/2008/12/09/windows-2003-x64-terminal-server-patch/</link><pubDate>Tue, 09 Dec 2008 13:53:39 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/12/09/windows-2003-x64-terminal-server-patch/</guid><description>&lt;p&gt;A while ago I published a &lt;a href="https://remkoweijnen.nl/blog/2008/08/31/patch-windows-2003-terminal-server-to-allow-more-than-2-concurrent-sessions/"&gt;patch for Windows 2003 Terminal Server&lt;/a&gt; that allows more than 2 concurrent sessions in Remote Administration mode.&lt;/p&gt;
+&lt;p&gt;Today I publish the same patch but for Windows Server 2003 X64. The patched function (CRAPolicy::Logon) is the same as in the original patch.&lt;/p&gt;</description></item></channel></rss>

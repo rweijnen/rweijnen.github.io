@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Scheduled Tasks on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/scheduled-tasks/</link><description>Recent content in Scheduled Tasks on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 03 May 2011 10:27:30 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/scheduled-tasks/index.xml" rel="self" type="application/rss+xml"/><item><title>Deleting scheduled Altiris tasks from SQL</title><link>https://remkoweijnen.nl/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/</link><pubDate>Tue, 03 May 2011 10:27:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/</guid><description>&lt;p&gt;I needed to delete around 50 scheduled tasks from several machines in Altiris because something went wrong in on of the first jobs.&lt;/p&gt; &lt;p&gt;It would have better if the jobs were configured to fail on error and not continue but they weren't.&lt;/p&gt; &lt;p&gt;Deleting the jobs from the Altiris console is very, very, slow. First the console asks for confirmation (after showing the hourglass for a long time): &lt;br /&gt; &lt;br /&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/05/image10.webp" class="glightbox" data-type="image" data-gallery="post-1731"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-bottom: 0px; border-left: 0px; margin: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top: 0px; border-right: 0px; padding-top: 0px" title="image" border="0" alt="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/05/image_thumb10.webp" width="244" height="88" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Then the actual delete can take a few minutes and then the next server and so on.&lt;/p&gt; &lt;p&gt;I decided to delete the tasks directly from SQL.&lt;/p&gt; &lt;p&gt;I know this is not preferred but I think in the end it's safe enough because I found a stored procedure called &lt;em&gt;del_event_schedule&lt;/em&gt; which looks like this:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,QUxURVIgcHJvY2VkdXJlIFtkYm9dLltkZWxfZXZlbnRfc2NoZWR1bGVdCiAgIEBzY2hlZHVsZV9pZCAgICAgICAgIGludAphcwogICBiZWdpbiB0cmFuc2FjdGlvbgoKICAgZGVsZXRlIGZyb20gZXZlbnRfc2NoZWR1bGUgd2hlcmUgc2NoZWR1bGVfaWQgPSBAc2NoZWR1bGVfaWQKCiAgIGlmIChAQGVycm9yICE9IDApCiAgICAgIHJvbGxiYWNrIHRyYW5zYWN0aW9uCiAgIGVsc2UKICAgICAgY29tbWl0IHRyYW5zYWN0aW9u"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;ALTER procedure [dbo].[del_event_schedule]
+ @schedule_id int
+as
+ begin transaction
+
+ delete from event_schedule where schedule_id = @schedule_id
+
+ if (@@error != 0)
+ rollback transaction
+ else
+ commit transaction&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;So al it does is a (transacted) delete from the table. &lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item></channel></rss>

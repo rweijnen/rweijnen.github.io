@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Default Credentials on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/default-credentials/</link><description>Recent content in Default Credentials on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 18 Oct 2010 10:18:08 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/default-credentials/index.xml" rel="self" type="application/rss+xml"/><item><title>Default username password HP 8/20q FC San Switch</title><link>https://remkoweijnen.nl/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/</link><pubDate>Mon, 18 Oct 2010 10:18:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/18/default-username-password-hp-820q-fc-san-switch/</guid><description>&lt;p&gt;Again a note that is mainly for myself since I tend to forget these kind of things and always spend much time to look it up...&lt;/p&gt;
+&lt;p&gt;Default settings for the HP 8/20q FC SAN Switch are:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,dXNlcm5hbWU6IGFkbWluCgpwYXNzd29yZDogcGFzc3dvcmQKCmRlZmF1bHQgaXA6IDEwLjAuMC4x"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;username: admin
+
+password: password
+
+default ip: 10.0.0.1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Default username password HP Storageworks P2000</title><link>https://remkoweijnen.nl/blog/2010/10/14/default-username-password-hp-storageworks-p2000/</link><pubDate>Thu, 14 Oct 2010 14:38:02 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/14/default-username-password-hp-storageworks-p2000/</guid><description>&lt;p&gt;Just a reminder to Self for future reference, the default credentials for HP Storageworks P2000 (G3) are:&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;text&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".txt" href="data:text/plain;charset=utf-8;base64,dXNlcm5hbWU6IG1hbmFnZQoKcGFzc3dvcmQ6ICFtYW5hZ2U="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-none"&gt;&lt;code class="language-none"&gt;username: manage
+
+password: !manage&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;14 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;Thx&lt;/span&gt; &lt;time datetime="2010-11-05"&gt;Nov 5, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;100% THX!&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="https://remkoweijnen.nl/blog/" rel="nofollow ugc"&gt;Remko&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2010-11-05"&gt;Nov 5, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;You're welcome and thanks for your comment!&lt;/p&gt;</description></item></channel></rss>

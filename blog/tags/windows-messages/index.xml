@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Windows Messages on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/windows-messages/</link><description>Recent content in Windows Messages on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 30 Mar 2009 22:57:28 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/windows-messages/index.xml" rel="self" type="application/rss+xml"/><item><title>Sending WM_KEYDOWN or WM_KEYUP</title><link>https://remkoweijnen.nl/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/</link><pubDate>Mon, 30 Mar 2009 22:57:28 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/03/30/sending-wm_keydown-or-wm_keyup/</guid><description>&lt;p&gt;If you read the MSDN documentation of &lt;a href="http://msdn.microsoft.com/en-us/library/ms646280(VS.85).aspx" target="_blank"&gt;WM_KEYDOWN&lt;/a&gt; and &lt;a href="http://msdn.microsoft.com/en-us/library/ms646281(VS.85).aspx" target="_blank"&gt;WM_KEYUP&lt;/a&gt; you can see that those message require us to interpret lParam as a bitfield:&lt;/p&gt;
+&lt;blockquote&gt;lParam
+Specifies the repeat count, scan code, extended-key flag, context code, previous key-state flag, and transition-state flag, as shown in the following table.
+&lt;p&gt;0-15&lt;br&gt;
+Specifies the repeat count for the current message. The value is the number of times the keystroke is autorepeated as a result of the user holding down the key. The repeat count is always one for a WM_KEYUP message.&lt;br&gt;
+16-23&lt;br&gt;
+Specifies the scan code. The value depends on the OEM.&lt;br&gt;
+24&lt;br&gt;
+Specifies whether the key is an extended key, such as the right-hand ALT and CTRL keys that appear on an enhanced 101- or 102-key keyboard. The value is 1 if it is an extended key; otherwise, it is 0.&lt;br&gt;
+25-28&lt;br&gt;
+Reserved; do not use.&lt;br&gt;
+29&lt;br&gt;
+Specifies the context code. The value is always 0 for a WM_KEYUP message.&lt;br&gt;
+30&lt;br&gt;
+Specifies the previous key state. The value is always 1 for a WM_KEYUP message.&lt;br&gt;
+31&lt;br&gt;
+Specifies the transition state. The value is always 1 for a WM_KEYUP message.&lt;/blockquote&gt;&lt;br&gt;
+I was looking for a convenient way to get and read the bits and this is what I made up:&lt;/p&gt;</description></item></channel></rss>

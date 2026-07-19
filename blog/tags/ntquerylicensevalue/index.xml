@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NtQueryLicenseValue on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/ntquerylicensevalue/</link><description>Recent content in NtQueryLicenseValue on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 17 May 2011 21:32:22 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/ntquerylicensevalue/index.xml" rel="self" type="application/rss+xml"/><item><title>Programmatically determine if we run server core</title><link>https://remkoweijnen.nl/blog/2011/05/17/programmatically-determine-if-we-run-server-core/</link><pubDate>Tue, 17 May 2011 21:32:22 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/17/programmatically-determine-if-we-run-server-core/</guid><description>&lt;p&gt;If you want to check if you are running on a Server Core edition of Windows you can use the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724358.aspx" target="_blank"&gt;GetProductInfo&lt;/a&gt; API.&lt;/p&gt; &lt;p&gt;GetProductInfo takes 4 input parameters that can be obtained using &lt;a href="http://msdn.microsoft.com/en-us/library/ms724451(VS.85).aspx" target="_blank"&gt;GetVersionEx&lt;/a&gt; and the &lt;a href="http://msdn.microsoft.com/en-us/library/ms724833(v=VS.85).aspx" target="_blank"&gt;OSVERSIONINFOEX&lt;/a&gt; structure:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgb3N2aTogT1NWRVJTSU9OSU5GT0VYOwpiZWdpbgogIFplcm9NZW1vcnkoQG9zdmksIFNpemVPZihvc3ZpKSk7CiAgb3N2aS5kd09TVmVyc2lvbkluZm9TaXplIDo9IFNpemVPZihvc3ZpKTsKICBXaW4zMkNoZWNrKEdldFZlcnNpb25FeChvc3ZpKSk7"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ osvi: OSVERSIONINFOEX;
+begin
+ ZeroMemory(@osvi, SizeOf(osvi));
+ osvi.dwOSVersionInfoSize := SizeOf(osvi);
+ Win32Check(GetVersionEx(osvi));&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;No we call GetProductInfo:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;delphi&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".pas" href="data:text/plain;charset=utf-8;base64,dmFyCiAgZHdQcm9kVHlwZTogRFdPUkQ7CmJlZ2luCiAgV2luMzJDaGVjayhHZXRQcm9kdWN0SW5mbyhvc3ZpLmR3TWFqb3JWZXJzaW9uLCBvc3ZpLmR3TWlub3JWZXJzaW9uLAogICAgb3N2aS53U2VydmljZVBhY2tNYWpvciwgb3N2aS53U2VydmljZVBhY2tNaW5vciwgZHdQcm9kVHlwZSkpOw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-pascal"&gt;&lt;code class="language-pascal"&gt;var
+ dwProdType: DWORD;
+begin
+ Win32Check(GetProductInfo(osvi.dwMajorVersion, osvi.dwMinorVersion,
+ osvi.wServicePackMajor, osvi.wServicePackMinor, dwProdType));&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item></channel></rss>

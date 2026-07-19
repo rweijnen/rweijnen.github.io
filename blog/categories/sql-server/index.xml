@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>SQL Server on Remko's Blog</title><link>https://remkoweijnen.nl/blog/categories/sql-server/</link><description>Recent content in SQL Server on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 13 Jul 2014 13:22:13 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/categories/sql-server/index.xml" rel="self" type="application/rss+xml"/><item><title>Where to find System.NetworkManagement.Monitoring.mp?</title><link>https://remkoweijnen.nl/blog/2014/07/13/where-to-find-system-networkmanagement-monitoring-mp/</link><pubDate>Sun, 13 Jul 2014 13:22:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2014/07/13/where-to-find-system-networkmanagement-monitoring-mp/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2014/07/image.webp" class="glightbox thickbox" data-type="image" data-gallery="post-3465"&gt;&lt;img loading="lazy" decoding="async" title="SCOM Logo" style="float: right; display: inline" alt="System Center Operations Manager Logo" src="https://remkoweijnen.nl/blog/wp-content/uploads/2014/07/image_thumb.webp" width="89" align="right" height="95" /&gt;&lt;/a&gt;I am currently working on a Management Pack for SCOM and I have studies a few examples on adding processor and memory counters. &lt;/p&gt; &lt;p&gt;These examples all reference a Management Pack named &amp;quot;System.NetworkManagement.Monitoring.mp&amp;quot; but this Management Pack is not bundled with the &lt;a href="http://www.microsoft.com/en-us/download/details.aspx?id=30169" target="_blank"&gt;System Center 2012 Visual Studio Authoring Extensions&lt;/a&gt;. &lt;/p&gt;</description></item><item><title>Deleting scheduled Altiris tasks from SQL</title><link>https://remkoweijnen.nl/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/</link><pubDate>Tue, 03 May 2011 10:27:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/05/03/deleting-scheduled-altiris-tasks-from-sql/</guid><description>&lt;p&gt;I needed to delete around 50 scheduled tasks from several machines in Altiris because something went wrong in on of the first jobs.&lt;/p&gt; &lt;p&gt;It would have better if the jobs were configured to fail on error and not continue but they weren't.&lt;/p&gt; &lt;p&gt;Deleting the jobs from the Altiris console is very, very, slow. First the console asks for confirmation (after showing the hourglass for a long time): &lt;br /&gt; &lt;br /&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/05/image10.webp" class="glightbox" data-type="image" data-gallery="post-1731"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; border-bottom: 0px; border-left: 0px; margin: 0px; padding-left: 0px; padding-right: 0px; display: inline; border-top: 0px; border-right: 0px; padding-top: 0px" title="image" border="0" alt="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/05/image_thumb10.webp" width="244" height="88" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Then the actual delete can take a few minutes and then the next server and so on.&lt;/p&gt; &lt;p&gt;I decided to delete the tasks directly from SQL.&lt;/p&gt; &lt;p&gt;I know this is not preferred but I think in the end it's safe enough because I found a stored procedure called &lt;em&gt;del_event_schedule&lt;/em&gt; which looks like this:&lt;/p&gt; 
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,QUxURVIgcHJvY2VkdXJlIFtkYm9dLltkZWxfZXZlbnRfc2NoZWR1bGVdCiAgIEBzY2hlZHVsZV9pZCAgICAgICAgIGludAphcwogICBiZWdpbiB0cmFuc2FjdGlvbgoKICAgZGVsZXRlIGZyb20gZXZlbnRfc2NoZWR1bGUgd2hlcmUgc2NoZWR1bGVfaWQgPSBAc2NoZWR1bGVfaWQKCiAgIGlmIChAQGVycm9yICE9IDApCiAgICAgIHJvbGxiYWNrIHRyYW5zYWN0aW9uCiAgIGVsc2UKICAgICAgY29tbWl0IHRyYW5zYWN0aW9u"&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;ALTER procedure [dbo].[del_event_schedule]
+ @schedule_id int
+as
+ begin transaction
+
+ delete from event_schedule where schedule_id = @schedule_id
+
+ if (@@error != 0)
+ rollback transaction
+ else
+ commit transaction&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;So al it does is a (transacted) delete from the table. &lt;/p&gt;
+&lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>Apply IP Configuration from a Database</title><link>https://remkoweijnen.nl/blog/2011/04/29/apply-ip-configuration-from-a-database/</link><pubDate>Fri, 29 Apr 2011 10:27:27 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/04/29/apply-ip-configuration-from-a-database/</guid><description>&lt;p&gt;I am currently deploying 64 Citrix XenApp servers with Altiris. The deployment consists of an OS Image, OS Configuration and finally Citrix XenApp and Applications.&lt;/p&gt;
+&lt;p&gt;In the OS Configuration part the IP configuration needs to be applied and I decided to do this with a database.&lt;/p&gt;
+&lt;p&gt;The database consists of 2 tables; one table with the per host settings and one table with the global settings (such as DNS).&lt;/p&gt;
+&lt;p&gt;In the Altiris job both tables are read from an embedded VBScript and assigned to the NIC.&lt;/p&gt;
+&lt;p&gt;&lt;span style="text-decoration: underline;"&gt;&lt;strong&gt;Database configuration&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;I created a database (SQL Server) called IPManagement with 2 tables:&lt;/p&gt;
+&lt;p&gt;&lt;a class="glightbox" data-type="image" data-gallery="post-1695" href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/04/image7.webp"&gt;&lt;img loading="lazy" decoding="async" style="background-image: none; margin: 0px; padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border-width: 0px;" title="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/04/image_thumb7.webp" border="0" alt="image" width="177" height="100" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;</description></item><item><title>SQL Query to get the Full Path of an Altiris Job #3</title><link>https://remkoweijnen.nl/blog/2010/12/12/sql-query-to-get-the-full-path-of-an-altiris-job-3/</link><pubDate>Sun, 12 Dec 2010 19:50:32 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/12/sql-query-to-get-the-full-path-of-an-altiris-job-3/</guid><description>&lt;p&gt;Last time I &lt;a title="SQL Query to get the Full Path of an Altiris Job #2" href="https://remkoweijnen.nl/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/" target="_blank"&gt;showed&lt;/a&gt; a User Defined Function to the Full Path of an Altiris Job given it&amp;rsquo;s id (event_id). Note that Altiris calls a Job an Event so the terms Event and Jobs are interchangeable here.&lt;/p&gt;
+&lt;p&gt;To complete it we first need to prepend the server and share name to the path.&lt;/p&gt;
+&lt;p&gt;I looked into the Altiris database tables to find the best place to get the servername and it seems that the hostname column of the mmsettings table is a good way.&lt;/p&gt;
+&lt;p&gt;In my database there was only one row in the table but I restrict the results by adding top 1:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,U0VMRUNUIFRPUCAxIGhvc3RuYW1lIEZST00gbW1zZXR0aW5ncw=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;SELECT TOP 1 hostname FROM mmsettings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Then I looked into the available tokens for one that returns a job id but we can only return a job name or a computer id. Since a job name is not unique I decided to use the computername and find the active job for this computer.&lt;/p&gt;
+&lt;p&gt;When a Job is scheduled an entry is added to the event_schedule table. If you look into this table you will notice a column status_code which is NULL initially and when the job start it will get a value of -1 which indicates the job is active.&lt;/p&gt;
+&lt;p&gt;When the job has finished the status will always be 0 or higher.&lt;/p&gt;</description></item><item><title>SQL Query to get the Full Path of an Altiris Job #2</title><link>https://remkoweijnen.nl/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/</link><pubDate>Thu, 09 Dec 2010 10:00:43 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/09/sql-query-to-get-the-full-path-of-an-altiris-job-2/</guid><description>&lt;p&gt;Earlier I described a &lt;a href="https://remkoweijnen.nl/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/"&gt;SQL Query to get the Full Path of an Altiris Job&lt;/a&gt;, today I will describe how we can make a &lt;a title="User Defined Functions" href="http://msdn.microsoft.com/en-us/library/ms189593.aspx" target="_blank"&gt;User Defined Function&lt;/a&gt; (UDF) in SQL so we can call it easier.&lt;/p&gt;
+&lt;p&gt;I am using an UDF because it allows us to specify parameters, in this case a single parameter (the EventId (or job id).&lt;/p&gt;
+&lt;p&gt;This is the SQL that creates the UDF:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;sql&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".sql" href="data:text/plain;charset=utf-8;base64,Q1JFQVRFIEZVTkNUSU9OIEdldEZ1bGxQYXRoCiAgKCBARXZlbnRJZCBpbnQpClJFVFVSTlMgbnZhcmNoYXIoNDAwMCkKQVMKQkVHSU4KCURFQ0xBUkUgQHN0ciBudmFyY2hhcig0MDAwKTsKCVdJVEggdDEgKGZvbGRlcl9pZCwgbmFtZSwgcGFyZW50X2lkLCBsZXZlbCkKCUFTCgkoCgktLSBBbmNob3IgbWVtYmVyIGRlZmluaXRpb24KCQlTRUxFQ1QgZm9sZGVyX2lkLCBuYW1lLCBwYXJlbnRfaWQsIDAgQVMgTGV2ZWwKCQlGUk9NIGV2ZW50X2ZvbGRlcgoJCVdIRVJFIGZvbGRlcl9pZCBpbiAoCgkJCVNFTEVDVCBmb2xkZXJfaWQgRlJPTSBldmVudCBXSEVSRSBldmVudF9pZCA9IEBFdmVudElkKQoJCVVOSU9OIEFMTAoKCS0tIFJlY3Vyc2l2ZSBtZW1iZXIgZGVmaW5pdGlvbgoJCVNFTEVDVCB0Mi5mb2xkZXJfaWQsdDIubmFtZSwgdDIucGFyZW50X2lkLCBMZXZlbCsxCgkJRlJPTSBldmVudF9mb2xkZXIgQVMgdDIsIHQxCgkJV0hFUkUgdDIuZm9sZGVyX2lkID0gdDEucGFyZW50X2lkCgkpCgoJLS0gU3RhdGVtZW50IHRoYXQgZXhlY3V0ZXMgdGhlIENURQoJLS0gU1RVRkYgYW5kIEZPUiBYTUwgYXJlIHVzZWQgdG8gQ29uY2F0ZW5hdGUgdGhlIFZhbHVlcyBhbmQgc2VwZXJhdGUgdGhlbSBieSBcIGNoYXJhY3RlcgoKCVNFTEVDVCBAc3RyID0gU1RVRkYoKFNFTEVDVCAnXCcgKyBuYW1lIGZyb20gdDEgb3JkZXIgYnkgbGV2ZWwgZGVzYyBGT1IgWE1MIFBBVEgoJycpKSwxLDEsJycpCglSRVRVUk4gQHN0cgpFTkQKR08="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-sql"&gt;&lt;code class="language-sql"&gt;CREATE FUNCTION GetFullPath
+ ( @EventId int)
+RETURNS nvarchar(4000)
+AS
+BEGIN
+	DECLARE @str nvarchar(4000);
+	WITH t1 (folder_id, name, parent_id, level)
+	AS
+	(
+	-- Anchor member definition
+		SELECT folder_id, name, parent_id, 0 AS Level
+		FROM event_folder
+		WHERE folder_id in (
+			SELECT folder_id FROM event WHERE event_id = @EventId)
+		UNION ALL
+
+	-- Recursive member definition
+		SELECT t2.folder_id,t2.name, t2.parent_id, Level&amp;#43;1
+		FROM event_folder AS t2, t1
+		WHERE t2.folder_id = t1.parent_id
+	)
+
+	-- Statement that executes the CTE
+	-- STUFF and FOR XML are used to Concatenate the Values and seperate them by \ character
+
+	SELECT @str = STUFF((SELECT &amp;#39;\&amp;#39; &amp;#43; name from t1 order by level desc FOR XML PATH(&amp;#39;&amp;#39;)),1,1,&amp;#39;&amp;#39;)
+	RETURN @str
+END
+GO&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>SQL Query to get the Full Path of an Altiris Job</title><link>https://remkoweijnen.nl/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/</link><pubDate>Tue, 07 Dec 2010 22:22:56 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/12/07/sql-query-to-get-the-full-path-of-an-altiris-job/</guid><description>&lt;p&gt;I wanted to query the full path name of an Altiris Job, this sounds easier that it is though.&lt;/p&gt;
+&lt;p&gt;Consider the following hierarchy:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/12/tree1.webp" alt="Tree" width="302" height="360" /&gt;
+&lt;p&gt;Now I want to assemble the full Path, in this case: RPA\Getronics\PKG_p007.Citrix_Components.&lt;/p&gt;</description></item><item><title>Altiris AxSched ignores the DSN parameter</title><link>https://remkoweijnen.nl/blog/2010/11/23/altiris-axsched-ignores-the-dsn-parameter/</link><pubDate>Tue, 23 Nov 2010 22:48:47 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/23/altiris-axsched-ignores-the-dsn-parameter/</guid><description>&lt;p&gt;I was playing around with the AxSched tool that comes with Altiris, in my case the version that comes with v6.9 build 453.&lt;/p&gt;
+&lt;p&gt;I could not make it connect to the Deployment Server from my test machine, it seemed like the /dsn parameter I used was totally ignored.&lt;/p&gt;</description></item><item><title>Why is my scheduled job not executed in Altiris?</title><link>https://remkoweijnen.nl/blog/2010/11/23/why-is-my-scheduled-job-not-executed-in-altiris/</link><pubDate>Tue, 23 Nov 2010 20:34:15 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/23/why-is-my-scheduled-job-not-executed-in-altiris/</guid><description>&lt;p&gt;Earlier today I wrote about my &lt;a href="https://remkoweijnen.nl/blog/2010/11/23/altiris-job-builder/"&gt;Altiris Job Builder&lt;/a&gt; tool but when I tested the actual produced build job I noticed something weird: the job was scheduled but not executed.&lt;/p&gt;
+&lt;p&gt;I then tried to manually push a job to this server and that one executed fine.&lt;/p&gt;
+&lt;p&gt;When I clicked the Job I could see that it was scheduled:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/job1.webp" class="glightbox" data-type="image" data-gallery="post-799"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/job1-small.webp" alt="Job1" width="430" height="246" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;But when I clicked the Server it wasn&amp;rsquo;t there:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/job2.webp" class="glightbox" data-type="image" data-gallery="post-799"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/job2-small.webp" alt="Job2" width="430" height="313" /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Altiris Job Builder</title><link>https://remkoweijnen.nl/blog/2010/11/23/altiris-job-builder/</link><pubDate>Tue, 23 Nov 2010 10:26:34 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/23/altiris-job-builder/</guid><description>&lt;p&gt;I have created a little tool for myself that I have call Altiris Job Builder, it retreives the Jobs from the Altiris database and shows them in a Treeview.&lt;/p&gt;
+&lt;p&gt;Then I can assemble a Master Build Job by dragging the needed Jobs to another Treeview on the right. Since it&amp;rsquo;s just for me it doesn&amp;rsquo;t have a fancy gui:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/jobbuilder2.webp" class="glightbox" data-type="image" data-gallery="post-784"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/11/jobbuilder2-small.webp" alt="JobBuilder2" width="430" height="406" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;So why did I write it? Well I have divided my Jobs into Prerequisites and Packages, for instance IIS and Terminal Server and Java are prereqisuites for Citrix. But many prereqisuites are required for one or more other packages, eg Java is also used for certain applications.&lt;/p&gt;</description></item><item><title>The case of the failing Deployment Server Install</title><link>https://remkoweijnen.nl/blog/2010/10/26/694/</link><pubDate>Tue, 26 Oct 2010 16:47:15 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/10/26/694/</guid><description>&lt;p&gt;I was trying to install HP Insight Control server deployment (&lt;a href="https://remkoweijnen.nl/blog/2010/10/14/where-to-download-hp-rapid-deployment-pack/" target="_blank"&gt;previously called HP Rapid Deployment Pack&lt;/a&gt;) on Sql Server 2008 Express. I will just call it Deployment Server or DS from here.&lt;/p&gt;
+&lt;p&gt;I first installed SQL 2008 Express with Advanced Services and configured it to listen op Port 1433 as required by DS.&lt;/p&gt;
+&lt;p&gt;The installation of the first part (Deployment Server version 6.9.4) indicated a successfull install but the prereqisuites check of the Hotfix version 2.0 installer failed on the last step:&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/NoAttachedConsoles.webp" class="glightbox" data-type="image" data-gallery="post-694"&gt;&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/NoAttachedConsoles-small.webp" alt="No Attached Consoles HP Deployment Server" width="430" height="300" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This was strange because I didn&amp;rsquo;t yet startup the console, so I decided to start it and close it as this would perhaps allow me to continue.&lt;/p&gt;
+&lt;p&gt;The next screen was a clear indication something went wrong:&lt;/p&gt;
+&lt;img loading="lazy" decoding="async" src="https://remkoweijnen.nl/blog/wp-content/uploads/2010/10/ConsoleUnableToConnect.webp" alt="Altiris Deploymeny Server Unable to Connect" width="405" height="238" /&gt;
+&lt;p&gt;I presumed that the ODBC connection was missing so I went to Adminstrative Tools | Data Sources (ODBC). But the ODBC connection was present. I then fired up SQL Server Management Studio which showed me the eXpress database was missing.&lt;/p&gt;</description></item><item><title>Script to clear SQL Transactions logs</title><link>https://remkoweijnen.nl/blog/2007/10/28/script-to-clear-sql-transactions-logs/</link><pubDate>Sun, 28 Oct 2007 13:11:15 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/10/28/script-to-clear-sql-transactions-logs/</guid><description>&lt;p&gt;Script to clear SQL Transactions Logs&lt;/p&gt;
+&lt;p&gt;Did you know that when you backup a SQL database with Backup Exec (with the SQL Agent) the transaction log is not cleared? This means that if you use the full recovery model your transaction log keeps growing and growing. I tested this with Backup Exec v11D and you can only create a seperate scheduled job to backup the transactions logs but not one to just clear it or truncate it after successfull backup.&lt;/p&gt;
+&lt;p&gt;Therefore I made a VBS script that clears SQL transactions logs, an option would be to schedule this as a post backup job.&lt;/p&gt;
+&lt;p&gt;This is the script:&lt;/p&gt;</description></item></channel></rss>

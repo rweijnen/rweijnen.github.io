@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Password on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/password/</link><description>Recent content in Password on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 13 Dec 2017 13:53:08 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/password/index.xml" rel="self" type="application/rss+xml"/><item><title>Change NetScaler Password Hash from SHA1 to SHA512</title><link>https://remkoweijnen.nl/blog/2017/12/13/change-netscaler-password-hash-sha1-sha512/</link><pubDate>Wed, 13 Dec 2017 13:53:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2017/12/13/change-netscaler-password-hash-sha1-sha512/</guid><description>&lt;p&gt;This morning I wanted to install the NetScaler patch for the TLS padding vulnerability and of course I made a backup before deploying it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: If you haven&amp;rsquo;t installed this patch yet I would recommended to do so: see &lt;a href="https://support.citrix.com/article/CTX230238"&gt;CTX230238&lt;/a&gt; and check out the &lt;a href="https://robotattack.org/"&gt;ROBOT attack -Return Of Bleichenbacher&amp;rsquo;s Oracle Threat&lt;/a&gt; page to check which other products you may have that are vulnerable.&lt;/p&gt;
+&lt;p&gt;Upon checking the backups (I always download the backup and verify that the archive is intact) I noticed that one of my NetScaler&amp;rsquo;s uses SHA1 for the password hash whilst the other one uses SHA512:&lt;/p&gt;
+&lt;p id="NVylnDh"&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image.webp" class="glightbox" data-type="image" data-gallery="post-4167"&gt;&lt;img loading="lazy" decoding="async" style="display: inline;" title="image" src="https://remkoweijnen.nl/blog/wp-content/uploads/2017/12/image_thumb.webp" alt="image" width="432" height="90" /&gt;&lt;/a&gt;&lt;/p&gt;
+I thought that this was a little strange as both NetScaler's are running the exact same build. However one of them (the one that uses SHA512) was reinstalled recently whilst the one using SHA1 has been upgraded.</description></item><item><title>Decoding Citrix IMA Datastore Password</title><link>https://remkoweijnen.nl/blog/2012/05/29/decoding-citrix-ima-datastore-password/</link><pubDate>Tue, 29 May 2012 21:46:30 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/05/29/decoding-citrix-ima-datastore-password/</guid><description>&lt;p&gt;This morning &lt;a href="http://www.twitter.com/arbeijer/status/207398601066942464"&gt;Arjan Beijer&lt;/a&gt; sent me an interesting link to a &lt;a href="http://www.youtube.com/watch?v=Cb8-kvJkojY"&gt;youtube video&lt;/a&gt; about obtaining the Citrix IMA Datastore password using Windbg.&lt;/p&gt;
+&lt;p&gt;The video shows a method, discovered by &lt;a href="https://twitter.com/#!/fdwl"&gt;Denis Gundarev&lt;/a&gt; to obtain the IMA Datastore password. Basically he uses DSMaint.exe and set&amp;rsquo;s a breakpoint on the call to &lt;a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa380882(v=vs.85).aspx"&gt;CryptUnprotectData&lt;/a&gt; and then reads the password from memory.&lt;/p&gt;
+&lt;p&gt;I tried to call the CryptUnprotectData API with the data read from the registry directly but this failed with error NTE_BAD_KEY_STATE, this is defined in winerror.h and it means &amp;ldquo;Key not valid for use in specified state&amp;rdquo;.&lt;/p&gt;</description></item><item><title>Encoding and Decoding Citrix Passwords</title><link>https://remkoweijnen.nl/blog/2012/05/13/encoding-and-decoding-citrix-passwords/</link><pubDate>Sun, 13 May 2012 21:55:02 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/05/13/encoding-and-decoding-citrix-passwords/</guid><description>&lt;p&gt;I am working on a launcher tool for Citrix XenApp that can not only connect to a published application or published desktop but can also leverage Citrix Workspace Control to reconnect to disconnected and/or active sessions.&lt;/p&gt; &lt;p&gt;There doesn't seem to be any sdk that exposed the data we need so I am trying to reproduce what the Citrix online plugi-in does.&lt;/p&gt; &lt;p&gt;I used a HTTP monitoring tool to capture the traffic between the Online plug-in and the Web Interface. First the online plug-in will retrieve the config.xml from the server specified via the Change Server option:&lt;/p&gt; &lt;p&gt;&lt;a class="glightbox thickbox" href="https://remkoweijnen.nl/blog/wp-content/uploads/2012/05/image2.webp" data-type="image" data-gallery="post-2586"&gt;&lt;img loading="lazy" decoding="async" style="display: inline" title="Change Server - Citrix online plug-in" alt="What is the address of the server hosting your published resources? | Server Address | Example: servername (for non-secure connections) | https://servername (for secure connections)" src="https://remkoweijnen.nl/blog/wp-content/uploads/2012/05/image_thumb2.webp" width="240" height="167" /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Lync Client Password Recovery</title><link>https://remkoweijnen.nl/blog/2012/03/12/lync-client-password-recovery/</link><pubDate>Mon, 12 Mar 2012 23:25:51 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2012/03/12/lync-client-password-recovery/</guid><description>&lt;p&gt;I wrote a small tool that dumps all stored password for the Microsoft Lync Client that I'd like to share here.&lt;/p&gt; &lt;p&gt;It's a commandline tool that takes no arguments:&lt;/p&gt; &lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/SNAGHTML173c9066.webp" class="glightbox" data-type="image" data-gallery="post-2529"&gt;&lt;img loading="lazy" decoding="async" style="display: inline" title="Screenshot" alt="Lync Password Dumper" src="https://remkoweijnen.nl/blog/wp-content/uploads/2012/03/SNAGHTML173c9066_thumb.webp" width="415" height="210" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Have fun with it!&lt;/p&gt;</description></item><item><title>McAfee Anti Virus Unlock User Interface Password</title><link>https://remkoweijnen.nl/blog/2011/12/09/mcafee-anti-virus-unlock-user-interface-password/</link><pubDate>Fri, 09 Dec 2011 15:50:12 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/12/09/mcafee-anti-virus-unlock-user-interface-password/</guid><description>&lt;p&gt;&lt;a href="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/image2.webp" class="glightbox" data-type="image" data-gallery="post-2231"&gt;&lt;img loading="lazy" decoding="async" style="margin: 0px 5px 0px 0px; display: inline; float: left" title="image" alt="image" align="left" src="https://remkoweijnen.nl/blog/wp-content/uploads/2011/12/image_thumb2.webp" width="48" height="48" /&gt;&lt;/a&gt;I needed to change a few settings on a McAfee VirusScan Enterprise 8.7.Oi client. However there was a password protection in place that locks the user interface and nobody around that could tell me the password. So what to do?&lt;/p&gt; &lt;p&gt;Right, we check out where this password is stored and how we can get rid of it!&lt;/p&gt; &lt;p&gt;I openend vsplugin.dll in Ida Pro and searched for related strings such as password, lock etc.&lt;/p&gt; &lt;p&gt;&amp;#160;&lt;/p&gt;</description></item><item><title>Saving Password in Office Communicator</title><link>https://remkoweijnen.nl/blog/2011/01/27/saving-password-in-office-communicator/</link><pubDate>Thu, 27 Jan 2011 15:50:27 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2011/01/27/saving-password-in-office-communicator/</guid><description>&lt;p&gt;If you want to be able save the password in Office Communicator you must create the key &lt;em&gt;HKLM\Software\Microsoft\Communicator&lt;/em&gt; or on x64 OS &lt;em&gt;HKLM\Software\Wow6432Node\Policies\Microsoft\Communicator &lt;/em&gt;and set the DWORD value SavePassword to 1.&lt;/p&gt;
+&lt;p&gt;Now you will have the Save my password checkbox (which will save the encrpted password to HKCU\Software\Microsoft\Communicator\AccountPassword&lt;/p&gt;</description></item><item><title>Random Active Directory Notes #4</title><link>https://remkoweijnen.nl/blog/2010/03/30/random-active-directory-notes-4/</link><pubDate>Tue, 30 Mar 2010 15:04:51 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/03/30/random-active-directory-notes-4/</guid><description>&lt;p&gt;Previously I discussed IDirectoryObject, today I will show how to change a user&amp;rsquo;s password with IDirectoryObject.&lt;/p&gt;
+&lt;p&gt;I didn&amp;rsquo;t find any documentation except a &lt;a href="http://support.microsoft.com/kb/269190" target="_self"&gt;kb article&lt;/a&gt; describing how to use pure ldap to do it. Of course I could have used IADsUser::SetPassword but I decided not to because of the following reasons:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;IADs interfaces are terribly slow (although for one use you probably wouldn't really notice).&lt;/li&gt;
+	&lt;li&gt;IADsUser::SetPassword tries 3 different methods to set the password (ldap over ssl, kerberos and finally NetUserSetInfo) which makes it even slower (most domain controllers do not have an ssl certificate) and unpredictable.&lt;/li&gt;
+&lt;/ul&gt;
+All example code I found was .NET based using the .NET wrappers for Active Directory and seemed to be meant for use in Adam rather than full Active Directory (it set port number to 389 and password mode to cleartext).
+&lt;p&gt;In the end it&amp;rsquo;s not very difficult but nonetheless it took me a while before I got it right.&lt;/p&gt;
+&lt;p&gt;We can write to the unicodePwd attribute which wants the password as a double quoted unicode string. If you look at this attribute with AdsiEdit you&amp;rsquo;ll see that the type is Octet String and that it can be written only.&lt;/p&gt;
+&lt;p&gt;I was tricked with Delphi&amp;rsquo;s QuotedStr function for a while because it doesn&amp;rsquo;t return a double but single quoted string ;-)&lt;/p&gt;
+&lt;p&gt;Below a small snippet from the upcoming JwsclActiveDirectory that shows how to use it:&lt;/p&gt;</description></item><item><title>PowerShell 2.0: Changing password through ADSI problem</title><link>https://remkoweijnen.nl/blog/2009/11/24/powershell-2-0-changing-password-through-adsi-problem/</link><pubDate>Tue, 24 Nov 2009 11:50:08 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2009/11/24/powershell-2-0-changing-password-through-adsi-problem/</guid><description>&lt;p&gt;I needed to do a mass password change on imported accounts and decided to do this with Powershell. For some reason (maybe because I am using PowerShell 2.0) I got an unexpected error when using the Password property or the SetPassword method (RandomPassword is a function I wrote that generates Random passwords the meet the Complexity Requirements):&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;powershell&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".ps1" href="data:text/plain;charset=utf-8;base64,JHVzZXIuUGFzc3dvcmQgPSBSYW5kb21QYXNzd29yZAokdXNlci5Db21taXRDaGFuZ2VzKCk="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-powershell"&gt;&lt;code class="language-powershell"&gt;$user.Password = RandomPassword
+$user.CommitChanges()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Encrypting RDP Passwords in VB.NET</title><link>https://remkoweijnen.nl/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/</link><pubDate>Fri, 02 May 2008 08:53:13 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2008/05/02/encrypting-rdp-passwords-in-vbnet/</guid><description>&lt;p&gt;Justin Shepard converted my code to &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;encrypt RPD passwords&lt;/a&gt; to VB.NET:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;vb.net&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".vb" href="data:text/plain;charset=utf-8;base64,Jz09PT09PVNPRgoKSW1wb3J0cyBTeXN0ZW0KSW1wb3J0cyBTeXN0ZW0uVGV4dApJbXBvcnRzIFN5c3RlbS5SdW50aW1lLkludGVyb3BTZXJ2aWNlcwpJbXBvcnRzIFN5c3RlbS5Db21wb25lbnRNb2RlbApJbXBvcnRzIE1pY3Jvc29mdC5WaXN1YWxCYXNpYwoKUHVibGljIE1vZHVsZSBSZHBFbmNyeXB0CgogICAgUHVibGljIENsYXNzIERQQVBJCjxkbGxpbXBvcnQ&amp;#43;IF8KICAgICAgICBQcml2YXRlIFNoYXJlZCBGdW5jdGlvbiBDcnlwdFByb3RlY3REYXRhKCBfCiAgICAgICAgICAgIEJ5UmVmIHBQbGFpblRleHQgQXMgREFUQV9CTE9CLCBfCiAgICAgICAgICAgIEJ5VmFsIHN6RGVzY3JpcHRpb24gQXMgU3RyaW5nLCBfCiAgICAgICAgICAgIEJ5UmVmIHBFbnRyb3B5IEFzIERBVEFfQkxPQiwgXwogICAgICAgICAgICBCeVZhbCBwUmVzZXJ2ZWQgQXMgSW50UHRyLCBfCiAgICAgICAgICAgIEJ5UmVmIHBQcm9tcHQgQXMgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVCwgXwogICAgICAgICAgICBCeVZhbCBkd0ZsYWdzIEFzIEludGVnZXIsIF8KICAgICAgICAgICAgQnlSZWYgcENpcGhlclRleHQgQXMgREFUQV9CTE9CIF8KICAgICAgICApIEFzIEJvb2xlYW4KICAgICAgICBFbmQgRnVuY3Rpb24KCjxkbGxpbXBvcnQ&amp;#43;IF8KICAgICAgICBQcml2YXRlIFNoYXJlZCBGdW5jdGlvbiBDcnlwdFVucHJvdGVjdERhdGEoIF8KICAgICAgICAgICAgQnlSZWYgcENpcGhlclRleHQgQXMgREFUQV9CTE9CLCBfCiAgICAgICAgICAgIEJ5UmVmIHBzekRlc2NyaXB0aW9uIEFzIFN0cmluZywgXwogICAgICAgICAgICBCeVJlZiBwRW50cm9weSBBcyBEQVRBX0JMT0IsIF8KICAgICAgICAgICAgQnlWYWwgcFJlc2VydmVkIEFzIEludFB0ciwgXwogICAgICAgICAgICBCeVJlZiBwUHJvbXB0IEFzIENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QsIF8KICAgICAgICAgICAgQnlWYWwgZHdGbGFncyBBcyBJbnRlZ2VyLCBfCiAgICAgICAgICAgIEJ5UmVmIHBQbGFpblRleHQgQXMgREFUQV9CTE9CIF8KICAgICAgICApIEFzIEJvb2xlYW4KICAgICAgICBFbmQgRnVuY3Rpb24KCjxzdHJ1Y3RsYXlvdXQ&amp;#43;IF8KICAgICAgICBGcmllbmQgU3RydWN0dXJlIERBVEFfQkxPQgogICAgICAgICAgICBQdWJsaWMgY2JEYXRhIEFzIEludGVnZXIKICAgICAgICAgICAgUHVibGljIHBiRGF0YSBBcyBJbnRQdHIKICAgICAgICBFbmQgU3RydWN0dXJlCgo8c3RydWN0bGF5b3V0PiBfCiAgICAgICAgRnJpZW5kIFN0cnVjdHVyZSBDUllQVFBST1RFQ1RfUFJPTVBUU1RSVUNUCiAgICAgICAgICAgIFB1YmxpYyBjYlNpemUgQXMgSW50ZWdlcgogICAgICAgICAgICBQdWJsaWMgZHdQcm9tcHRGbGFncyBBcyBJbnRlZ2VyCiAgICAgICAgICAgIFB1YmxpYyBod25kQXBwIEFzIEludFB0cgogICAgICAgICAgICBQdWJsaWMgc3pQcm9tcHQgQXMgU3RyaW5nCiAgICAgICAgRW5kIFN0cnVjdHVyZQoKICAgICAgICBQcml2YXRlIENvbnN0IENSWVBUUFJPVEVDVF9VSV9GT1JCSURERU4gQXMgSW50ZWdlciA9IDEKICAgICAgICBQcml2YXRlIENvbnN0IENSWVBUUFJPVEVDVF9MT0NBTF9NQUNISU5FIEFzIEludGVnZXIgPSA0CgogICAgICAgIFByaXZhdGUgU2hhcmVkIFN1YiBJbml0UHJvbXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlSZWYgcHMgQXMgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVCBfCiAgICAgICAgKQogICAgICAgICAgICBwcy5jYlNpemUgPSBNYXJzaGFsLlNpemVPZihHZXRUeXBlKENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QpKQogICAgICAgICAgICBwcy5kd1Byb21wdEZsYWdzID0gMAogICAgICAgICAgICBwcy5od25kQXBwID0gSW50UHRyLlplcm8KICAgICAgICAgICAgcHMuc3pQcm9tcHQgPSBOb3RoaW5nCiAgICAgICAgRW5kIFN1YgoKICAgICAgICBQcml2YXRlIFNoYXJlZCBTdWIgSW5pdEJMT0IgXwogICAgICAgICggXwogICAgICAgICAgICBCeVZhbCBkYXRhIEFzIEJ5dGUoKSwgXwogICAgICAgICAgICBCeVJlZiBibG9iIEFzIERBVEFfQkxPQiBfCiAgICAgICAgKQogICAgICAgICAgICAnIFVzZSBlbXB0eSBhcnJheSBmb3IgbnVsbCBwYXJhbWV0ZXIuCiAgICAgICAgICAgIElmIGRhdGEgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBkYXRhID0gTmV3IEJ5dGUoMCkge30KICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICAnIEFsbG9jYXRlIG1lbW9yeSBmb3IgdGhlIEJMT0IgZGF0YS4KICAgICAgICAgICAgYmxvYi5wYkRhdGEgPSBNYXJzaGFsLkFsbG9jSEdsb2JhbChkYXRhLkxlbmd0aCkKCiAgICAgICAgICAgICcgTWFrZSBzdXJlIHRoYXQgbWVtb3J5IGFsbG9jYXRpb24gd2FzIHN1Y2Nlc3NmdWwuCiAgICAgICAgICAgIElmIGJsb2IucGJEYXRhLkVxdWFscyhJbnRQdHIuWmVybykgVGhlbgogICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbiggXwogICAgICAgICAgICAgICAgICAgICAgICAiVW5hYmxlIHRvIGFsbG9jYXRlIGRhdGEgYnVmZmVyIGZvciBCTE9CIHN0cnVjdHVyZS4iKQogICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICcgU3BlY2lmeSBudW1iZXIgb2YgYnl0ZXMgaW4gdGhlIEJMT0IuCiAgICAgICAgICAgIGJsb2IuY2JEYXRhID0gZGF0YS5MZW5ndGgKICAgICAgICAgICAgTWFyc2hhbC5Db3B5KGRhdGEsIDAsIGJsb2IucGJEYXRhLCBkYXRhLkxlbmd0aCkKICAgICAgICBFbmQgU3ViCgogICAgICAgIFB1YmxpYyBFbnVtIEtleVR5cGUKICAgICAgICAgICAgVXNlcktleSA9IDEKICAgICAgICAgICAgTWFjaGluZUtleQogICAgICAgIEVuZCBFbnVtCgogICAgICAgIFByaXZhdGUgU2hhcmVkIGRlZmF1bHRLZXlUeXBlIEFzIEtleVR5cGUgPSBLZXlUeXBlLlVzZXJLZXkKCiAgICAgICAgUHVibGljIFNoYXJlZCBGdW5jdGlvbiBFbmNyeXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlWYWwga2V5VHlwZSBBcyBLZXlUeXBlLCBfCiAgICAgICAgICAgIEJ5VmFsIHBsYWluVGV4dCBBcyBTdHJpbmcsIF8KICAgICAgICAgICAgQnlWYWwgZW50cm9weSBBcyBTdHJpbmcsIF8KICAgICAgICAgICAgQnlWYWwgZGVzY3JpcHRpb24gQXMgU3RyaW5nIF8KICAgICAgICApIEFzIFN0cmluZwogICAgICAgICAgICBJZiBwbGFpblRleHQgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBwbGFpblRleHQgPSBTdHJpbmcuRW1wdHkKICAgICAgICAgICAgRW5kIElmCiAgICAgICAgICAgIElmIGVudHJvcHkgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBlbnRyb3B5ID0gU3RyaW5nLkVtcHR5CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgRGltIHJlc3VsdCBBcyBCeXRlKCkKICAgICAgICAgICAgRGltIGVuY3J5cHRlZCBBcyBTdHJpbmcgPSAiIgogICAgICAgICAgICBEaW0gaSBBcyBJbnRlZ2VyCiAgICAgICAgICAgIHJlc3VsdCA9IEVuY3J5cHQoa2V5VHlwZSwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY29kaW5nLlVuaWNvZGUuR2V0Qnl0ZXMocGxhaW5UZXh0KSwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVuY29kaW5nLlVuaWNvZGUuR2V0Qnl0ZXMoZW50cm9weSksIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbikKICAgICAgICAgICAgRm9yIGkgPSAwIFRvIHJlc3VsdC5MZW5ndGggLSAxCiAgICAgICAgICAgICAgICBlbmNyeXB0ZWQgPSBlbmNyeXB0ZWQgJiBDb252ZXJ0LlRvU3RyaW5nKHJlc3VsdChpKSwgMTYpLlBhZExlZnQoMiwgIjAiKS5Ub1VwcGVyKCkKICAgICAgICAgICAgTmV4dAogICAgICAgICAgICBSZXR1cm4gZW5jcnlwdGVkLlRvU3RyaW5nKCkKICAgICAgICBFbmQgRnVuY3Rpb24KCiAgICAgICAgUHVibGljIFNoYXJlZCBGdW5jdGlvbiBFbmNyeXB0IF8KICAgICAgICAoIF8KICAgICAgICAgICAgQnlWYWwga2V5VHlwZSBBcyBLZXlUeXBlLCBfCiAgICAgICAgICAgIEJ5VmFsIHBsYWluVGV4dEJ5dGVzIEFzIEJ5dGUoKSwgXwogICAgICAgICAgICBCeVZhbCBlbnRyb3B5Qnl0ZXMgQXMgQnl0ZSgpLCBfCiAgICAgICAgICAgIEJ5VmFsIGRlc2NyaXB0aW9uIEFzIFN0cmluZyBfCiAgICAgICAgKSBBcyBCeXRlKCkKICAgICAgICAgICAgSWYgcGxhaW5UZXh0Qnl0ZXMgSXMgTm90aGluZyBUaGVuCiAgICAgICAgICAgICAgICBwbGFpblRleHRCeXRlcyA9IE5ldyBCeXRlKDApIHt9CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgSWYgZW50cm9weUJ5dGVzIElzIE5vdGhpbmcgVGhlbgogICAgICAgICAgICAgICAgZW50cm9weUJ5dGVzID0gTmV3IEJ5dGUoMCkge30KICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICBJZiBkZXNjcmlwdGlvbiBJcyBOb3RoaW5nIFRoZW4KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uID0gU3RyaW5nLkVtcHR5CiAgICAgICAgICAgIEVuZCBJZgoKICAgICAgICAgICAgRGltIHBsYWluVGV4dEJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgogICAgICAgICAgICBEaW0gY2lwaGVyVGV4dEJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgogICAgICAgICAgICBEaW0gZW50cm9weUJsb2IgQXMgREFUQV9CTE9CID0gTmV3IERBVEFfQkxPQgoKICAgICAgICAgICAgRGltIHByb21wdCBBcyAgXwogICAgICAgICAgICAgICAgICAgIENSWVBUUFJPVEVDVF9QUk9NUFRTVFJVQ1QgPSBOZXcgQ1JZUFRQUk9URUNUX1BST01QVFNUUlVDVAogICAgICAgICAgICBJbml0UHJvbXB0KHByb21wdCkKCiAgICAgICAgICAgIFRyeQogICAgICAgICAgICAgICAgVHJ5CiAgICAgICAgICAgICAgICAgICAgSW5pdEJMT0IocGxhaW5UZXh0Qnl0ZXMsIHBsYWluVGV4dEJsb2IpCiAgICAgICAgICAgICAgICBDYXRjaCBleCBBcyBFeGNlcHRpb24KICAgICAgICAgICAgICAgICAgICBUaHJvdyBOZXcgRXhjZXB0aW9uKCJDYW5ub3QgaW5pdGlhbGl6ZSBwbGFpbnRleHQgQkxPQi4iLCBleCkKICAgICAgICAgICAgICAgIEVuZCBUcnkKCiAgICAgICAgICAgICAgICBUcnkKICAgICAgICAgICAgICAgICAgICBJbml0QkxPQihlbnRyb3B5Qnl0ZXMsIGVudHJvcHlCbG9iKQogICAgICAgICAgICAgICAgQ2F0Y2ggZXggQXMgRXhjZXB0aW9uCiAgICAgICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiQ2Fubm90IGluaXRpYWxpemUgZW50cm9weSBCTE9CLiIsIGV4KQogICAgICAgICAgICAgICAgRW5kIFRyeQoKICAgICAgICAgICAgICAgIERpbSBmbGFncyBBcyBJbnRlZ2VyID0gQ1JZUFRQUk9URUNUX1VJX0ZPUkJJRERFTgoKICAgICAgICAgICAgICAgIElmIGtleVR5cGUgPSBrZXlUeXBlLk1hY2hpbmVLZXkgVGhlbgogICAgICAgICAgICAgICAgICAgIGZsYWdzID0gZmxhZ3MgT3IgKENSWVBUUFJPVEVDVF9MT0NBTF9NQUNISU5FKQogICAgICAgICAgICAgICAgRW5kIElmCgogICAgICAgICAgICAgICAgRGltIHN1Y2Nlc3MgQXMgQm9vbGVhbiA9IENyeXB0UHJvdGVjdERhdGEoIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGxhaW5UZXh0QmxvYiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbnRyb3B5QmxvYiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJbnRQdHIuWmVybywgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcm9tcHQsIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmxhZ3MsIF8KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2lwaGVyVGV4dEJsb2IpCgogICAgICAgICAgICAgICAgSWYgTm90IHN1Y2Nlc3MgVGhlbgogICAgICAgICAgICAgICAgICAgIERpbSBlcnJDb2RlIEFzIEludGVnZXIgPSBNYXJzaGFsLkdldExhc3RXaW4zMkVycm9yKCkKCiAgICAgICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiQ3J5cHRQcm90ZWN0RGF0YSBmYWlsZWQuIiwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOZXcgV2luMzJFeGNlcHRpb24oZXJyQ29kZSkpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBEaW0gY2lwaGVyVGV4dEJ5dGVzKGNpcGhlclRleHRCbG9iLmNiRGF0YSkgQXMgQnl0ZQoKICAgICAgICAgICAgICAgIE1hcnNoYWwuQ29weShjaXBoZXJUZXh0QmxvYi5wYkRhdGEsIGNpcGhlclRleHRCeXRlcywgMCwgXwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNpcGhlclRleHRCbG9iLmNiRGF0YSkKCiAgICAgICAgICAgICAgICBSZXR1cm4gY2lwaGVyVGV4dEJ5dGVzCiAgICAgICAgICAgIENhdGNoIGV4IEFzIEV4Y2VwdGlvbgogICAgICAgICAgICAgICAgVGhyb3cgTmV3IEV4Y2VwdGlvbigiRFBBUEkgd2FzIHVuYWJsZSB0byBlbmNyeXB0IGRhdGEuIiwgZXgpCiAgICAgICAgICAgIEZpbmFsbHkKICAgICAgICAgICAgICAgIElmIE5vdCAocGxhaW5UZXh0QmxvYi5wYkRhdGEuRXF1YWxzKEludFB0ci5aZXJvKSkgVGhlbgogICAgICAgICAgICAgICAgICAgIE1hcnNoYWwuRnJlZUhHbG9iYWwocGxhaW5UZXh0QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBJZiBOb3QgKGNpcGhlclRleHRCbG9iLnBiRGF0YS5FcXVhbHMoSW50UHRyLlplcm8pKSBUaGVuCiAgICAgICAgICAgICAgICAgICAgTWFyc2hhbC5GcmVlSEdsb2JhbChjaXBoZXJUZXh0QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKCiAgICAgICAgICAgICAgICBJZiBOb3QgKGVudHJvcHlCbG9iLnBiRGF0YS5FcXVhbHMoSW50UHRyLlplcm8pKSBUaGVuCiAgICAgICAgICAgICAgICAgICAgTWFyc2hhbC5GcmVlSEdsb2JhbChlbnRyb3B5QmxvYi5wYkRhdGEpCiAgICAgICAgICAgICAgICBFbmQgSWYKICAgICAgICAgICAgRW5kIFRyeQogICAgICAgIEVuZCBGdW5jdGlvbgoKICAgIEVuZCBDbGFzcwoKICAgIFN1YiBNYWluKEJ5VmFsIGFyZ3MgQXMgU3RyaW5nKCkpCiAgICAgICAgVHJ5CiAgICAgICAgICAgIERpbSB0ZXh0IEFzIFN0cmluZyA9IGFyZ3MoMCkKICAgICAgICAgICAgRGltIGVuY3J5cHRlZCBBcyBTdHJpbmcKCiAgICAgICAgICAgIGVuY3J5cHRlZCA9IERQQVBJLkVuY3J5cHQoRFBBUEkuS2V5VHlwZS5NYWNoaW5lS2V5LCB0ZXh0LCBOb3RoaW5nLCAicHN3IikKCiAgICAgICAgICAgIENvbnNvbGUuV3JpdGVMaW5lKCJ7MH0iICYgQ2hyKDEzKSAmIENocigxMCksIGVuY3J5cHRlZCkKCiAgICAgICAgQ2F0Y2ggZXggQXMgRXhjZXB0aW9uCiAgICAgICAgICAgIFdoaWxlIE5vdCAoZXggSXMgTm90aGluZykKICAgICAgICAgICAgICAgIENvbnNvbGUuV3JpdGVMaW5lKGV4Lk1lc3NhZ2UpCiAgICAgICAgICAgICAgICBleCA9IGV4LklubmVyRXhjZXB0aW9uCiAgICAgICAgICAgIEVuZCBXaGlsZQogICAgICAgIEVuZCBUcnkKICAgIEVuZCBTdWIKCkVuZCBNb2R1bGUKJz09PT09PUVPRg=="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-vbnet"&gt;&lt;code class="language-vbnet"&gt;&amp;#39;======SOF
+
+Imports System
+Imports System.Text
+Imports System.Runtime.InteropServices
+Imports System.ComponentModel
+Imports Microsoft.VisualBasic
+
+Public Module RdpEncrypt
+
+ Public Class DPAPI
+&amp;lt;dllimport&amp;gt; _
+ Private Shared Function CryptProtectData( _
+ ByRef pPlainText As DATA_BLOB, _
+ ByVal szDescription As String, _
+ ByRef pEntropy As DATA_BLOB, _
+ ByVal pReserved As IntPtr, _
+ ByRef pPrompt As CRYPTPROTECT_PROMPTSTRUCT, _
+ ByVal dwFlags As Integer, _
+ ByRef pCipherText As DATA_BLOB _
+ ) As Boolean
+ End Function
+
+&amp;lt;dllimport&amp;gt; _
+ Private Shared Function CryptUnprotectData( _
+ ByRef pCipherText As DATA_BLOB, _
+ ByRef pszDescription As String, _
+ ByRef pEntropy As DATA_BLOB, _
+ ByVal pReserved As IntPtr, _
+ ByRef pPrompt As CRYPTPROTECT_PROMPTSTRUCT, _
+ ByVal dwFlags As Integer, _
+ ByRef pPlainText As DATA_BLOB _
+ ) As Boolean
+ End Function
+
+&amp;lt;structlayout&amp;gt; _
+ Friend Structure DATA_BLOB
+ Public cbData As Integer
+ Public pbData As IntPtr
+ End Structure
+
+&amp;lt;structlayout&amp;gt; _
+ Friend Structure CRYPTPROTECT_PROMPTSTRUCT
+ Public cbSize As Integer
+ Public dwPromptFlags As Integer
+ Public hwndApp As IntPtr
+ Public szPrompt As String
+ End Structure
+
+ Private Const CRYPTPROTECT_UI_FORBIDDEN As Integer = 1
+ Private Const CRYPTPROTECT_LOCAL_MACHINE As Integer = 4
+
+ Private Shared Sub InitPrompt _
+ ( _
+ ByRef ps As CRYPTPROTECT_PROMPTSTRUCT _
+ )
+ ps.cbSize = Marshal.SizeOf(GetType(CRYPTPROTECT_PROMPTSTRUCT))
+ ps.dwPromptFlags = 0
+ ps.hwndApp = IntPtr.Zero
+ ps.szPrompt = Nothing
+ End Sub
+
+ Private Shared Sub InitBLOB _
+ ( _
+ ByVal data As Byte(), _
+ ByRef blob As DATA_BLOB _
+ )
+ &amp;#39; Use empty array for null parameter.
+ If data Is Nothing Then
+ data = New Byte(0) {}
+ End If
+
+ &amp;#39; Allocate memory for the BLOB data.
+ blob.pbData = Marshal.AllocHGlobal(data.Length)
+
+ &amp;#39; Make sure that memory allocation was successful.
+ If blob.pbData.Equals(IntPtr.Zero) Then
+ Throw New Exception( _
+ &amp;#34;Unable to allocate data buffer for BLOB structure.&amp;#34;)
+ End If
+
+ &amp;#39; Specify number of bytes in the BLOB.
+ blob.cbData = data.Length
+ Marshal.Copy(data, 0, blob.pbData, data.Length)
+ End Sub
+
+ Public Enum KeyType
+ UserKey = 1
+ MachineKey
+ End Enum
+
+ Private Shared defaultKeyType As KeyType = KeyType.UserKey
+
+ Public Shared Function Encrypt _
+ ( _
+ ByVal keyType As KeyType, _
+ ByVal plainText As String, _
+ ByVal entropy As String, _
+ ByVal description As String _
+ ) As String
+ If plainText Is Nothing Then
+ plainText = String.Empty
+ End If
+ If entropy Is Nothing Then
+ entropy = String.Empty
+ End If
+
+ Dim result As Byte()
+ Dim encrypted As String = &amp;#34;&amp;#34;
+ Dim i As Integer
+ result = Encrypt(keyType, _
+ Encoding.Unicode.GetBytes(plainText), _
+ Encoding.Unicode.GetBytes(entropy), _
+ description)
+ For i = 0 To result.Length - 1
+ encrypted = encrypted &amp;amp; Convert.ToString(result(i), 16).PadLeft(2, &amp;#34;0&amp;#34;).ToUpper()
+ Next
+ Return encrypted.ToString()
+ End Function
+
+ Public Shared Function Encrypt _
+ ( _
+ ByVal keyType As KeyType, _
+ ByVal plainTextBytes As Byte(), _
+ ByVal entropyBytes As Byte(), _
+ ByVal description As String _
+ ) As Byte()
+ If plainTextBytes Is Nothing Then
+ plainTextBytes = New Byte(0) {}
+ End If
+
+ If entropyBytes Is Nothing Then
+ entropyBytes = New Byte(0) {}
+ End If
+
+ If description Is Nothing Then
+ description = String.Empty
+ End If
+
+ Dim plainTextBlob As DATA_BLOB = New DATA_BLOB
+ Dim cipherTextBlob As DATA_BLOB = New DATA_BLOB
+ Dim entropyBlob As DATA_BLOB = New DATA_BLOB
+
+ Dim prompt As _
+ CRYPTPROTECT_PROMPTSTRUCT = New CRYPTPROTECT_PROMPTSTRUCT
+ InitPrompt(prompt)
+
+ Try
+ Try
+ InitBLOB(plainTextBytes, plainTextBlob)
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;Cannot initialize plaintext BLOB.&amp;#34;, ex)
+ End Try
+
+ Try
+ InitBLOB(entropyBytes, entropyBlob)
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;Cannot initialize entropy BLOB.&amp;#34;, ex)
+ End Try
+
+ Dim flags As Integer = CRYPTPROTECT_UI_FORBIDDEN
+
+ If keyType = keyType.MachineKey Then
+ flags = flags Or (CRYPTPROTECT_LOCAL_MACHINE)
+ End If
+
+ Dim success As Boolean = CryptProtectData( _
+ plainTextBlob, _
+ description, _
+ entropyBlob, _
+ IntPtr.Zero, _
+ prompt, _
+ flags, _
+ cipherTextBlob)
+
+ If Not success Then
+ Dim errCode As Integer = Marshal.GetLastWin32Error()
+
+ Throw New Exception(&amp;#34;CryptProtectData failed.&amp;#34;, _
+ New Win32Exception(errCode))
+ End If
+
+ Dim cipherTextBytes(cipherTextBlob.cbData) As Byte
+
+ Marshal.Copy(cipherTextBlob.pbData, cipherTextBytes, 0, _
+ cipherTextBlob.cbData)
+
+ Return cipherTextBytes
+ Catch ex As Exception
+ Throw New Exception(&amp;#34;DPAPI was unable to encrypt data.&amp;#34;, ex)
+ Finally
+ If Not (plainTextBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(plainTextBlob.pbData)
+ End If
+
+ If Not (cipherTextBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(cipherTextBlob.pbData)
+ End If
+
+ If Not (entropyBlob.pbData.Equals(IntPtr.Zero)) Then
+ Marshal.FreeHGlobal(entropyBlob.pbData)
+ End If
+ End Try
+ End Function
+
+ End Class
+
+ Sub Main(ByVal args As String())
+ Try
+ Dim text As String = args(0)
+ Dim encrypted As String
+
+ encrypted = DPAPI.Encrypt(DPAPI.KeyType.MachineKey, text, Nothing, &amp;#34;psw&amp;#34;)
+
+ Console.WriteLine(&amp;#34;{0}&amp;#34; &amp;amp; Chr(13) &amp;amp; Chr(10), encrypted)
+
+ Catch ex As Exception
+ While Not (ex Is Nothing)
+ Console.WriteLine(ex.Message)
+ ex = ex.InnerException
+ End While
+ End Try
+ End Sub
+
+End Module
+&amp;#39;======EOF&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;2 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;&lt;a href="http://Decript" rel="nofollow ugc"&gt;James&lt;/a&gt;&lt;/span&gt; &lt;time datetime="2010-07-05"&gt;Jul 5, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;Hi friends, anyone know where I can find the code to decrypt in vb.net? Thanks for your help&lt;/p&gt;</description></item><item><title>Encrypt RDP password in Python</title><link>https://remkoweijnen.nl/blog/2007/11/05/encrypt-rdp-password-in-python/</link><pubDate>Mon, 05 Nov 2007 23:10:29 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2007/11/05/encrypt-rdp-password-in-python/</guid><description>&lt;p&gt;Dirk Schmitz send me his Python version of encrypting the RDP Password:&lt;/p&gt;
+&lt;div class="codecard"&gt;
+ &lt;div class="codehead"&gt;
+ &lt;span class="codefile"&gt;&lt;span class="codelang"&gt;python&lt;/span&gt;&lt;/span&gt;
+ &lt;span class="codetools" data-pagefind-ignore&gt;
+ &lt;button class="codebtn" type="button" data-copy&gt;Copy&lt;/button&gt;
+ &lt;a class="codebtn" download=".py" href="data:text/plain;charset=utf-8;base64,aW1wb3J0IHdpbjMyY3J5cHQKaW1wb3J0IGJpbmFzY2lpCgpwd2RIYXNoID0gd2luMzJjcnlwdC5DcnlwdFByb3RlY3REYXRhKHUiTVlQQVNTV09SRCIsdSdwc3cnLE5vbmUsTm9uZSxOb25lLDApCnByaW50IGJpbmFzY2lpLmhleGxpZnkocHdkSGFzaCk="&gt;Download&lt;/a&gt;
+ &lt;/span&gt;
+ &lt;/div&gt;
+ &lt;div class="codebody"&gt;&lt;pre class="language-python"&gt;&lt;code class="language-python"&gt;import win32crypt
+import binascii
+
+pwdHash = win32crypt.CryptProtectData(u&amp;#34;MYPASSWORD&amp;#34;,u&amp;#39;psw&amp;#39;,None,None,None,0)
+print binascii.hexlify(pwdHash)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;br&gt;Read the original article here: &lt;a href="https://remkoweijnen.nl/blog/2007/10/18/how-rdp-passwords-are-encrypted/"&gt;/2007/10/18/how-rdp-passwords-are-encrypted/&lt;/a&gt;&lt;/p&gt;
+&lt;section class="comments"&gt;
+&lt;h2&gt;5 Comments&lt;/h2&gt;
+&lt;ol class="comment-list"&gt;
+&lt;li class="comment depth-0"&gt;&lt;div class="comment-meta"&gt;&lt;span class="comment-author"&gt;Arvid Requate&lt;/span&gt; &lt;time datetime="2010-11-14"&gt;Nov 14, 2010&lt;/time&gt;&lt;/div&gt;&lt;div class="comment-body"&gt;&lt;p&gt;Thank's, this really worked well, after a bit of fiddling (donation will be given asap). For Python 2.7 I had to remove the unicode conversion, otherwise the RDP server would not get the proper password. Interestingly your updated post about 512-byte padding and appending a '0'-character to obtain a 1329 'password 51'-hash did not work for me yet. Did you need the padding as a bugfix or did you suggest it merely as an imrovement to become fully compatible to the MS encoding format? (/2008/03/02/how-rdp-passwords-are-encrypted-2/).&lt;/p&gt;</description></item></channel></rss>

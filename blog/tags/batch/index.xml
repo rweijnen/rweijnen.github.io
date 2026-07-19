@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Batch on Remko's Blog</title><link>https://remkoweijnen.nl/blog/tags/batch/</link><description>Recent content in Batch on Remko's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 04 Nov 2010 18:14:56 +0000</lastBuildDate><atom:link href="https://remkoweijnen.nl/blog/tags/batch/index.xml" rel="self" type="application/rss+xml"/><item><title>Programmatically Create Aligned Partitions</title><link>https://remkoweijnen.nl/blog/2010/11/04/programmatically-create-aligned-partitions/</link><pubDate>Thu, 04 Nov 2010 18:14:56 +0000</pubDate><guid>https://remkoweijnen.nl/blog/2010/11/04/programmatically-create-aligned-partitions/</guid><description>&lt;p&gt;After deploying Virtual Machines from a template and adding disks the next Task was to create and format the partitions.&lt;/p&gt;
+&lt;p&gt;In a VMWare environment it is very important to assure that the partitions are aligned. VMWare has a nice document that explains the details called &lt;a title="Performance Best Practices for VMware vSphere 4.0" href="http://www.vmware.com/pdf/Perf_Best_Practices_vSphere4.0.pdf" target="_blank"&gt;Performance Best Practices for VMware vSphere 4.0&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Basically the recommendation is to align partition on a 64 KB boundary, not only for VMWare itsself but also for the guests.&lt;/p&gt;
+&lt;p&gt;Of course we could do this manually but I wanted to run this task of from my Deployment Server to automate the following:&lt;/p&gt;
+&lt;ul&gt;
+	&lt;li&gt;
+&lt;div&gt;Create aligned partitions on all extra disks of the maximum size&lt;/div&gt;&lt;/li&gt;
+	&lt;li&gt;
+&lt;div&gt;Format, assign drive letter and assign a label&lt;/div&gt;&lt;/li&gt;
+	&lt;li&gt;
+&lt;div&gt;A safeguard to prevent overwriting existing Data&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+Well enough talk let's go the scripts! They are written as bat files that can be executed directly in Altiris as an embedded script but of course you don't need Altiris to use them.</description></item></channel></rss>
