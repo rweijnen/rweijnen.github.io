@@ -1,0 +1,28 @@
+# robots.txt for remkoweijnen.nl (copied to the site root by .github/workflows/deploy.yml)
+#
+# Policy: AI may read these posts to answer questions and to index them for AI search.
+# Training is only allowed for parties that also cite and link back to their sources.
+# Content-Signal: https://contentsignals.org  (search, ai-input, ai-train)
+# A crawler follows the most specific User-agent group that matches it.
+
+# Everyone else: search engines, AI search and user-initiated AI fetches; no training
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+
+# Training allowed: these also cite and link back in their AI answers
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+# Training-only crawlers and datasets: not allowed (also blocked at the edge)
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Meta-ExternalAgent
+User-agent: Applebot-Extended
+User-agent: cohere-training-data-crawler
+Disallow: /
+
+Sitemap: https://remkoweijnen.nl/blog/sitemap.xml
